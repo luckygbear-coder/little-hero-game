@@ -2,26 +2,90 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>小勇者之旅大冒險 — HTML 測試版</title>
+  <title>小勇者猜拳大戰 ⚔️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
   <div class="game-wrap">
-    <h1>小勇者猜拳大戰 ⚔️</h1>
+    <header class="title-block">
+      <h1>小勇者猜拳大戰 ⚔️</h1>
+      <p>選一個拳，陪著小勇者一起安撫被壞情緒影響的魔物吧！</p>
+    </header>
 
-    <p class="desc">
-      選一個拳，試著安撫被壞情緒影響的魔物吧！
-    </p>
+    <!-- 戰鬥狀態 -->
+    <section class="status-row">
+      <div class="card hero-card">
+        <div class="card-header">
+          <span class="role-tag">小勇者</span>
+          <span class="role-name">勇敢的你 💖</span>
+        </div>
+        <div class="avatar">🧑‍🚀</div>
+        <div class="hp-row">
+          <span>好心情</span>
+          <span id="heroHpHearts">❤️❤️❤️</span>
+        </div>
+      </div>
 
-    <div class="btn-row">
-      <button onclick="play('石頭')">✊ 石頭</button>
-      <button onclick="play('剪刀')">✌️ 剪刀</button>
-      <button onclick="play('布')">🖐 布</button>
-    </div>
+      <div class="card monster-card">
+        <div class="card-header">
+          <span class="role-tag bad">魔物</span>
+          <span class="role-name" id="monsterName">壞心情魔王</span>
+        </div>
+        <div class="avatar" id="monsterAvatar">👾</div>
+        <div class="hp-row">
+          <span>壞情緒進度</span>
+          <span id="emotionProgress">0 / 6</span>
+        </div>
+      </div>
+    </section>
 
-    <pre id="result">還沒開始戰鬥，先選一個拳吧～</pre>
+    <!-- 目前安撫到哪一個壞情緒 -->
+    <section class="card emotion-card">
+      <h2>正在安撫的壞情緒</h2>
+      <p id="currentEmotion">還沒開始戰鬥，先選一個拳吧～</p>
+    </section>
+
+    <!-- 猜拳按鈕 -->
+    <section class="card rps-card">
+      <h2>請選擇你要出的拳 ✊✌️🖐️</h2>
+      <div class="rps-buttons">
+        <button class="rps-btn" data-choice="rock">✊ 石頭</button>
+        <button class="rps-btn" data-choice="scissors">✌️ 剪刀</button>
+        <button class="rps-btn" data-choice="paper">🖐️ 布</button>
+      </div>
+      <p class="small-tip">溫柔提醒：輸了也沒關係，我們是在練習「怎麼面對情緒」喔！</p>
+    </section>
+
+    <!-- 對話區 -->
+    <section class="dialog-row">
+      <div class="dialog-card hero-dialog">
+        <h3>小勇者說：</h3>
+        <p id="heroLine">今天也要帶著好心情出發！</p>
+      </div>
+      <div class="dialog-card monster-dialog">
+        <h3>魔物心裡想：</h3>
+        <p id="monsterLine">哼，我現在心情很糟，不想理人...</p>
+      </div>
+    </section>
+
+    <!-- 回合資訊 -->
+    <section class="card info-card">
+      <h2>這一回合發生了什麼？</h2>
+      <p id="roundInfo">還沒有出拳喔～</p>
+      <ul id="logList" class="log-list"></ul>
+    </section>
+
+    <!-- 底部功能 -->
+    <footer class="footer-row">
+      <button id="resetBtn" class="reset-btn">重新開始這場戰鬥 ♻️</button>
+      <p class="footer-text">
+        玩法小提醒：<br />
+        ⭐ 贏一回合 → 安撫一種壞情緒<br />
+        ⭐ 輸一回合 → 小勇者好心情 -1（最多 3 次，要記得休息）<br />
+        ⭐ 安撫完 6 種壞情緒 → 魔物會變回開心好朋友！
+      </p>
+    </footer>
   </div>
 
   <script src="script.js"></script>

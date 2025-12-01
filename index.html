@@ -1,51 +1,84 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>小勇者之旅大冒險 🎮</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>小勇者之旅大冒險 ✨</title>
+
+  <!-- 主 CSS -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-
   <div class="game-wrap">
-    
+
     <!-- 標題 -->
-    <h1 class="title">小勇者之旅大冒險 🌟</h1>
-    <p class="subtitle">猜拳、安撫魔物、抽占卜、挑戰魔王！</p>
+    <h1 class="title">小勇者之旅大冒險 ✨</h1>
+    <p class="subtitle">用勇氣與好心情，一起安撫被壞情緒困住的魔物吧！</p>
 
-    <!-- 魔物區 -->
-    <div class="monster-box">
-      <h2 id="monster-name">魔物名稱</h2>
-      <img id="monster-img" src="" class="monster-img">
-      <p id="monster-hp">壞情緒值：--</p>
+    <!-- 選擇勇者職業 -->
+    <section id="hero-select" class="card">
+      <h2>選擇你的勇者</h2>
+      <div class="hero-buttons">
+        <button onclick="selectHero('warrior')">🛡️ 戰士</button>
+        <button onclick="selectHero('mage')">🔮 法師</button>
+        <button onclick="selectHero('priest')">💖 牧師</button>
+        <button onclick="selectHero('villager')">🌾 勇敢的村民</button>
+      </div>
+    </section>
+
+    <!-- 地圖九宮格 -->
+    <section id="map-area" class="card hidden">
+      <h2>冒險地圖</h2>
+      <div class="map-grid" id="mapGrid"></div>
+    </section>
+
+    <!-- 魔物戰場 -->
+    <section id="battle-area" class="card hidden">
+      <h2 id="monsterName">魔物戰</h2>
+
+      <img id="monsterImg" class="monster-img" src="" alt="monster" />
+
+      <p id="battleDialogue" class="dialogue">魔物正在看著你…</p>
+
+      <div class="rps-buttons">
+        <button onclick="playerChoose('rock')">✊ 石頭</button>
+        <button onclick="playerChoose('scissors')">✌️ 剪刀</button>
+        <button onclick="playerChoose('paper')">✋ 布</button>
+      </div>
+
+      <p id="battleResult"></p>
+      <button class="back-btn" onclick="backToMap()">返回地圖</button>
+    </section>
+
+    <!-- 占卜彈窗 -->
+    <div id="fortunePopup" class="popup hidden">
+      <div class="popup-card">
+        <h2>🐻 熊熊占卜</h2>
+        <p id="fortuneText"></p>
+        <button onclick="closeFortune()">好！</button>
+      </div>
     </div>
 
-    <!-- 玩家出拳 -->
-    <div class="controls">
-      <button onclick="play('石頭')">✊ 石頭</button>
-      <button onclick="play('剪刀')">✌️ 剪刀</button>
-      <button onclick="play('布')">🖐 布</button>
-    </div>
+    <!-- 魔王戰 -->
+    <section id="boss-area" class="card hidden">
+      <h2>👑 魔王戰</h2>
+      <img id="bossImg" class="boss-img" src="" />
 
-    <!-- 遊戲訊息 -->
-    <div id="log" class="log-box">
-      遊戲開始！請選一個拳～
-    </div>
+      <p id="bossDialogue" class="dialogue"></p>
+
+      <div class="rps-buttons">
+        <button onclick="bossChoose('rock')">✊</button>
+        <button onclick="bossChoose('scissors')">✌️</button>
+        <button onclick="bossChoose('paper')">✋</button>
+      </div>
+
+      <p id="bossResult"></p>
+    </section>
 
   </div>
 
-  <!-- 熊熊占卜彈出視窗 -->
-  <div id="fortune-box" class="fortune-box">
-    <div class="fortune-card">
-      <h3>🐻 熊熊占卜</h3>
-      <p id="fortune-text">占卜內容</p>
-      <button onclick="closeFortune()" class="close-btn">確定</button>
-    </div>
-  </div>
-
-  <!-- 主程式 -->
+  <!-- Script 主程式 -->
   <script src="script.js"></script>
 </body>
 </html>

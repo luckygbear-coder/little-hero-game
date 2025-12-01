@@ -1,7 +1,7 @@
-/* 全域設定 */
-*,
-*::before,
-*::after {
+/* =========================
+   全域設定
+========================= */
+* {
   box-sizing: border-box;
 }
 
@@ -9,53 +9,191 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Noto Sans TC", sans-serif;
-  background: linear-gradient(#ffe9c9, #ffd9e8);
+  background: linear-gradient(#ffe9c9, #ffd9f1);
   color: #4a2e2a;
+  text-align: center;
 }
 
-/* 外框 */
 .game-wrap {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 24px;
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
 }
 
-/* 標題 */
-h1 {
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 16px;
+/* =========================
+   標題
+========================= */
+.title {
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 4px;
 }
 
-/* 說明 */
-p {
-  font-size: 18px;
-  margin-bottom: 12px;
+.subtitle {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #7a5a50;
 }
 
-/* 拳按鈕區 */
-.btn-row {
-  display: flex;
-  gap: 12px;
-  margin: 16px 0;
-}
-
-button {
-  flex: 1;
-  padding: 12px;
-  background: white;
+/* =========================
+   魔物區
+========================= */
+.monster-box {
+  background: #fff5dd;
+  border: 3px solid #f3c27a;
+  padding: 16px;
   border-radius: 12px;
-  border: 2px solid #d7b28c;
+  margin-bottom: 20px;
+}
+
+.monster-img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  margin: 12px auto;
+  transition: 0.25s;
+}
+
+/* =========================
+   魔物動畫效果
+========================= */
+
+/* 受傷（抖動） */
+.shake {
+  animation: shakeAnim 0.4s;
+}
+@keyframes shakeAnim {
+  0% { transform: translate(0px, 0px); }
+  25% { transform: translate(4px, -4px); }
+  50% { transform: translate(-4px, 4px); }
+  75% { transform: translate(4px, 4px); }
+  100% { transform: translate(0px, 0px); }
+}
+
+/* 難過（下墜） */
+.sad {
+  animation: sadAnim 0.6s;
+}
+@keyframes sadAnim {
+  0% { transform: translateY(0px); opacity: 1; }
+  100% { transform: translateY(14px); opacity: 0.7; }
+}
+
+/* 開心（跳動） */
+.happy {
+  animation: happyAnim 0.8s ease-in-out;
+}
+@keyframes happyAnim {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.15); }
+  60% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* =========================
+   出拳按鈕
+========================= */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.controls button {
+  padding: 12px 18px;
   font-size: 18px;
+  border: none;
+  background: #ffe7b8;
+  border-radius: 12px;
+  border: 2px solid #d7a76a;
   cursor: pointer;
+  transition: 0.15s;
 }
 
-button:hover {
-  background: #fff4e6;
+.controls button:hover {
+  background: #fff4d6;
 }
 
-#result {
-  margin-top: 16px;
-  font-size: 20px;
-  font-weight: 600;
+.controls button:active {
+  transform: scale(0.95);
+}
+
+/* =========================
+   Log 區
+========================= */
+.log-box {
+  background: #ffffff;
+  border: 2px dashed #d6a771;
+  padding: 12px;
+  border-radius: 10px;
+  min-height: 60px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #634131;
+}
+
+/* =========================
+   熊熊占卜彈跳視窗
+========================= */
+.fortune-box {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.4s forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fortune-card {
+  background: #fff8e8;
+  width: 80%;
+  max-width: 320px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 3px solid #f3c27a;
+  animation: popup 0.3s ease-out;
+}
+
+@keyframes popup {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.fortune-card h3 {
+  margin-top: 0;
+  color: #c4741c;
+  font-size: 24px;
+}
+
+.close-btn {
+  background: #ffd28d;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-top: 12px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.close-btn:hover {
+  background: #ffe3b8;
+}
+
+/* =========================
+   魔王暗黑特效
+========================= */
+.boss-mode {
+  animation: bossDark 1.2s infinite alternate;
+}
+
+@keyframes bossDark {
+  0% { filter: brightness(1); }
+  100% { filter: brightness(0.75); }
 }

@@ -2,92 +2,193 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>小勇者猜拳大戰 ⚔️</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="game-wrap">
-    <header class="title-block">
-      <h1>小勇者猜拳大戰 ⚔️</h1>
-      <p>選一個拳，陪著小勇者一起安撫被壞情緒影響的魔物吧！</p>
-    </header>
+    <h1>小勇者猜拳大戰 ⚔️</h1>
+    <p>選一個拳，試著安撫被壞情緒影響的魔物吧！</p>
 
-    <!-- 戰鬥狀態 -->
-    <section class="status-row">
-      <div class="card hero-card">
-        <div class="card-header">
-          <span class="role-tag">小勇者</span>
-          <span class="role-name">勇敢的你 💖</span>
-        </div>
-        <div class="avatar">🧑‍🚀</div>
-        <div class="hp-row">
-          <span>好心情</span>
-          <span id="heroHpHearts">❤️❤️❤️</span>
-        </div>
-      </div>
+    <h2 id="monster-name">魔物：哭哭史萊姆 💧</h2>
+    <p id="monster-intro">牠覺得沒有人懂牠，所以一直在哭。</p>
 
-      <div class="card monster-card">
-        <div class="card-header">
-          <span class="role-tag bad">魔物</span>
-          <span class="role-name" id="monsterName">壞心情魔王</span>
-        </div>
-        <div class="avatar" id="monsterAvatar">👾</div>
-        <div class="hp-row">
-          <span>壞情緒進度</span>
-          <span id="emotionProgress">0 / 6</span>
-        </div>
-      </div>
-    </section>
+    <div class="btn-row">
+      <button data-move="rock">✊ 石頭</button>
+      <button data-move="scissors">✌️ 剪刀</button>
+      <button data-move="paper">🖐 布</button>
+    </div>
 
-    <!-- 目前安撫到哪一個壞情緒 -->
-    <section class="card emotion-card">
-      <h2>正在安撫的壞情緒</h2>
-      <p id="currentEmotion">還沒開始戰鬥，先選一個拳吧～</p>
-    </section>
+    <p id="talk-hero"></p>
+    <p id="talk-monster"></p>
 
-    <!-- 猜拳按鈕 -->
-    <section class="card rps-card">
-      <h2>請選擇你要出的拳 ✊✌️🖐️</h2>
-      <div class="rps-buttons">
-        <button class="rps-btn" data-choice="rock">✊ 石頭</button>
-        <button class="rps-btn" data-choice="scissors">✌️ 剪刀</button>
-        <button class="rps-btn" data-choice="paper">🖐️ 布</button>
-      </div>
-      <p class="small-tip">溫柔提醒：輸了也沒關係，我們是在練習「怎麼面對情緒」喔！</p>
-    </section>
-
-    <!-- 對話區 -->
-    <section class="dialog-row">
-      <div class="dialog-card hero-dialog">
-        <h3>小勇者說：</h3>
-        <p id="heroLine">今天也要帶著好心情出發！</p>
-      </div>
-      <div class="dialog-card monster-dialog">
-        <h3>魔物心裡想：</h3>
-        <p id="monsterLine">哼，我現在心情很糟，不想理人...</p>
-      </div>
-    </section>
-
-    <!-- 回合資訊 -->
-    <section class="card info-card">
-      <h2>這一回合發生了什麼？</h2>
-      <p id="roundInfo">還沒有出拳喔～</p>
-      <ul id="logList" class="log-list"></ul>
-    </section>
-
-    <!-- 底部功能 -->
-    <footer class="footer-row">
-      <button id="resetBtn" class="reset-btn">重新開始這場戰鬥 ♻️</button>
-      <p class="footer-text">
-        玩法小提醒：<br />
-        ⭐ 贏一回合 → 安撫一種壞情緒<br />
-        ⭐ 輸一回合 → 小勇者好心情 -1（最多 3 次，要記得休息）<br />
-        ⭐ 安撫完 6 種壞情緒 → 魔物會變回開心好朋友！
-      </p>
-    </footer>
+    <p id="round-result"></p>
+    <p id="hp-info"></p>
+    <p id="game-info"></p>
   </div>
 
-  <script src="script.js"></script>
+  <!-- 這裡是 JavaScript：猜拳 + 魔物邏輯 -->
+  <script>
+    const monsters = [
+      {
+        name: "哭哭史萊姆 💧",
+        intro: "牠覺得沒有人懂牠，所以一直在哭。",
+        hp: 3,
+        negativeLines: [
+          "嗚嗚嗚，每天都好難過……",
+          "反正沒有人在乎我啦。",
+          "不要靠近我，我會把你弄得黏答答。"
+        ],
+        positiveLines: [
+          "欸？好像有人願意聽我說話……",
+          "謝謝你關心我，我心情好一點了！",
+          "原來我也可以變開心，嗚嗚感動～"
+        ]
+      },
+      {
+        name: "暴躁小火龍 🔥",
+        intro: "一生氣就噴火，其實只是很害怕被拒絕。",
+        hp: 3,
+        negativeLines: [
+          "誰都別靠近，我現在超暴躁！",
+          "哼，先攻擊再說！",
+          "我才不需要朋友。"
+        ],
+        positiveLines: [
+          "欸？你都不怕我欸。",
+          "好啦，我不亂噴火了……",
+          "也許我可以試著溫柔一點。"
+        ]
+      },
+      {
+        name: "孤單蝙蝠 🦇",
+        intro: "總是躲在角落偷偷看大家玩。",
+        hp: 3,
+        negativeLines: [
+          "我習慣一個人了，不需要誰。",
+          "別看我，我很奇怪啦。",
+          "沒有人會想跟我玩。"
+        ],
+        positiveLines: [
+          "你真的願意陪我玩嗎？",
+          "好久沒有這麼開心了！",
+          "謝謝你把我從黑暗洞穴裡叫出來。"
+        ]
+      }
+    ];
+
+    const heroLines = [
+      "我來陪你，沒關係，我在這裡！",
+      "你的感受很重要，慢慢來就好～",
+      "一起玩個猜拳遊戲，好嗎？",
+      "就算現在心情不好，也可以一點一滴變好。"
+    ];
+
+    const monsterNameEl = document.getElementById("monster-name");
+    const monsterIntroEl = document.getElementById("monster-intro");
+    const talkHeroEl = document.getElementById("talk-hero");
+    const talkMonsterEl = document.getElementById("talk-monster");
+    const roundResultEl = document.getElementById("round-result");
+    const hpInfoEl = document.getElementById("hp-info");
+    const gameInfoEl = document.getElementById("game-info");
+    const buttons = document.querySelectorAll("button[data-move]");
+
+    let currentMonsterIndex = 0;
+    let currentMonster = null;
+
+    function pickRandom(list) {
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function setMonster(index) {
+      currentMonsterIndex = index;
+      // 複製一份，避免直接改到原本資料
+      currentMonster = { ...monsters[index] };
+
+      monsterNameEl.textContent = "魔物：" + currentMonster.name;
+      monsterIntroEl.textContent = currentMonster.intro;
+
+      talkHeroEl.textContent = "";
+      talkMonsterEl.textContent = "";
+      roundResultEl.textContent = "";
+      hpInfoEl.textContent = `壞情緒能量：${currentMonster.hp} 點`;
+      gameInfoEl.textContent = `與這隻魔物玩猜拳，贏 ${currentMonster.hp} 次就能安撫牠。`;
+    }
+
+    function moveBeats(move) {
+      if (move === "rock") return "scissors";
+      if (move === "scissors") return "paper";
+      if (move === "paper") return "rock";
+    }
+
+    function translateMove(move) {
+      if (move === "rock") return "石頭";
+      if (move === "paper") return "布";
+      if (move === "scissors") return "剪刀";
+      return "";
+    }
+
+    function handleRound(playerMove) {
+      if (!currentMonster) return;
+
+      const monsterMoveOptions = ["rock", "paper", "scissors"];
+      const monsterMove = pickRandom(monsterMoveOptions);
+
+      // 對話
+      talkHeroEl.textContent = "小勇者：「" + pickRandom(heroLines) + "」";
+      talkMonsterEl.textContent = "魔物：「" + pickRandom(currentMonster.negativeLines) + "」";
+
+      let resultText = "";
+
+      if (playerMove === monsterMove) {
+        resultText = `平手！你出了 ${translateMove(playerMove)}，魔物也是 ${translateMove(monsterMove)}。`;
+      } else if (moveBeats(playerMove) === monsterMove) {
+        // 小勇者勝利，魔物壞情緒 -1
+        currentMonster.hp -= 1;
+        resultText =
+          `你贏了！你的 ${translateMove(playerMove)} 戰勝了魔物的 ${translateMove(monsterMove)}。` +
+          "好心情能量傳達過去囉～";
+      } else {
+        resultText =
+          `這回合魔物小贏，你出了 ${translateMove(playerMove)}，魔物是 ${translateMove(monsterMove)}。` +
+          "沒關係，再試一次！";
+      }
+
+      roundResultEl.textContent = resultText;
+
+      if (currentMonster.hp > 0) {
+        hpInfoEl.textContent = `壞情緒能量還剩：${currentMonster.hp} 點`;
+      } else {
+        // 壞情緒清空
+        hpInfoEl.textContent = "壞情緒被安撫完了！";
+        talkMonsterEl.textContent = "魔物：「" + pickRandom(currentMonster.positiveLines) + "」";
+
+        if (currentMonsterIndex < monsters.length - 1) {
+          gameInfoEl.textContent =
+            "恭喜你安撫了這隻魔物！等一下會出現下一隻魔物～";
+          // 一點點延遲，再切換到下一隻
+          const nextIndex = currentMonsterIndex + 1;
+          currentMonster = null;
+          setTimeout(() => {
+            setMonster(nextIndex);
+          }, 900);
+        } else {
+          gameInfoEl.textContent =
+            "全部魔物都被你安撫了！小勇者，你太棒了！🎉 重新整理頁面可以再玩一次。";
+        }
+      }
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const move = btn.getAttribute("data-move");
+        handleRound(move);
+      });
+    });
+
+    // 一開始載入第一隻魔物
+    setMonster(0);
+  </script>
 </body>
 </html>

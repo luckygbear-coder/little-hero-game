@@ -1,194 +1,51 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>小勇者猜拳大戰 ⚔️</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>小勇者之旅大冒險 🎮</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
   <div class="game-wrap">
-    <h1>小勇者猜拳大戰 ⚔️</h1>
-    <p>選一個拳，試著安撫被壞情緒影響的魔物吧！</p>
+    
+    <!-- 標題 -->
+    <h1 class="title">小勇者之旅大冒險 🌟</h1>
+    <p class="subtitle">猜拳、安撫魔物、抽占卜、挑戰魔王！</p>
 
-    <h2 id="monster-name">魔物：哭哭史萊姆 💧</h2>
-    <p id="monster-intro">牠覺得沒有人懂牠，所以一直在哭。</p>
-
-    <div class="btn-row">
-      <button data-move="rock">✊ 石頭</button>
-      <button data-move="scissors">✌️ 剪刀</button>
-      <button data-move="paper">🖐 布</button>
+    <!-- 魔物區 -->
+    <div class="monster-box">
+      <h2 id="monster-name">魔物名稱</h2>
+      <img id="monster-img" src="" class="monster-img">
+      <p id="monster-hp">壞情緒值：--</p>
     </div>
 
-    <p id="talk-hero"></p>
-    <p id="talk-monster"></p>
+    <!-- 玩家出拳 -->
+    <div class="controls">
+      <button onclick="play('石頭')">✊ 石頭</button>
+      <button onclick="play('剪刀')">✌️ 剪刀</button>
+      <button onclick="play('布')">🖐 布</button>
+    </div>
 
-    <p id="round-result"></p>
-    <p id="hp-info"></p>
-    <p id="game-info"></p>
+    <!-- 遊戲訊息 -->
+    <div id="log" class="log-box">
+      遊戲開始！請選一個拳～
+    </div>
+
   </div>
 
-  <!-- 這裡是 JavaScript：猜拳 + 魔物邏輯 -->
-  <script>
-    const monsters = [
-      {
-        name: "哭哭史萊姆 💧",
-        intro: "牠覺得沒有人懂牠，所以一直在哭。",
-        hp: 3,
-        negativeLines: [
-          "嗚嗚嗚，每天都好難過……",
-          "反正沒有人在乎我啦。",
-          "不要靠近我，我會把你弄得黏答答。"
-        ],
-        positiveLines: [
-          "欸？好像有人願意聽我說話……",
-          "謝謝你關心我，我心情好一點了！",
-          "原來我也可以變開心，嗚嗚感動～"
-        ]
-      },
-      {
-        name: "暴躁小火龍 🔥",
-        intro: "一生氣就噴火，其實只是很害怕被拒絕。",
-        hp: 3,
-        negativeLines: [
-          "誰都別靠近，我現在超暴躁！",
-          "哼，先攻擊再說！",
-          "我才不需要朋友。"
-        ],
-        positiveLines: [
-          "欸？你都不怕我欸。",
-          "好啦，我不亂噴火了……",
-          "也許我可以試著溫柔一點。"
-        ]
-      },
-      {
-        name: "孤單蝙蝠 🦇",
-        intro: "總是躲在角落偷偷看大家玩。",
-        hp: 3,
-        negativeLines: [
-          "我習慣一個人了，不需要誰。",
-          "別看我，我很奇怪啦。",
-          "沒有人會想跟我玩。"
-        ],
-        positiveLines: [
-          "你真的願意陪我玩嗎？",
-          "好久沒有這麼開心了！",
-          "謝謝你把我從黑暗洞穴裡叫出來。"
-        ]
-      }
-    ];
+  <!-- 熊熊占卜彈出視窗 -->
+  <div id="fortune-box" class="fortune-box">
+    <div class="fortune-card">
+      <h3>🐻 熊熊占卜</h3>
+      <p id="fortune-text">占卜內容</p>
+      <button onclick="closeFortune()" class="close-btn">確定</button>
+    </div>
+  </div>
 
-    const heroLines = [
-      "我來陪你，沒關係，我在這裡！",
-      "你的感受很重要，慢慢來就好～",
-      "一起玩個猜拳遊戲，好嗎？",
-      "就算現在心情不好，也可以一點一滴變好。"
-    ];
-
-    const monsterNameEl = document.getElementById("monster-name");
-    const monsterIntroEl = document.getElementById("monster-intro");
-    const talkHeroEl = document.getElementById("talk-hero");
-    const talkMonsterEl = document.getElementById("talk-monster");
-    const roundResultEl = document.getElementById("round-result");
-    const hpInfoEl = document.getElementById("hp-info");
-    const gameInfoEl = document.getElementById("game-info");
-    const buttons = document.querySelectorAll("button[data-move]");
-
-    let currentMonsterIndex = 0;
-    let currentMonster = null;
-
-    function pickRandom(list) {
-      return list[Math.floor(Math.random() * list.length)];
-    }
-
-    function setMonster(index) {
-      currentMonsterIndex = index;
-      // 複製一份，避免直接改到原本資料
-      currentMonster = { ...monsters[index] };
-
-      monsterNameEl.textContent = "魔物：" + currentMonster.name;
-      monsterIntroEl.textContent = currentMonster.intro;
-
-      talkHeroEl.textContent = "";
-      talkMonsterEl.textContent = "";
-      roundResultEl.textContent = "";
-      hpInfoEl.textContent = `壞情緒能量：${currentMonster.hp} 點`;
-      gameInfoEl.textContent = `與這隻魔物玩猜拳，贏 ${currentMonster.hp} 次就能安撫牠。`;
-    }
-
-    function moveBeats(move) {
-      if (move === "rock") return "scissors";
-      if (move === "scissors") return "paper";
-      if (move === "paper") return "rock";
-    }
-
-    function translateMove(move) {
-      if (move === "rock") return "石頭";
-      if (move === "paper") return "布";
-      if (move === "scissors") return "剪刀";
-      return "";
-    }
-
-    function handleRound(playerMove) {
-      if (!currentMonster) return;
-
-      const monsterMoveOptions = ["rock", "paper", "scissors"];
-      const monsterMove = pickRandom(monsterMoveOptions);
-
-      // 對話
-      talkHeroEl.textContent = "小勇者：「" + pickRandom(heroLines) + "」";
-      talkMonsterEl.textContent = "魔物：「" + pickRandom(currentMonster.negativeLines) + "」";
-
-      let resultText = "";
-
-      if (playerMove === monsterMove) {
-        resultText = `平手！你出了 ${translateMove(playerMove)}，魔物也是 ${translateMove(monsterMove)}。`;
-      } else if (moveBeats(playerMove) === monsterMove) {
-        // 小勇者勝利，魔物壞情緒 -1
-        currentMonster.hp -= 1;
-        resultText =
-          `你贏了！你的 ${translateMove(playerMove)} 戰勝了魔物的 ${translateMove(monsterMove)}。` +
-          "好心情能量傳達過去囉～";
-      } else {
-        resultText =
-          `這回合魔物小贏，你出了 ${translateMove(playerMove)}，魔物是 ${translateMove(monsterMove)}。` +
-          "沒關係，再試一次！";
-      }
-
-      roundResultEl.textContent = resultText;
-
-      if (currentMonster.hp > 0) {
-        hpInfoEl.textContent = `壞情緒能量還剩：${currentMonster.hp} 點`;
-      } else {
-        // 壞情緒清空
-        hpInfoEl.textContent = "壞情緒被安撫完了！";
-        talkMonsterEl.textContent = "魔物：「" + pickRandom(currentMonster.positiveLines) + "」";
-
-        if (currentMonsterIndex < monsters.length - 1) {
-          gameInfoEl.textContent =
-            "恭喜你安撫了這隻魔物！等一下會出現下一隻魔物～";
-          // 一點點延遲，再切換到下一隻
-          const nextIndex = currentMonsterIndex + 1;
-          currentMonster = null;
-          setTimeout(() => {
-            setMonster(nextIndex);
-          }, 900);
-        } else {
-          gameInfoEl.textContent =
-            "全部魔物都被你安撫了！小勇者，你太棒了！🎉 重新整理頁面可以再玩一次。";
-        }
-      }
-    }
-
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const move = btn.getAttribute("data-move");
-        handleRound(move);
-      });
-    });
-
-    // 一開始載入第一隻魔物
-    setMonster(0);
-  </script>
+  <!-- 主程式 -->
+  <script src="script.js"></script>
 </body>
 </html>

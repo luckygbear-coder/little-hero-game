@@ -3,72 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>小勇者之旅大冒險 - HTML 版</title>
+  <title>小勇者之旅大冒險 — HTML 測試版</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <div class="game-wrap">
-    <header class="game-header">
-      <h1>小勇者之旅大冒險</h1>
-      <p class="subtitle">剪刀石頭布．安撫壞情緒的小勇者</p>
-    </header>
+    <h1>小勇者猜拳大戰 ⚔️</h1>
 
-    <main class="game-main">
-      <!-- 狀態區 -->
-      <section class="status-row">
-        <div class="card hero-card">
-          <h2>小勇者</h2>
-          <p>好心情 ❤️：<span id="hero-hearts"></span></p>
-          <p>勇氣星星 ⭐：<span id="hero-stars"></span></p>
-          <p class="small">輸了會掉好心情，可以用勇氣星星回復一次。</p>
-        </div>
+    <p class="desc">
+      選一個拳，試著安撫被壞情緒影響的魔物吧！
+    </p>
 
-        <div class="card monster-card">
-          <h2>壞情緒魔王</h2>
-          <p>壞情緒 😈：<span id="monster-hearts"></span></p>
-          <p class="small">一共有 6 個壞情緒，要慢慢安撫牠。</p>
-        </div>
-      </section>
+    <div class="btn-row">
+      <button onclick="play('石頭')">✊ 石頭</button>
+      <button onclick="play('剪刀')">✌️ 剪刀</button>
+      <button onclick="play('布')">🖐 布</button>
+    </div>
 
-      <!-- 對話區 -->
-      <section class="dialog card">
-        <h2>對話 / 故事</h2>
-        <div id="dialog-log" class="dialog-log">
-          <p>村長熊熊：歡迎來到星星王國！用剪刀石頭布，把魔王的壞情緒一個個安撫吧～</p>
-        </div>
-      </section>
-
-      <!-- 操作區 -->
-      <section class="controls card">
-        <h2>出拳！</h2>
-        <div class="buttons-row">
-          <button class="btn rps-btn" data-choice="rock">✊ 石頭</button>
-          <button class="btn rps-btn" data-choice="scissors">✌️ 剪刀</button>
-          <button class="btn rps-btn" data-choice="paper">🖐 布</button>
-        </div>
-
-        <h3>選一句安撫魔王的話：</h3>
-        <select id="phrase-select" class="phrase-select">
-          <option value="你看起來很難過，我願意聽你說。">你看起來很難過，我願意聽你說。</option>
-          <option value="生氣也是一種情緒，我陪你一起慢慢放下。">生氣也是一種情緒，我陪你一起慢慢放下。</option>
-          <option value="你並不孤單，我們都在這裡。">你並不孤單，我們都在這裡。</option>
-          <option value="害怕的時候，我們可以一起深呼吸。">害怕的時候，我們可以一起深呼吸。</option>
-          <option value="謝謝你願意把心情說出來，真的很勇敢。">謝謝你願意把心情說出來，真的很勇敢。</option>
-        </select>
-
-        <div class="buttons-row extra">
-          <button id="use-star-btn" class="btn secondary-btn">使用勇氣星星 ⭐（回復好心情）</button>
-          <button id="restart-btn" class="btn ghost-btn">重新開始 🔁</button>
-        </div>
-
-        <p id="round-result" class="round-result"></p>
-        <p id="last-choices" class="last-choices"></p>
-      </section>
-    </main>
-
-    <footer class="game-footer">
-      <p>設計：村長熊熊 &amp; 小勇者們 ｜ 純 HTML 版本，可直接部署到 GitHub Pages</p>
-    </footer>
+    <pre id="result">還沒開始戰鬥，先選一個拳吧～</pre>
   </div>
 
   <script src="script.js"></script>

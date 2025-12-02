@@ -124,9 +124,43 @@
         </div>
 
         <p class="hint small">
-          之後我們會在這裡加入：<br />
-          「點地點 → 遇到魔物 → 進入猜拳安撫戰」的完整流程。
+          之後可以重複挑戰不同地點，慢慢安撫所有情緒魔物與魔王。
         </p>
+      </div>
+    </section>
+
+    <!-- ===== 畫面 3：魔物猜拳戰 ===== -->
+    <section id="screen-battle" class="screen hidden">
+      <div class="card">
+        <h2 id="battleTitle">對戰：情緒小魔物</h2>
+        <p id="battleIntro" class="hint">
+          用剪刀、石頭、布傳送好心情，慢慢安撫牠的情緒吧！
+        </p>
+
+        <div class="battle-status">
+          <div class="hp-row">
+            <span class="hp-label">小勇者心情</span>
+            <span id="heroHp" class="hp-hearts">❤️❤️❤️</span>
+          </div>
+          <div class="hp-row">
+            <span id="monsterNameLabel" class="hp-label">魔物心情</span>
+            <span id="monsterHp" class="hp-hearts">💜💜💜</span>
+          </div>
+        </div>
+
+        <div class="battle-buttons">
+          <button class="rps-btn" data-hand="rock">✊ 石頭</button>
+          <button class="rps-btn" data-hand="scissors">✌️ 剪刀</button>
+          <button class="rps-btn" data-hand="paper">🖐 布</button>
+        </div>
+
+        <p id="battleLog" class="battle-log">
+          選一個拳，向魔物傳達你的好心情～
+        </p>
+
+        <button id="battleBackBtn" class="secondary-btn hidden">
+          回到地圖
+        </button>
       </div>
     </section>
   </div>
@@ -155,7 +189,7 @@
     <p id="encounterText" class="modal-text">
       遠方出現了一隻情緒魔物……之後會在這裡加入猜拳安撫戰！
     </p>
-    <button id="encounterOkBtn" class="primary-btn">先記下這裡，等等再來安撫～</button>
+    <button id="encounterOkBtn" class="primary-btn">前往安撫戰！</button>
   </div>
 
   <script src="script.js"></script>

@@ -56,6 +56,18 @@
             </div>
           </button>
         </div>
+
+        <!-- 熊熊村長 IG 推薦區 -->
+        <div class="ig-banner">
+          <p>🐻 想在現實世界也遇見熊熊村長嗎？</p>
+          <a
+            class="ig-link"
+            href="https://www.instagram.com/luckygbear"
+            target="_blank"
+          >
+            👉 追蹤熊熊村長 IG：@luckygbear
+          </a>
+        </div>
       </div>
     </section>
 
@@ -68,16 +80,17 @@
         </p>
 
         <div class="map-grid">
+          <!-- 新手村：可以回到選擇職業 -->
           <button class="map-cell" data-location="village">
             <span class="cell-emoji">🏡</span>
             <span class="cell-name">新手村</span>
-            <span class="cell-tag">回到選職業</span>
+            <span class="cell-tag">回到起點</span>
           </button>
 
           <button class="map-cell" data-location="meadow">
             <span class="cell-emoji">🌿</span>
             <span class="cell-name">草原</span>
-            <span class="cell-tag">擔心史萊姆</span>
+            <span class="cell-tag">小小史萊姆</span>
           </button>
 
           <button class="map-cell" data-location="forest">
@@ -89,7 +102,7 @@
           <button class="map-cell" data-location="cave">
             <span class="cell-emoji">🕳️</span>
             <span class="cell-name">洞窟</span>
-            <span class="cell-tag">怕黑岩怪</span>
+            <span class="cell-tag">怕黑小魔物</span>
           </button>
 
           <button class="map-cell" data-location="lake">
@@ -99,13 +112,111 @@
           </button>
 
           <button class="map-cell" data-location="graveyard">
-            <span
-            <!-- ===== 熊熊村長 IG 連結區 ===== -->
-<footer class="footer">
-  <p>🐻 想看更多熊熊村長的溫暖提醒嗎？</p>
-  <p>
-    <a class="ig-link" href="https://www.instagram.com/luckygbear" target="_blank">
-      👉 追蹤熊熊村長 IG：@luckygbear
-    </a>
-  </p>
-</footer>
+            <span class="cell-emoji">⚰️</span>
+            <span class="cell-name">墓地</span>
+            <span class="cell-tag">寂寞骷髏</span>
+          </button>
+
+          <!-- 女巫小屋：塔羅占卜入口（之後會加塔羅系統） -->
+          <button class="map-cell" data-location="witch">
+            <span class="cell-emoji">🧙‍♀️</span>
+            <span class="cell-name">女巫小屋</span>
+            <span class="cell-tag">塔羅占卜</span>
+          </button>
+
+          <button class="map-cell" data-location="mountain">
+            <span class="cell-emoji">⛰️</span>
+            <span class="cell-name">山頂</span>
+            <span class="cell-tag">壓力小獸</span>
+          </button>
+
+          <button class="map-cell boss-cell" data-location="boss">
+            <span class="cell-emoji">🐉</span>
+            <span class="cell-name">魔王城</span>
+            <span class="cell-tag">最終決戰</span>
+          </button>
+        </div>
+
+        <p class="hint small">
+          之後我們會在這裡加入：<br />
+          「點地點 → 遇到魔物（含弱點拳 / 禁出拳 / 熊熊提醒）
+          → 進入猜拳安撫戰」的完整流程。
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== 通用遮罩 ===== -->
+  <div id="modal-backdrop" class="modal-backdrop hidden"></div>
+
+  <!-- 熊熊占卜視窗 -->
+  <div id="fortuneModal" class="modal hidden">
+    <div class="modal-header">
+      <span class="modal-emoji">🐻</span>
+      <h3>熊熊占卜</h3>
+    </div>
+    <p id="fortuneText" class="modal-text">
+      今天的你，擁有溫柔治癒力，壞情緒看到你都會慢慢軟化～
+    </p>
+
+    <!-- 占卜後的 IG 引導 -->
+    <p class="modal-text modal-ig">
+      想聽熊熊更多溫暖小語？<br />
+      <a
+        class="ig-link"
+        href="https://www.instagram.com/luckygbear"
+        target="_blank"
+      >
+        來 IG 找熊熊：@luckygbear
+      </a>
+    </p>
+
+    <button id="fortuneOkBtn" class="primary-btn">收到，出發！</button>
+  </div>
+
+  <!-- 地圖遭遇視窗（之後會接上魔物 / 魔王戰） -->
+  <div id="encounterModal" class="modal hidden">
+    <div class="modal-header">
+      <span class="modal-emoji">✨</span>
+      <h3 id="encounterTitle">你來到了草原</h3>
+    </div>
+    <p id="encounterText" class="modal-text">
+      遠方出現了一隻情緒魔物……之後會在這裡加入猜拳安撫戰！
+    </p>
+
+    <!-- 熊熊村長小提醒 + IG -->
+    <p class="modal-text modal-ig">
+      熊熊村長提醒：每一個魔物，都只是暫時被壞情緒纏住的小夥伴。<br />
+      先照顧好自己的心情，再慢慢靠近就好。<br />
+      想看熊熊更多冒險日記？<br />
+      <a
+        class="ig-link"
+        href="https://www.instagram.com/luckygbear"
+        target="_blank"
+      >
+        IG：@luckygbear
+      </a>
+    </p>
+
+    <button id="encounterOkBtn" class="primary-btn">
+      了解了，先記下這裡～
+    </button>
+  </div>
+
+  <!-- ===== 頁尾：熊熊村長 IG 固定入口 ===== -->
+  <footer class="footer">
+    <p>🐻 想看更多熊熊村長的故事與小勇者日常嗎？</p>
+    <p>
+      <a
+        class="ig-link"
+        href="https://www.instagram.com/luckygbear"
+        target="_blank"
+      >
+        👉 追蹤熊熊村長 IG：@luckygbear
+      </a>
+    </p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

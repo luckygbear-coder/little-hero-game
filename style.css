@@ -1,327 +1,171 @@
-/* =========================================
-   小勇者之旅大冒險 - 風格化外觀樣式
-   色調：溫暖童話風、圓角、柔和陰影
-========================================= */
+/* ============================================
+   小勇者之旅大冒險：童話遊戲風 UI 樣式
+   檔案：style.css
+============================================ */
+
+/* 全域設定 */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
 
 body {
-  margin: 0;
-  padding: 0;
-  font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(#cff4ff, #b9ffd3);
-  color: #5a3b23;
+    font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(180deg, #dff8ff 0%, #c7f7e3 40%, #fdf6d9 100%);
+    color: #5a4636;
 }
 
-.game-wrap {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 16px;
-}
-
-/* 卡片框架 */
-.card {
-  background: #fff7e6;
-  border-radius: 18px;
-  border: 2px solid #e1b676;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+/* 頁面主容器 */
+.container {
+    max-width: 860px;
+    margin: auto;
+    padding: 20px;
 }
 
 /* 標題 */
-h1 {
-  font-size: 26px;
-  color: #b6661a;
-  margin: 0;
-  text-align: center;
+.title {
+    text-align: center;
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: #d08a2e;
+    text-shadow: 2px 2px #fff3cd;
+    margin-top: 10px;
 }
 
 .subtitle {
-  text-align: center;
-  font-size: 14px;
-  color: #c4874d;
-  margin-bottom: 18px;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #a77b47;
+    margin-bottom: 25px;
 }
 
-/* =========================================
-   主選單 Tabs
-========================================= */
-.nav-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 14px;
-}
-
-.nav-btn {
-  flex: 1;
-  padding: 8px;
-  font-size: 13px;
-  border-radius: 10px;
-  border: 1px solid #d9b47a;
-  background: #fff3d8;
-  color: #7a5635;
-}
-
-.nav-btn.active {
-  background: #f7c57b;
-  color: #5a3b23;
-  font-weight: bold;
-}
-
-/* =========================================
-   模式選擇（單人 / 雙人）
-========================================= */
-
-.mode-select-wrap {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+/* 模式切換按鈕 */
+.mode-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
 }
 
 .mode-btn {
-  flex: 1;
-  padding: 10px 0;
-  border-radius: 14px;
-  font-size: 15px;
-  border: 2px solid #e1b676;
-  background: #fff3dd;
-  color: #7a4f25;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    background: #ffeccc;
+    box-shadow: 0 3px #e0b98a;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
 .mode-btn.active {
-  background: #ffb870;
-  color: #fff;
-  font-weight: bold;
+    background: #ffd48f;
 }
 
-.mode-banner {
-  text-align: center;
-  background: #ffe8c2;
-  padding: 6px 0;
-  border-radius: 10px;
-  border: 1px solid #e1b676;
-  margin-bottom: 15px;
-  font-size: 14px;
+.mode-btn:hover {
+    transform: translateY(-2px);
 }
 
-/* =========================================
-   頁面顯示 / 隱藏
-========================================= */
-.page {
-  display: none;
+/* 上方導覽選單 */
+.nav-menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
 }
 
-.page.active {
-  display: block;
+.nav-item {
+    padding: 8px 14px;
+    background: #fff7e6;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    border: 1px solid #e8cfa2;
+    cursor: pointer;
+    transition: 0.15s;
 }
 
-/* =========================================
-   小勇者選擇卡
-========================================= */
-
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+.nav-item:hover {
+    background: #ffefc7;
 }
 
+/* 小節標題 */
+.section-title {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #cc7a2b;
+    margin: 20px 0 10px 0;
+}
+
+/* 卡片區塊 */
 .hero-card {
-  background: #fff;
-  border-radius: 16px;
-  border: 2px solid #e1b676;
-  padding: 12px;
-  text-align: center;
-  font-size: 13px;
-  cursor: pointer;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    background: #fffdf7;
+    border-radius: 22px;
+    padding: 18px;
+    border: 2px solid #f0d8a8;
+    box-shadow: 0 4px #e3c592;
+    max-width: 300px;
+    transition: 0.2s;
 }
 
 .hero-card:hover {
-  background: #fff5e3;
+    transform: translateY(-4px);
 }
 
-.hero-badge {
-  background: #ffe2b2;
-  padding: 3px 8px;
-  border-radius: 50px;
-  font-size: 12px;
-  display: inline-block;
-  margin-bottom: 5px;
-  color: #8a551d;
+.hero-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    margin-top: 10px;
 }
 
-.hero-tag {
-  font-size: 12px;
-  color: #9b7040;
-  margin-bottom: 6px;
+.hero-name {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: #d0892c;
 }
 
-.current-hero {
-  margin-top: 16px;
-  background: #fff3d5;
-  border-radius: 12px;
-  padding: 10px;
-  border: 1px solid #e1b676;
-  font-size: 14px;
-  text-align: center;
+.hero-info {
+    font-size: 0.95rem;
+    line-height: 1.45;
 }
 
-/* =========================================
-   主選單頁
-========================================= */
-
-.center {
-  text-align: center;
+/* 按鈕 */
+.start-btn, .confirm-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: #ffcf73;
+    border: none;
+    border-radius: 25px;
+    box-shadow: 0 3px #d9a657;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: 0.2s;
 }
 
-.primary-btn {
-  background: linear-gradient(90deg, #ffb870, #ff9f52);
-  color: white;
-  padding: 12px 20px;
-  border-radius: 16px;
-  border: none;
-  font-size: 16px;
-  margin: 10px 0;
-  cursor: pointer;
+.start-btn:hover, .confirm-btn:hover {
+    background: #ffd88e;
+    transform: translateY(-2px);
 }
 
-.primary-btn:hover {
-  opacity: 0.85;
+/* 隱藏區塊（切換用） */
+.page-section {
+    display: none;
+}
+.page-section.active {
+    display: block;
 }
 
-.tip-box {
-  background: #fff0d0;
-  border-left: 4px solid #f2a24a;
-  padding: 10px;
-  border-radius: 10px;
-  margin-top: 12px;
-  font-size: 14px;
-}
-
-/* =========================================
-   地圖九宮格
-========================================= */
-
-.map-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.map-cell {
-  background: #fff;
-  border: 2px solid #e1b676;
-  border-radius: 16px;
-  padding: 10px;
-  font-size: 12px;
-  position: relative;
-}
-
-.map-cell h4 {
-  margin: 0;
-  font-size: 14px;
-  color: #b6661a;
-}
-
-.map-cell .tag {
-  display: inline-block;
-  background: #ffe9c7;
-  padding: 2px 6px;
-  border-radius: 6px;
-  margin-top: 6px;
-  color: #7a5635;
-  font-size: 11px;
-}
-
-.pos-label {
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-  background: #ffd28c;
-  padding: 2px 6px;
-  border-radius: 6px;
-  font-size: 11px;
-}
-
-/* =========================================
-   戰鬥畫面
-========================================= */
-
-.battle-box {
-  background: #fff8e7;
-  border-radius: 18px;
-  padding: 15px;
-  border: 2px solid #e1b676;
-}
-
-.battle-mode-label {
-  text-align: center;
-  background: #ffe2b9;
-  padding: 4px 0;
-  font-size: 13px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-}
-
-.battle-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  font-size: 13px;
-}
-
-#bossEmotionBar {
-  background: #ffe8cc;
-  padding: 6px;
-  border-radius: 10px;
-  border: 1px solid #e1b676;
-  margin-bottom: 10px;
-  font-size: 14px;
-}
-
-.bear-tip {
-  background: #fff0d7;
-  border-left: 4px solid #e39d41;
-  padding: 8px;
-  font-size: 13px;
-  border-radius: 8px;
-}
-
-.battle-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin: 16px 0;
-}
-
-.battle-btn {
-  flex: 1;
-  margin: 0 4px;
-  padding: 10px 0;
-  font-size: 15px;
-  border-radius: 14px;
-  border: 2px solid #e1b676;
-  background: #fff3dd;
-  color: #7a4f25;
-}
-
-.battle-btn:hover {
-  background: #ffe4c0;
-}
-
-#battleResult {
-  background: #fff0d0;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #e1b676;
-  min-height: 40px;
-  font-size: 14px;
-}
-
-/* =========================================
-   表單 / 說明頁
-========================================= */
-
-.mono {
-  font-size: 12px;
-  line-height: 1.6;
-  color: #7a5635;
+/* 底部留白 */
+.footer-space {
+    height: 80px;
 }

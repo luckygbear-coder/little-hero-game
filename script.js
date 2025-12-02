@@ -1,395 +1,415 @@
-// 小勇者之旅大冒險：選職業 → 占卜 → 地圖 → 魔物猜拳戰
+// ===== 全域狀態 =====
+let currentHeroKey = null;
+let currentMonsterKey = null;
+let heroHp = 3;
+let heroHpMax = 3;
+let monsterHp = 3;
+let monsterHpMax = 3;
 
-document.addEventListener("DOMContentLoaded", function () {
-  // ===== 畫面元素 =====
-  var screenChoose = document.getElementById("screen-choose");
-  var screenMap = document.getElementById("screen-map");
-  var screenBattle = document.getElementById("screen-battle");
+// ===== DOM 取得 =====
+document.addEventListener("DOMContentLoaded", () => {
+  const screens = {
+    hero: document.getElementById("screen-hero"),
+    map: document.getElementById("screen-map"),
+    battle: document.getElementById("screen-battle"),
+  };
 
+  const modalBackdrop = document.getElementById("modal-backdrop");
+  const fortuneModal = document.getElementById("fortuneModal");
+  const fortuneText = document.getElementById("fortuneText");
+  const fortuneOkBtn = document.getElementById("fortuneOkBtn");
+
+  const resultModal = document.getElementById("resultModal");
+  const resultText = document.getElementById("resultText");
+  const resultOkBtn = document.getElementById("resultOkBtn");
+
+  const battleLocationTitle = document.getElementById("battle-location-title");
+  const battleIntro = document.getElementById("battle-intro");
+  const heroNameLabel = document.getElementById("hero-name-label");
+  const heroFistLabel = document.getElementById("hero-fist");
+  const heroHpLabel = document.getElementById("hero-hp");
+  const monsterNameLabel = document.getElementById("monster-name");
+  const monsterEmotionLabel = document.getElementById("monster-emotion");
+  const monsterTraitLabel = document.getElementById("monster-trait");
+  const monsterHpLabel = document.getElementById("monster-hp");
+  const battleLog = document.getElementById("battle-log");
+
+  const backToMapBtn = document.getElementById("backToMapBtn");
+  const rpsButtons = document.querySelectorAll(".rps-btn");
+  const useStarBtn = document.getElementById("useStarBtn");
+  const useLoveBtn = document.getElementById("useLoveBtn");
+
+  // ===== 資料：勇者、魔物、占卜 =====
+  const heroes = {
+    warrior: {
+      name: "勇敢的戰士",
+      fist: "✊",
+      description: "出石頭獲勝時，安撫效果加倍。",
+    },
+    mage: {
+      name: "創意法師",
+      fist: "✌️",
+      description: "出剪刀獲勝時，可以多說一句創意安撫語。",
+    },
+    priest: {
+      name: "溫柔牧師",
+      fist: "🖐",
+      description: "出布獲勝時，自己也會回復一點好心情。",
+    },
+    villager: {
+      name: "勇敢的村民",
+      fist: "❔",
+      description: "雖然沒有固定拳，但不會被壞情緒打敗。",
+    },
+  };
+
+  // 每個地點對應一隻魔物；之後可以擴充成 10 隻、12 隻
+  const monsters = {
+    meadow: {
+      name: "怒炎小獸",
+      emotion: "生氣",
+      trait: "容易一秒爆炸，但其實只是覺得不被理解。",
+      hpMax: 3,
+    },
+    forest: {
+      name: "懶懶樹精",
+      emotion: "沒動力",
+      trait: "看起來很頹廢，其實是在偷偷存能量。",
+      hpMax: 3,
+    },
+    cave: {
+      name: "怕黑小影",
+      emotion: "害怕",
+      trait: "什麼都覺得好可怕，需要有人陪一起面對。",
+      hpMax: 3,
+    },
+    lake: {
+      name: "哭哭水靈",
+      emotion: "難過",
+      trait: "眼淚很多，但哭完其實會變得更輕鬆。",
+      hpMax: 3,
+    },
+    graveyard: {
+      name: "寂寞骷髏",
+      emotion: "孤單",
+      trait: "看起來冷冷的，其實超想交朋友。",
+      hpMax: 3,
+    },
+    witch: {
+      name: "情緒女巫",
+      emotion: "混亂",
+      trait: "情緒一下高一下低，需要有人幫忙理一理。",
+      hpMax: 4,
+    },
+    mountain: {
+      name: "壓力石獸",
+      emotion: "壓力大",
+      trait: "背了太多石頭，忘記怎麼放鬆。",
+      hpMax: 4,
+    },
+    boss: {
+      name: "情緒暴走龍",
+      emotion: "所有壞情緒",
+      trait: "把所有魔物的壞情緒都吞進肚子裡，快要爆炸。",
+      hpMax: 6,
+      isBoss: true,
+    },
+  };
+
+  const fortunes = [
+    "今天的你，擁有溫柔治癒力，壞情緒看到你都會慢慢軟化～",
+    "你的笑容像星星一樣亮，能照亮魔物心裡最黑暗的角落。",
+    "只要你願意傾聽，魔物也會慢慢說出它真正的心事。",
+    "你今天的勇氣值滿滿，連魔王都會對你刮目相看！",
+  ];
+
+  const starSentences = [
+    "「謝謝你願意出現，我想聽聽你怎麼了。」",
+    "「我看到你在努力撐著，一定很辛苦吧。」",
+    "「就算現在心情不好，我也會陪你慢慢好起來。」",
+  ];
+
+  const loveSentences = [
+    "「不管你現在是什麼情緒，我都還是喜歡你。」",
+    "「你可以生氣、難過，但不需要一個人承受。」",
+    "「我們一起深呼吸三次，好嗎？」",
+  ];
+
+  // ===== 小工具 =====
   function showScreen(name) {
-    if (screenChoose) screenChoose.classList.add("hidden");
-    if (screenMap) screenMap.classList.add("hidden");
-    if (screenBattle) screenBattle.classList.add("hidden");
-
-    if (name === "choose" && screenChoose) {
-      screenChoose.classList.remove("hidden");
-    }
-    if (name === "map" && screenMap) {
-      screenMap.classList.remove("hidden");
-    }
-    if (name === "battle" && screenBattle) {
-      screenBattle.classList.remove("hidden");
+    Object.values(screens).forEach((el) => el.classList.add("hidden"));
+    if (screens[name]) {
+      screens[name].classList.remove("hidden");
     }
   }
 
-  // 預設在選職業畫面
-  showScreen("choose");
-
-  // ===== 共用 Modal 元件 =====
-  var modalBackdrop = document.getElementById("modal-backdrop");
-  var fortuneModal = document.getElementById("fortuneModal");
-  var encounterModal = document.getElementById("encounterModal");
-
   function openModal(modalEl) {
-    if (!modalEl) return;
     modalEl.classList.remove("hidden");
-    if (modalBackdrop) modalBackdrop.classList.remove("hidden");
+    modalBackdrop.classList.remove("hidden");
   }
 
   function closeModal(modalEl) {
-    if (modalEl) modalEl.classList.add("hidden");
-
-    var allClosed =
-      (!fortuneModal || fortuneModal.classList.contains("hidden")) &&
-      (!encounterModal || encounterModal.classList.contains("hidden"));
-
-    if (allClosed && modalBackdrop) {
+    modalEl.classList.add("hidden");
+    // 若沒有其他 modal 打開，就關掉背景
+    const anyVisibleModal = [fortuneModal, resultModal].some(
+      (m) => !m.classList.contains("hidden")
+    );
+    if (!anyVisibleModal) {
       modalBackdrop.classList.add("hidden");
     }
   }
 
-  // 點背景關閉所有 modal
-  if (modalBackdrop) {
-    modalBackdrop.addEventListener("click", function () {
-      closeModal(fortuneModal);
-      closeModal(encounterModal);
-    });
+  function setHearts(current, max, icon) {
+    let str = "";
+    for (let i = 0; i < current; i++) str += icon;
+    return str;
   }
 
-  // ===== 熊熊占卜 =====
-  var fortuneText = document.getElementById("fortuneText");
-  var fortuneOkBtn = document.getElementById("fortuneOkBtn");
-
-  var fortuneMessages = [
-    "今天的你，擁有溫柔治癒力，壞情緒看到你都會慢慢軟化～",
-    "今天的你，充滿勇氣加乘值，適合面對讓你有點緊張的事情！",
-    "今天的你，創意滿滿，只要願意開口，大家都會被你逗笑～",
-    "今天的你，很適合好好照顧自己，休息一下也是一種勇敢喔！",
-    "今天的你，是隊友的大太陽，你的笑容會影響整個隊伍的心情！"
-  ];
-
-  function showFortune() {
-    if (!fortuneText) return;
-    var index = Math.floor(Math.random() * fortuneMessages.length);
-    fortuneText.textContent = fortuneMessages[index];
-    openModal(fortuneModal);
+  function randomPick(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
   }
 
-  if (fortuneOkBtn) {
-    fortuneOkBtn.addEventListener("click", function () {
-      closeModal(fortuneModal);
-      showScreen("map");
-    });
+  function updateBattleUi() {
+    const hero = heroes[currentHeroKey];
+    if (!hero) return;
+
+    heroNameLabel.textContent = hero.name;
+    heroFistLabel.textContent = hero.fist;
+    heroHpLabel.textContent = setHearts(heroHp, heroHpMax, "❤️");
+    monsterHpLabel.textContent = setHearts(monsterHp, monsterHpMax, "💔");
   }
 
-  // ===== 選擇職業（.hero-card） =====
-  var heroCards = document.querySelectorAll(".hero-card");
-  for (var i = 0; i < heroCards.length; i++) {
-    heroCards[i].addEventListener("click", function () {
-      // 之後可依職業調整技能，目前先直接占卜
-      showFortune();
-    });
-  }
+  function startBattle(locationKey) {
+    const hero = heroes[currentHeroKey];
+    const m = monsters[locationKey];
+    if (!hero || !m) return;
 
-  // ===== 地圖遭遇 & 紀錄目前地點 =====
-  var encounterTitle = document.getElementById("encounterTitle");
-  var encounterText = document.getElementById("encounterText");
-  var encounterOkBtn = document.getElementById("encounterOkBtn");
-
-  var currentLocation = null; // 用來知道等一下要跟哪一隻魔物戰鬥
-
-  var locationInfo = {
-    village: {
-      title: "你回到了新手村",
-      text: "村民們向你揮手打招呼，這裡是最安全的地方，可以好好整理心情再出發～"
-    },
-    meadow: {
-      title: "你來到了草原",
-      text: "一隻小小史萊姆被壞情緒纏住，等等可以在這裡進行「安撫猜拳戰」！"
-    },
-    forest: {
-      title: "你走進了森林",
-      text: "害羞樹精躲在樹後面偷看你，似乎很想說話又不敢開口。"
-    },
-    cave: {
-      title: "你來到黑暗洞窟",
-      text: "怕黑小魔物緊緊抱著自己，也許需要有人陪它一起點亮小燈。"
-    },
-    lake: {
-      title: "你來到湖畔",
-      text: "哭哭水靈在湖邊掉眼淚，你的話語，也許可以成為它的安慰。"
-    },
-    graveyard: {
-      title: "你來到寂寞墓地",
-      text: "寂寞骷髏坐在石碑上發呆，似乎很需要一個「願意聽他說話的朋友」。"
-    },
-    witch: {
-      title: "你來到女巫小屋",
-      text: "女巫正在研究情緒魔法，也許可以從她那裡學到新的安撫方法。"
-    },
-    mountain: {
-      title: "你來到高高的山頂",
-      text: "壓力小獸扛著好多重重的石頭，你能不能幫它分擔一點呢？"
-    },
-    boss: {
-      title: "你來到魔王城前",
-      text: "巨大魔王的壞情緒在天空盤旋，這將會是最重要的一場安撫戰！"
-    }
-  };
-
-  var mapCells = document.querySelectorAll(".map-cell");
-  for (var j = 0; j < mapCells.length; j++) {
-    mapCells[j].addEventListener("click", function () {
-      var loc = this.getAttribute("data-location");
-      currentLocation = loc;
-
-      var info = locationInfo[loc];
-      if (info && encounterTitle && encounterText) {
-        encounterTitle.textContent = info.title;
-        encounterText.textContent = info.text;
-        openModal(encounterModal);
-      }
-    });
-  }
-
-  // ===== 魔物資料（用地點當 key） =====
-  var battleMonsters = {
-    meadow: {
-      name: "緊張史萊姆",
-      intro:
-        "黏呼呼的小史萊姆好緊張，總是擔心自己做不好。試著用溫柔又穩定的好心情安撫牠吧～",
-      maxHp: 3
-    },
-    forest: {
-      name: "害羞樹精",
-      intro:
-        "害羞樹精怕被拒絕，所以常常躲起來。用幽默和理解，讓牠知道就算慢慢來也沒關係。",
-      maxHp: 3
-    },
-    cave: {
-      name: "怕黑小魔物",
-      intro:
-        "洞窟裡的魔物其實只是怕黑。用你的勇氣星星，幫牠一起把洞窟點亮吧！",
-      maxHp: 3
-    },
-    lake: {
-      name: "哭哭水靈",
-      intro:
-        "水靈的眼淚流成一整片湖。告訴牠：想哭的時候可以哭，哭完我們再一起想辦法。",
-      maxHp: 3
-    },
-    graveyard: {
-      name: "寂寞骷髏",
-      intro:
-        "骷髏看起來冷冰冰，其實只是太久沒有朋友陪。你的陪伴，就是牠最需要的魔法。",
-      maxHp: 3
-    },
-    witch: {
-      name: "混亂情緒鍋",
-      intro:
-        "女巫的情緒大鍋裡混在一起：生氣、害怕、興奮、期待……幫忙慢慢理出頭緒吧！",
-      maxHp: 4
-    },
-    mountain: {
-      name: "壓力小獸",
-      intro:
-        "壓力小獸背著超多責任，快喘不過氣。一起學會「分工」和「求助」，壓力就會變輕。",
-      maxHp: 4
-    },
-    boss: {
-      name: "暴走魔王",
-      intro:
-        "魔王被六種壞情緒纏住：生氣、害怕、嫉妒、孤單、羞愧、失望。慢慢安撫牠的心吧！",
-      maxHp: 6
-    },
-    village: {
-      // 新手村當作「教學戰」，也可以直接結束
-      name: "心情小練習",
-      intro: "在新手村，你可以先跟自己的小情緒做練習，不一定要打到贏才算成功喔。",
-      maxHp: 2
-    }
-  };
-
-  // ===== 戰鬥相關元素與狀態 =====
-  var battleTitle = document.getElementById("battleTitle");
-  var battleIntro = document.getElementById("battleIntro");
-  var monsterNameLabel = document.getElementById("monsterNameLabel");
-  var heroHpEl = document.getElementById("heroHp");
-  var monsterHpEl = document.getElementById("monsterHp");
-  var battleLog = document.getElementById("battleLog");
-  var battleBackBtn = document.getElementById("battleBackBtn");
-  var rpsButtons = document.querySelectorAll(".rps-btn");
-
-  var heroHpMax = 3;
-  var heroHp = heroHpMax;
-  var monsterHpMax = 3;
-  var monsterHp = 3;
-  var currentMonsterKey = null;
-
-  function makeHearts(current, max, fullEmoji) {
-    var result = "";
-    for (var k = 0; k < max; k++) {
-      result += k < current ? fullEmoji : "🤍";
-    }
-    return result;
-  }
-
-  function renderHp() {
-    if (heroHpEl) {
-      heroHpEl.textContent = makeHearts(heroHp, heroHpMax, "❤️");
-    }
-    if (monsterHpEl) {
-      monsterHpEl.textContent = makeHearts(monsterHp, monsterHpMax, "💜");
-    }
-  }
-
-  function getMonsterInfo(loc) {
-    if (battleMonsters[loc]) return battleMonsters[loc];
-    return battleMonsters.meadow;
-  }
-
-  function startBattleForLocation(loc) {
-    currentMonsterKey = loc;
-    var info = getMonsterInfo(loc);
-
+    currentMonsterKey = locationKey;
     heroHpMax = 3;
     heroHp = heroHpMax;
-    monsterHpMax = info.maxHp || 3;
+    monsterHpMax = m.hpMax;
     monsterHp = monsterHpMax;
 
-    if (battleTitle) {
-      battleTitle.textContent = "對戰：" + info.name;
-    }
-    if (battleIntro) {
-      battleIntro.textContent =
-        info.intro ||
-        "用剪刀、石頭、布傳送好心情，慢慢安撫牠的情緒吧！";
-    }
-    if (monsterNameLabel) {
-      monsterNameLabel.textContent = info.name + " 的心情";
-    }
-    if (battleLog) {
-      battleLog.textContent =
-        "選一個拳，向「" + info.name + "」傳達你的好心情～";
-    }
-    if (battleBackBtn) {
-      battleBackBtn.classList.add("hidden");
-    }
+    battleLocationTitle.textContent = m.isBoss
+      ? "魔王城 · 最終決戰"
+      : `${locationNameMap[locationKey]}遭遇戰`;
 
-    renderHp();
+    monsterNameLabel.textContent = m.name;
+    monsterEmotionLabel.textContent = m.emotion;
+    monsterTraitLabel.textContent = m.trait;
+
+    battleIntro.innerHTML = `你遇見了 <span id="monster-name">${m.name}</span>（情緒：<span id="monster-emotion">${m.emotion}</span>）`;
+    battleLog.textContent = "小勇者，先選一個拳吧～";
+
+    updateBattleUi();
     showScreen("battle");
   }
 
-  function handToText(hand) {
-    if (hand === "rock") return "✊ 石頭";
-    if (hand === "scissors") return "✌️ 剪刀";
-    return "🖐 布";
+  const locationNameMap = {
+    village: "新手村",
+    meadow: "草原",
+    forest: "森林",
+    cave: "洞窟",
+    lake: "湖畔",
+    graveyard: "墓地",
+    witch: "女巫小屋",
+    mountain: "山頂",
+    boss: "魔王城",
+  };
+
+  function resultMessage(win, isBoss) {
+    if (win) {
+      if (isBoss) {
+        return "你用好多句真心的話，讓情緒暴走龍終於鬆了一口氣，慢慢變成溫柔的守護龍。";
+      }
+      return "這隻魔物的壞情緒被你安撫了，牠小聲說了聲「謝謝」就變回可愛的夥伴～";
+    } else {
+      return "你累了，需要回到地圖休息一下，下次再來陪牠聊聊也可以。";
+    }
   }
 
-  function getMonsterName() {
-    var info = getMonsterInfo(currentMonsterKey);
-    return info.name || "小魔物";
-  }
+  // ===== 事件：選勇者 → 熊熊占卜 =====
+  const heroCards = document.querySelectorAll(".hero-card");
+  heroCards.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.hero;
+      currentHeroKey = key;
 
-  var hands = ["rock", "scissors", "paper"];
-  function randomHand() {
-    var idx = Math.floor(Math.random() * hands.length);
-    return hands[idx];
-  }
+      // 隨機一句占卜
+      fortuneText.textContent = randomPick(fortunes);
+      openModal(fortuneModal);
+    });
+  });
 
-  function playRound(playerHand) {
-    // 若已經結束戰鬥，就不再計算
-    if (heroHp <= 0 || monsterHp <= 0) return;
+  fortuneOkBtn.addEventListener("click", () => {
+    closeModal(fortuneModal);
+    showScreen("map");
+  });
 
-    var monsterHand = randomHand();
-    var result;
+  // 點擊背景不關掉熊熊占卜，避免小孩亂點
+  modalBackdrop.addEventListener("click", () => {
+    // 不做事，讓孩子一定要按按鈕
+  });
 
-    if (playerHand === monsterHand) {
-      result = "draw";
-    } else if (
-      (playerHand === "rock" && monsterHand === "scissors") ||
-      (playerHand === "scissors" && monsterHand === "paper") ||
-      (playerHand === "paper" && monsterHand === "rock")
+  // ===== 事件：點地圖格子 =====
+  const mapCells = document.querySelectorAll(".map-cell");
+  mapCells.forEach((cell) => {
+    cell.addEventListener("click", () => {
+      const loc = cell.dataset.location;
+
+      if (loc === "village") {
+        // 新手村只是提示，不進戰鬥
+        resultText.textContent =
+          "你在新手村整理裝備、做做伸展，等等再出發去安撫魔物～";
+        resultOkBtn.textContent = "準備好了！";
+        openModal(resultModal);
+        return;
+      }
+
+      // 其他地點：進戰鬥
+      startBattle(loc);
+    });
+  });
+
+  // 結果視窗按鈕：回到地圖
+  resultOkBtn.addEventListener("click", () => {
+    closeModal(resultModal);
+    showScreen("map");
+  });
+
+  // ===== 事件：回到地圖 =====
+  backToMapBtn.addEventListener("click", () => {
+    showScreen("map");
+  });
+
+  // ===== 出拳判定 =====
+  function rpsResult(player, enemy) {
+    if (player === enemy) return "draw";
+    if (
+      (player === "rock" && enemy === "scissors") ||
+      (player === "scissors" && enemy === "paper") ||
+      (player === "paper" && enemy === "rock")
     ) {
-      result = "win";
-      monsterHp -= 1;
-      if (monsterHp < 0) monsterHp = 0;
-    } else {
-      result = "lose";
-      heroHp -= 1;
-      if (heroHp < 0) heroHp = 0;
+      return "win";
     }
+    return "lose";
+  }
 
-    renderHp();
+  function enemyRandomHand() {
+    const list = ["rock", "scissors", "paper"];
+    return list[Math.floor(Math.random() * list.length)];
+  }
 
-    var playerText = handToText(playerHand);
-    var monsterText = handToText(monsterHand);
-
-    if (!battleLog) return;
-
-    if (result === "win") {
-      battleLog.textContent =
-        "你出了 " +
-        playerText +
-        "，魔物出了 " +
-        monsterText +
-        "。好心情成功傳達！牠的壞情緒慢慢減少了～";
-    } else if (result === "lose") {
-      battleLog.textContent =
-        "你出了 " +
-        playerText +
-        "，魔物出了 " +
-        monsterText +
-        "。這回合有點小挫折，你的心情受到了影響，但沒關係，再試一次！";
-    } else {
-      battleLog.textContent =
-        "你出了 " +
-        playerText +
-        "，魔物也出了 " +
-        monsterText +
-        "，勢均力敵，再來一回合！";
+  function handToText(hand) {
+    switch (hand) {
+      case "rock":
+        return "✊ 石頭";
+      case "scissors":
+        return "✌️ 剪刀";
+      case "paper":
+        return "🖐 布";
+      default:
+        return "";
     }
+  }
 
-    // 檢查勝敗
+  rpsButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (!currentMonsterKey || !currentHeroKey) return;
+
+      const hero = heroes[currentHeroKey];
+      const m = monsters[currentMonsterKey];
+
+      const playerHand = btn.dataset.hand;
+      const enemyHand = enemyRandomHand();
+      const result = rpsResult(playerHand, enemyHand);
+
+      if (result === "win") {
+        // 勝利：扣魔物心情
+        monsterHp = Math.max(0, monsterHp - 1);
+
+        let extra = "";
+        if (
+          (currentHeroKey === "warrior" && playerHand === "rock") ||
+          (currentHeroKey === "mage" && playerHand === "scissors") ||
+          (currentHeroKey === "priest" && playerHand === "paper")
+        ) {
+          // 勇者天賦觸發：多扣 1
+          if (monsterHp > 0) {
+            monsterHp = Math.max(0, monsterHp - 1);
+            extra = "（你的職業天賦發動，安撫效果加倍！）";
+          }
+        }
+
+        // 牧師勝利時自己回 1
+        if (currentHeroKey === "priest" && result === "win" && heroHp < heroHpMax) {
+          heroHp += 1;
+        }
+
+        battleLog.textContent =
+          `你出了 ${handToText(playerHand)}，魔物出了 ${handToText(
+            enemyHand
+          )}，` + `魔物的壞情緒被安撫了一點點！${extra}`;
+      } else if (result === "lose") {
+        if (currentHeroKey !== "villager") {
+          heroHp = Math.max(0, heroHp - 1);
+        }
+        battleLog.textContent =
+          `你出了 ${handToText(playerHand)}，魔物出了 ${handToText(
+            enemyHand
+          )}，` +
+          `這回合魔物的情緒有點失控，你也感到有點累了……`;
+      } else {
+        battleLog.textContent =
+          `你出了 ${handToText(playerHand)}，魔物也出了 ${handToText(
+            enemyHand
+          )}，` + `彼此還在觀察對方心情中。`;
+      }
+
+      updateBattleUi();
+
+      // 判斷勝負
+      const mData = monsters[currentMonsterKey];
+      if (monsterHp <= 0) {
+        resultText.textContent = resultMessage(true, !!mData.isBoss);
+        resultOkBtn.textContent = "回到地圖";
+        openModal(resultModal);
+      } else if (heroHp <= 0) {
+        resultText.textContent = resultMessage(false, !!mData.isBoss);
+        resultOkBtn.textContent = "回到地圖";
+        openModal(resultModal);
+      }
+    });
+  });
+
+  // ===== 勇氣星星 & 愛的力量 =====
+  useStarBtn.addEventListener("click", () => {
+    if (!currentMonsterKey) return;
+    const sentence = randomPick(starSentences);
+    if (monsterHp > 0) {
+      monsterHp = Math.max(0, monsterHp - 1);
+    }
+    battleLog.textContent =
+      `你使用了勇氣星星語句：${sentence} 魔物的壞情緒安靜了一點。`;
+    updateBattleUi();
+
+    const mData = monsters[currentMonsterKey];
     if (monsterHp <= 0) {
-      battleLog.textContent =
-        "太棒了！「" +
-        getMonsterName() +
-        "」的壞情緒被好好安撫了，牠恢復了笑容～";
-      if (battleBackBtn) {
-        battleBackBtn.textContent = "回到地圖，繼續冒險！";
-        battleBackBtn.classList.remove("hidden");
-      }
-    } else if (heroHp <= 0) {
-      battleLog.textContent =
-        "今天的壓力有點大，你的心情先滿出來了……先回新手村休息一下，再出發也沒關係！";
-      if (battleBackBtn) {
-        battleBackBtn.textContent = "回到地圖，調整心情";
-        battleBackBtn.classList.remove("hidden");
-      }
+      resultText.textContent = resultMessage(true, !!mData.isBoss);
+      resultOkBtn.textContent = "回到地圖";
+      openModal(resultModal);
     }
-  }
+  });
 
-  // 綁定猜拳按鈕
-  for (var t = 0; t < rpsButtons.length; t++) {
-    rpsButtons[t].addEventListener("click", function () {
-      var hand = this.getAttribute("data-hand");
-      playRound(hand);
-    });
-  }
+  useLoveBtn.addEventListener("click", () => {
+    if (!currentMonsterKey) return;
+    const sentence = randomPick(loveSentences);
+    if (heroHp < heroHpMax) heroHp += 1;
+    battleLog.textContent =
+      `你使用了愛的力量語句：${sentence} 你和魔物都一起慢慢放鬆。`;
+    updateBattleUi();
+  });
 
-  // 戰鬥結束後回到地圖
-  if (battleBackBtn) {
-    battleBackBtn.addEventListener("click", function () {
-      showScreen("map");
-    });
-  }
-
-  // 遭遇視窗 → 進入戰鬥
-  if (encounterOkBtn) {
-    encounterOkBtn.addEventListener("click", function () {
-      closeModal(encounterModal);
-      startBattleForLocation(currentLocation || "meadow");
-    });
-  }
+  // 初始畫面：選勇者
+  showScreen("hero");
 });

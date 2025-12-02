@@ -314,3 +314,21 @@ body {
 .modal .primary-btn {
   width: 100%;
 }
+.footer {
+  text-align: center;
+  padding: 20px 10px;
+  margin-top: 40px;
+  font-size: 14px;
+  color: #8b5e3c;
+}
+
+.ig-link {
+  color: #d17b00;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.ig-link:hover {
+  color: #ff9800;
+  text-decoration: underline;
+}

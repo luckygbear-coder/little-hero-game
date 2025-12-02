@@ -1,6 +1,4 @@
-/* ================================
-   全域設定
-================================ */
+/* ====== 全域設定 ====== */
 *,
 *::before,
 *::after {
@@ -10,162 +8,325 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "Noto Sans TC", sans-serif;
-  background: linear-gradient(#ffe9c9, #ffdcdc, #ffe9c9);
-  color: #4a2c2a;
+  font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(#ffe6c9, #ffdbe8);
+  color: #4a2d2a;
 }
 
-/* 包裝器 */
+/* ====== 版面 ====== */
 .game-wrap {
-  max-width: 480px;
+  max-width: 520px;
   margin: 0 auto;
-  padding: 20px;
+  min-height: 100vh;
+  padding: 20px 16px 40px;
 }
 
-/* 卡片 */
+.game-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.game-header h1 {
+  font-size: 1.6rem;
+  margin: 0 0 8px;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #7b5a4e;
+}
+
 .card {
-  background: #fff7e6;
-  border-radius: 16px;
-  border: 2px solid #e1b676;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  background: #fff7e8;
+  border-radius: 20px;
+  border: 2px solid #f0c38a;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 20px 18px 18px;
+}
+
+.card-boss {
+  border-color: #f28b82;
+  box-shadow: 0 8px 24px rgba(242, 139, 130, 0.4);
+}
+
+/* ====== 共用元素 ====== */
+.card-title {
+  margin: 0 0 8px;
+  font-size: 1.3rem;
+}
+
+.card-text {
+  margin: 0 0 16px;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.hp-text {
+  margin: 0 0 12px;
+  font-weight: 600;
+  color: #d35400;
+}
+
+.pill {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 10px;
+  font-size: 0.78rem;
+  border-radius: 999px;
+  background: #ffe6c9;
+  border: 1px solid #f0c38a;
+}
+
+/* ====== 畫面切換 ====== */
+.screen {
+  display: block;
 }
 
 .hidden {
   display: none;
 }
 
-h1.title {
-  text-align: center;
-  font-size: 28px;
-  margin-bottom: 5px;
+/* ====== 勇者選擇 ====== */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
 }
 
-.subtitle {
-  text-align: center;
-  font-size: 16px;
-  margin-bottom: 20px;
-  opacity: 0.8;
-}
-
-/* ================================
-   按鈕
-================================ */
-button {
-  padding: 10px 16px;
-  border-radius: 12px;
-  border: none;
+.hero-btn {
+  width: 100%;
+  text-align: left;
+  border-radius: 14px;
+  border: 1px solid #f0c38a;
+  padding: 10px 12px;
+  background: #fffaf1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  grid-column-gap: 10px;
   cursor: pointer;
-  margin: 4px;
-  font-size: 16px;
-  transition: 0.2s;
+  transition: transform 0.12s ease, box-shadow 0.12s ease,
+    background 0.12s ease;
 }
 
-button:hover {
-  transform: scale(1.05);
+.hero-btn:hover,
+.hero-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  background: #fff3dd;
 }
 
-.hero-buttons button {
-  background: #ffe1a8;
-  border: 2px solid #d39a44;
+.hero-emoji {
+  grid-row: 1 / span 2;
+  font-size: 1.6rem;
+  align-self: center;
 }
 
-/* 返回按鈕 */
-.back-btn {
-  background: #ffb3b3;
-  border: 2px solid #d66;
-  margin-top: 10px;
+.hero-name {
+  font-weight: 700;
+  font-size: 0.98rem;
 }
 
-/* ================================
-   地圖九宮格
-================================ */
+.hero-desc {
+  font-size: 0.86rem;
+  color: #7b5a4e;
+}
 
+/* ====== 地圖九宮格 ====== */
 .map-grid {
+  margin-top: 10px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  margin-top: 10px;
+  gap: 8px;
 }
 
-.map-grid div {
-  background: #fff;
-  border: 2px solid #c6a974;
-  border-radius: 10px;
-  padding: 18px;
+.map-tile {
+  border-radius: 14px;
+  border: 1px solid #f0c38a;
+  padding: 10px 8px;
+  background: #fffaf1;
+  font-size: 0.86rem;
   text-align: center;
-  min-height: 65px;
-  font-size: 15px;
+  line-height: 1.4;
   cursor: pointer;
-  transition: 0.2s;
+  transition: transform 0.1s ease, box-shadow 0.1s ease,
+    background 0.1s ease, border-color 0.1s ease;
 }
 
-.map-grid div:hover {
-  transform: scale(1.05);
-  background: #fff3d6;
+.map-tile:hover,
+.map-tile:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+  background: #fff3dd;
 }
 
-/* ================================
-   魔物區
-================================ */
-
-.monster-img {
-  width: 70%;
-  display: block;
-  margin: 0 auto 10px auto;
+.map-tile--boss {
+  border-color: #f28b82;
+  background: #ffe4e0;
 }
 
-.dialogue {
-  font-size: 17px;
-  margin: 10px 0;
-  padding: 10px;
-  background: #fff3d4;
-  border-radius: 10px;
-  border: 1px solid #e2c085;
+.map-tile--boss:hover,
+.map-tile--boss:active {
+  background: #ffd4cf;
 }
 
-.rps-buttons button {
-  background: #ffd18b;
-  border: 2px solid #c48732;
+.map-tile--disabled {
+  cursor: default;
+  opacity: 0.5;
+  background: #fdf6ee;
 }
 
-/* ================================
-   占卜彈窗
-================================ */
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
+.map-tile--disabled:hover,
+.map-tile--disabled:active {
+  transform: none;
+  box-shadow: none;
+}
+
+.map-actions {
+  margin-top: 16px;
   display: flex;
+  justify-content: flex-end;
+}
+
+/* ====== 按鈕 ====== */
+button {
+  font-family: inherit;
+  border: none;
+}
+
+.secondary-btn {
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.86rem;
+  background: #fff;
+  border: 1px solid #f0c38a;
+  color: #7b5a4e;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.secondary-btn:hover,
+.secondary-btn:active {
+  background: #ffe6c9;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* ====== 猜拳區 ====== */
+.rps-area {
+  margin-top: 4px;
+}
+
+.rps-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.rps-btn,
+.boss-rps-btn {
+  flex: 1;
+  border-radius: 999px;
+  padding: 8px 6px;
+  font-size: 0.9rem;
+  background: #fffaf1;
+  border: 1px solid #f0c38a;
+  cursor: pointer;
+  transition: background 0.12s ease, transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.rps-btn:hover,
+.rps-btn:active,
+.boss-rps-btn:hover,
+.boss-rps-btn:active {
+  background: #ffe6c9;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.round-text {
+  min-height: 1.4em;
+  font-size: 0.9rem;
+  margin: 0 0 6px;
+}
+
+/* ====== 日誌盒 ====== */
+.log-box {
+  width: 100%;
+  min-height: 60px;
+  max-height: 160px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #f0c38a;
+  overflow-y: auto;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.log-line {
+  margin-bottom: 4px;
+}
+
+/* ====== 熊熊占卜視窗 ====== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.38);
+  display: none; /* 預設關閉，選完勇者才顯示 */
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  padding: 18px;
+  z-index: 10;
 }
 
-.popup-card {
-  background: #fff7e6;
-  border-radius: 16px;
-  border: 2px solid #e1b676;
-  padding: 20px;
-  width: 80%;
+.modal-card {
+  width: 100%;
+  max-width: 420px;
+  background: #fff7e8;
+  border-radius: 20px;
+  border: 2px solid #f0c38a;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+  padding: 20px 18px 16px;
   text-align: center;
 }
 
-/* ================================
-   魔王戰
-================================ */
-.boss-img {
-  width: 80%;
-  display: block;
-  margin: 0 auto 10px auto;
+.modal-title {
+  margin: 0 0 10px;
+  font-size: 1.3rem;
 }
 
-#bossResult {
-  font-size: 18px;
-  text-align: center;
-  margin-top: 10px;
+.modal-text {
+  margin: 0 0 18px;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.modal-button {
+  border-radius: 999px;
+  padding: 9px 24px;
+  font-size: 0.95rem;
+  background: #4a7bd9;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(74, 123, 217, 0.4);
+  transition: transform 0.12s ease, box-shadow 0.12s ease,
+    background 0.12s ease;
+}
+
+.modal-button:hover,
+.modal-button:active {
+  transform: translateY(-1px);
+  background: #3865bd;
+  box-shadow: 0 6px 16px rgba(74, 123, 217, 0.5);
+}
+
+/* ====== RWD 小調整 ====== */
+@media (min-width: 540px) {
+  .game-wrap {
+    padding-top: 28px;
+  }
 }

@@ -2,399 +2,117 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>小勇者之旅大冒險</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>小勇者之旅大冒險</title>
+
   <link rel="stylesheet" href="style.css" />
 </head>
-<script type="module" src="js/game.js"></script>
+
 <body>
-  <div class="game-wrap">
-    <div class="card">
-      <!-- 遊戲標題 -->
-      <h1>小勇者之旅大冒險</h1>
-      <div class="subtitle">情緒與勇氣的奇幻之旅 ✨</div>
 
-      <!-- 🔹 模式選擇（單人 / 同機雙人） -->
-      <div class="mode-select-wrap">
-        <button class="mode-btn active" data-mode="single">🎮 單人冒險</button>
-        <button class="mode-btn" data-mode="local2p">🤝 同機雙人</button>
-      </div>
-      <div class="mode-banner" id="modeBanner">
-        目前模式：<b>單人冒險</b>（一個人練習與魔物互動）
-      </div>
+<!-- 🔸 頁面標題區 -->
+<header class="top-header">
+  <h1>小勇者之旅大冒險</h1>
+  <p class="subtitle">情緒與勇氣的奇幻之旅 ✨</p>
+</header>
 
-      <!-- 主選單 Tabs -->
-      <div class="nav-tabs">
-        <button class="nav-btn active" data-target="page-hero">選擇小勇者</button>
-        <button class="nav-btn" data-target="page-home">主選單</button>
-        <button class="nav-btn" data-target="page-map">地圖冒險</button>
-        <button class="nav-btn" data-target="page-battle">戰鬥</button>
-        <button class="nav-btn" data-target="page-story">故事背景</button>
-        <button class="nav-btn" data-target="page-howto">玩法教學</button>
-        <button class="nav-btn" data-target="page-monsters">魔物圖鑑</button>
-        <button class="nav-btn" data-target="page-settings">設定 / 說明</button>
-      </div>
+<!-- 🔸 遊戲模式按鈕 -->
+<div class="mode-switch">
+  <button id="btn-single" class="active">🎮 單人冒險</button>
+  <button id="btn-double">🤝 同機雙人</button>
+</div>
 
-      <!-- 🌟 角色介紹 + 選擇小勇者 -->
-      <div id="page-hero" class="page active">
-        <h3>🌟 選擇你的小勇者</h3>
-        <p>
-          在出發冒險之前，先選擇你要扮演的小勇者角色。<br>
-          每個職業都有不同個性與口頭禪，可以陪你一起面對壞情緒魔物。
-        </p>
+<p class="current-mode">目前模式：單人冒險（1 個人練習與魔物互動）</p>
 
-        <div class="hero-grid">
-          <!-- 戰士 -->
-          <div class="hero-card"
-               data-hero="戰士"
-               data-fist="rock"
-               data-line="「我一定會守護大家！」">
-            <div class="hero-badge">Rock ✊</div>
-            <h4>🛡️ 戰士</h4>
-            <div class="hero-tag">個性：勇敢、有責任感</div>
-            <p>口頭禪：我一定會守護大家！</p>
-            <p>能力：出石頭並勝利 → 傳達 2 倍好心情。</p>
-          </div>
+<!-- 🔸 主導航 -->
+<nav class="tab-menu">
+  <button data-page="page-hero" class="active">選擇小勇者</button>
+  <button data-page="page-map">地圖冒險</button>
+  <button data-page="page-battle">戰鬥</button>
+  <button data-page="page-story">故事背景</button>
+  <button data-page="page-teach">玩法教學</button>
+  <button data-page="page-monsters">魔物圖鑑</button>
+  <button data-page="page-settings">設定 / 說明</button>
+</nav>
 
-          <!-- 法師 -->
-          <div class="hero-card"
-               data-hero="法師"
-               data-fist="scissors"
-               data-line="「嘿嘿～我有新點子！」">
-            <div class="hero-badge">Scissors ✌️</div>
-            <h4>🔮 法師</h4>
-            <div class="hero-tag">個性：聰明、有創意</div>
-            <p>口頭禪：嘿嘿～我有新點子！</p>
-            <p>能力：出剪刀並勝利 → 傳達 2 倍好心情。</p>
-          </div>
+<!-- 🔸 內容區：所有頁面 -->
+<main>
 
-          <!-- 牧師 -->
-          <div class="hero-card"
-               data-hero="牧師"
-               data-fist="paper"
-               data-line="「別擔心，我來幫你～」">
-            <div class="hero-badge">Paper 🖐</div>
-            <h4>💖 牧師</h4>
-            <div class="hero-tag">個性：溫柔、善解人意</div>
-            <p>口頭禪：別擔心，我來幫你～</p>
-            <p>能力：出布並勝利 → 傳達 2 倍好心情。</p>
-          </div>
+  <!-- ⭐ 1. 選擇勇者 -->
+  <section id="page-hero" class="page show">
 
-          <!-- 勇敢的村民 -->
-          <div class="hero-card"
-               data-hero="勇敢的村民"
-               data-fist="any"
-               data-line="「我雖然平凡，但不放棄！」">
-            <div class="hero-badge">自由拳 ✨</div>
-            <h4>🌾 勇敢的村民</h4>
-            <div class="hero-tag">個性：樸實、堅毅</div>
-            <p>口頭禪：我雖然平凡，但不放棄！</p>
-            <p>能力：魔王戰使用任意拳 → 即使輸也不受壞情緒影響。</p>
-          </div>
-        </div>
+    <h2>✨ 選擇你的小勇者</h2>
+    <p>在出發冒險之前，先選擇你要扮演的小勇者角色。</p>
 
-        <div id="currentHero" class="current-hero">
-          目前選擇的小勇者：<b>尚未選擇</b><br>
-          請點選上方任一角色卡開始冒險。
-        </div>
+    <div class="hero-select-grid">
 
-        <div class="center">
-          <button class="primary-btn" id="btnGoHomeFromHero">
-            ✅ 選好囉，前往主選單
-          </button>
-        </div>
+      <div class="hero-card" data-hero="warrior">
+        <h3>Rock ✊ 戰士</h3>
+        <p>個性：勇敢、有責任感</p>
+        <p>口頭禪：我一定會守護大家！</p>
       </div>
 
-      <!-- 🏠 主選單頁 -->
-      <div id="page-home" class="page">
-        <p class="center" id="homeIntro">
-          歡迎來到星星王國！<br>
-          跟著村長熊熊，一起用剪刀、石頭、布的力量，<br>
-          幫魔物們找回好心情吧！
-        </p>
-
-        <div class="center">
-          <button class="primary-btn" id="btnGoMapFromHome">
-            🗺️ 前往冒險地圖
-          </button>
-        </div>
-
-        <div class="tip-box" id="homeTip">
-          🌟 小提示：<br>
-          把九宮格全部變成「⭐ 已通關」，<br>
-          就會自動解鎖最終魔王關卡！<br><br>
-          （進度會在你每次回到主選單時更新）
-        </div>
+      <div class="hero-card" data-hero="mage">
+        <h3>Scissors ✌️ 法師</h3>
+        <p>個性：聰明、有創意</p>
+        <p>口頭禪：嘿嘿～我有新點子！</p>
       </div>
 
-      <!-- 🗺️ 九宮格地圖 -->
-      <div id="page-map" class="page">
-        <h3>🗺️ 冒險地圖（九宮格）</h3>
-        <p id="mapIntro">
-          選擇一個地點進行戰鬥，每一格都住著一隻壞情緒魔物。<br>
-          安撫成功會獲得一句「愛的力量語句」，<br>
-          三格連成一線時，還會觸發「勇氣星星語句」獎勵。⭐<br>
-          <b>全部 9 格通關後 → 進入魔王關卡！</b>
-        </p>
-
-        <div class="map-grid">
-          <!-- 1 -->
-          <div class="map-cell" data-stage="1" data-monster="哭哭史萊姆">
-            <h4>新手草原</h4>
-            <p>住著愛哭又迷惘的<br>「哭哭史萊姆」。</p>
-            <span class="tag">Rock 天賦／不能出布</span>
-            <div class="pos-label">1</div>
-          </div>
-
-          <!-- 2 -->
-          <div class="map-cell" data-stage="2" data-monster="暴躁火球">
-            <h4>熾熱丘陵</h4>
-            <p>一不小心就會爆炸的<br>「暴躁火球」。</p>
-            <span class="tag">Rock 天賦／不能出布</span>
-            <div class="pos-label">2</div>
-          </div>
-
-          <!-- 3 -->
-          <div class="map-cell" data-stage="3" data-monster="壞心情南瓜">
-            <h4>南瓜農場</h4>
-            <p>嘴巴很兇、其實很寂寞的<br>「壞心情南瓜」。</p>
-            <span class="tag">Rock 天賦／不能出布</span>
-            <div class="pos-label">3</div>
-          </div>
-
-          <!-- 4 -->
-          <div class="map-cell" data-stage="4" data-monster="哭哭菇菇">
-            <h4>蘑菇森林</h4>
-            <p>常常覺得自己不夠好<br>的「哭哭菇菇」。</p>
-            <span class="tag">Paper 天賦／不能出剪刀</span>
-            <div class="pos-label">4</div>
-          </div>
-
-          <!-- 5 -->
-          <div class="map-cell" data-stage="5" data-monster="悲傷骷髏">
-            <h4>墓園小丘</h4>
-            <p>以為自己沒人愛的<br>「悲傷骷髏」。</p>
-            <span class="tag">Rock 天賦／不能出布</span>
-            <div class="pos-label">5</div>
-          </div>
-
-          <!-- 6 -->
-          <div class="map-cell" data-stage="6" data-monster="黏黏史萊姆">
-            <h4>黏黏沼澤</h4>
-            <p>總是黏住不想放手的<br>「黏黏史萊姆」。</p>
-            <span class="tag">Rock 天賦／不能出布</span>
-            <div class="pos-label">6</div>
-          </div>
-
-          <!-- 7 -->
-          <div class="map-cell" data-stage="7" data-monster="兇暴狼人">
-            <h4>魔狼森林</h4>
-            <p>看起來超兇，其實怕孤單的<br>「兇暴狼人」。</p>
-            <span class="tag">Rock 天賦／不能出布</span>
-            <div class="pos-label">7</div>
-          </div>
-
-          <!-- 8 -->
-          <div class="map-cell" data-stage="8" data-monster="小惡魔">
-            <h4>惡作劇山丘</h4>
-            <p>愛捉弄人的<br>「小惡魔」。</p>
-            <span class="tag">Rock 天賦／不能出剪刀</span>
-            <div class="pos-label">8</div>
-          </div>
-
-          <!-- 9 -->
-          <div class="map-cell" data-stage="9" data-monster="憂鬱幽靈">
-            <h4>黑霧邊界</h4>
-            <p>徘徊在黑霧邊緣的<br>「憂鬱幽靈」。</p>
-            <span class="tag">Paper 天賦／不能出石頭</span>
-            <div class="pos-label">9</div>
-          </div>
-        </div>
-
-        <div id="currentStage" class="current-stage">
-          目前尚未選擇關卡，請點擊一格地圖開始冒險。
-        </div>
-
-        <!-- 愛的力量語句顯示區 -->
-        <div id="loveMessage">
-          💗 愛的力量語句：當你安撫第一隻魔物成功時，這裡會出現一句溫暖的話。
-        </div>
-
-        <!-- 勇氣星星語句顯示區 -->
-        <div id="courageMessage">
-          ⭐ 勇氣星星語句：當三格連成一線時，這裡會出現一顆勇氣星星送給你。
-        </div>
-
-        <!-- 🐉 魔王狀態徽章 -->
-        <div id="bossStatus" class="tip-box">
-          魔王狀態：尚未解鎖，先把九宮格通關吧！
-        </div>
-
-        <div class="center">
-          <button class="primary-btn" id="btnStartBattleFromMap">
-            ⚔️ 進入戰鬥！
-          </button>
-        </div>
-
-        <div class="tip-box" id="mapTip">
-          小任務：<br>
-          ✔ 把九宮格全部變成 ⭐ 已通關<br>
-          ✔ 就能面對壞情緒的源頭──魔王黑霧巨龍！
-        </div>
+      <div class="hero-card" data-hero="priest">
+        <h3>Paper 🖐 牧師</h3>
+        <p>個性：溫柔、善解人意</p>
+        <p>口頭禪：別擔心，我來幫你～</p>
       </div>
 
-      <!-- ⚔️ 戰鬥頁面（一般戰 + 魔王戰共用） -->
-      <div id="page-battle" class="page">
-        <h3>⚔️ 對戰畫面</h3>
-
-        <div class="battle-box">
-          <div class="battle-mode-label" id="battleModeLabel">
-            模式：一般關卡
-          </div>
-
-          <div class="battle-header">
-            <div class="battle-hero">
-              👦 小勇者：<br>
-              <b id="battleHeroName">（尚未選擇）</b><br>
-              <span id="battleHeroTalent">招牌拳：—</span>
-            </div>
-            <div class="battle-monster">
-              👾 對戰魔物：<br>
-              <b id="battleMonsterName">—</b><br>
-              <span id="battleMonsterInfo">天賦：—／弱點：—</span>
-            </div>
-          </div>
-
-          <!-- 魔王壞情緒條 -->
-          <div id="bossEmotionBar">
-            魔王壞情緒狀態：<b id="bossEmotionText">已安撫 0 / 6</b>
-          </div>
-
-          <div class="bear-tip" id="bearTip">
-            🧸 村長熊熊提示：選好地圖上的關卡後，這裡會告訴你魔物不能出什麼拳！
-          </div>
-
-          <!-- 魔王戰專用：選語句 -->
-          <div id="bossPhraseArea" class="tip-box" style="display:none; margin-top:8px;">
-            <div><b>對魔王說的話：</b></div>
-            <select id="bossPhraseSelect"
-                    style="margin-top:4px; width:100%; padding:6px 8px; border-radius:8px; border:1px solid #e1b676; font-size:13px;">
-              <option value="">（從已收集的語句中選一個）</option>
-            </select>
-            <input
-              id="bossCustomPhrase"
-              type="text"
-              placeholder="或在這裡輸入一句你自己的話"
-              style="width:100%;margin-top:6px;padding:6px 8px;border-radius:8px;border:1px solid #e1b676;font-size:13px;"
-            />
-            <p style="font-size:12px;color:#7a5635;margin-top:4px;">
-              提示：在魔王戰中，「先選一句話或自己打一句，再出拳獲勝」，才算成功安撫一種壞情緒喔！
-            </p>
-          </div>
-
-          <!-- 魔王內心小劇場 -->
-          <div id="bossInnerStoryBox" class="tip-box" style="display:none; margin-top:8px;"></div>
-
-          <div class="battle-buttons">
-            <button class="battle-btn" id="btn-rock">✊ 石頭</button>
-            <button class="battle-btn" id="btn-scissors">✌️ 剪刀</button>
-            <button class="battle-btn" id="btn-paper">🖐 布</button>
-            <!-- 雨過天晴娃娃：恢復鍵 -->
-            <button class="battle-btn" id="btn-recovery">🌦 雨過天晴娃娃</button>
-          </div>
-
-          <div id="battleResult">
-            這裡會顯示對戰結果與心情變化。
-          </div>
-
-          <div class="center">
-            <button class="primary-btn" id="btnBackToMapFromBattle">
-              ⬅ 回地圖選下一關
-            </button>
-          </div>
-        </div>
+      <div class="hero-card" data-hero="villager">
+        <h3>自由拳 ✨ 勇敢的村民</h3>
+        <p>個性：樸實、堅毅</p>
+        <p>口頭禪：我雖然平凡，但不放棄！</p>
       </div>
 
-      <!-- 📖 故事背景 -->
-      <div id="page-story" class="page">
-        <h3>📖 故事背景</h3>
-        <p>
-          在遙遠的「星星王國」裡，所有魔物原本都快快樂樂地生活著。
-          直到某一天，一股神秘的「壞情緒黑霧」突然降臨，
-          魔物們被影響得哭哭啼啼、暴躁生氣、失去笑容！
-        </p>
-        <p>
-          星星王國的孩子們被選中成為「小勇者」，
-          只要用 <b>剪刀、石頭、布</b> 的勇氣之力，
-          就能解除魔物的壞情緒，讓牠們再次露出幸福的笑容。
-        </p>
-        <p>
-          村長熊熊會一路陪伴你，提醒魔物的弱點，
-          幫助你順利通關，直到挑戰黑霧巨龍。
-        </p>
-      </div>
-
-      <!-- 🎮 玩法教學 -->
-      <div id="page-howto" class="page">
-        <h3>🎮 基本玩法</h3>
-        <ul>
-          <li>與魔物進行「剪刀、石頭、布」對決。</li>
-          <li>每隻魔物都有「天賦拳」與「不能出的弱點拳」。</li>
-          <li>出對拳 → 傳遞好心情，魔物會從哭哭變開心。</li>
-          <li>當魔物變成開心版本，就會離開黑霧，回到星星王國。</li>
-          <li>全部九宮格通關後，就會解鎖魔王黑霧巨龍。</li>
-          <li>魔王戰：需要「先說一句話 + 出拳獲勝」共 6 次，才能完全安撫魔王的 6 個壞情緒。</li>
-        </ul>
-      </div>
-
-      <!-- 🧟 魔物圖鑑（簡易版） -->
-      <div id="page-monsters" class="page">
-        <h3>🧟 魔物圖鑑（節錄）</h3>
-        <ul>
-          <li>哭哭史萊姆（Rock／不能出布）</li>
-          <li>暴躁火球（Rock／不能出布）</li>
-          <li>壞心情南瓜（Rock／不能出布）</li>
-          <li>哭哭菇菇（Paper／不能出剪刀）</li>
-          <li>悲傷骷髏（Rock／不能出布）</li>
-          <li>黏黏史萊姆（Rock／不能出布）</li>
-          <li>兇暴狼人（Rock／不能出布）</li>
-          <li>小惡魔（Rock／不能出剪刀）</li>
-          <li>憂鬱幽靈（Paper／不能出石頭）</li>
-          <li>魔王．黑霧巨龍（什麼拳都會出）</li>
-        </ul>
-      </div>
-
-      <!-- ⚙️ 設定 / 說明 -->
-      <div id="page-settings" class="page">
-        <h3>⚙️ 設定 / 家長導覽</h3>
-        <p>
-          這是一款結合「情緒教育」與「剪刀石頭布」的輕量遊戲，
-          適合親子一起玩，建議年齡約 5 歲以上。
-        </p>
-        <ul>
-          <li>可搭配真實卡牌／桌遊一起使用。</li>
-          <li>建議遊戲後和孩子聊聊：<br>
-            「哪一隻魔物跟你很像？」<br>
-            「你最近有出現什麼壞情緒嗎？」</li>
-          <li>讓孩子知道：所有情緒都可以被看見與安撫。</li>
-        </ul>
-
-        <p class="mono">
-          ※ 本頁已整合：選角、九宮格地圖、單場戰鬥、<br>
-          愛的力量語句、勇氣星星語句、通關連線判定、<br>
-          「九宮格通關 → 魔王戰」流程，<br>
-          以及「魔王 6 個壞情緒 + 內心小劇場 + 語句選擇 + 雨過天晴娃娃恢復鍵」設計。<br>
-          新增：主選單進度顯示、魔王狀態徽章。
-        </p>
-      </div>
     </div>
-  </div>
 
-  <!-- 資料 & 遊戲腳本 -->
-  <script src="js/sentences.js"></script>
-  <script src="js/monsters.js"></script>
-  <script src="js/boss.js"></script>
-  <script src="js/game.js"></script>
-  <script src="js/ui.js"></script>
+    <button id="confirm-hero" class="confirm-btn" disabled>✔️ 確認選擇</button>
+  </section>
+
+  <!-- ⭐ 2. 地圖 -->
+  <section id="page-map" class="page">
+    <h2>🗺 冒險地圖（九宮格）</h2>
+    <p>選擇地點開始冒險！</p>
+  </section>
+
+  <!-- ⭐ 3. 戰鬥 -->
+  <section id="page-battle" class="page">
+    <h2>⚔️ 戰鬥畫面</h2>
+    <p>這裡會顯示對戰內容。</p>
+  </section>
+
+  <!-- ⭐ 以下為其他頁面 -->
+  <section id="page-story" class="page">
+    <h2>📖 故事背景</h2>
+  </section>
+
+  <section id="page-teach" class="page">
+    <h2>🎓 玩法教學</h2>
+  </section>
+
+  <section id="page-monsters" class="page">
+    <h2>👹 魔物圖鑑</h2>
+  </section>
+
+  <section id="page-settings" class="page">
+    <h2>⚙️ 設定 / 家長導覽</h2>
+  </section>
+
+</main>
+
+<!-- 🔸 載入 JS（順序不能錯）-->
+<script src="js/monsters.js"></script>
+<script src="js/boss.js"></script>
+<script src="js/sentences.js"></script>
+<script src="js/game.js"></script>
+
+<script src="script.js"></script>
+
 </body>
 </html>

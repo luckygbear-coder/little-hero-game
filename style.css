@@ -1,4 +1,4 @@
-/* ========= 全域設定 ========= */
+/* 全域設定 */
 *,
 *::before,
 *::after {
@@ -8,71 +8,62 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(#ffe0c4, #ffd8e8);
-  color: #4a2b20;
+  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif;
+  background: linear-gradient(#ffe0c9, #ffd6e9);
+  color: #4a2a23;
 }
 
+/* 版面 */
 .game-wrap {
-  max-width: 480px;
+  max-width: 520px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 16px 16px 32px;
 }
 
-/* ========= 文字與標題 ========= */
-
+/* 標題區 */
 .game-header {
   text-align: center;
   margin-bottom: 16px;
 }
 
 .game-header h1 {
-  font-size: 1.7rem;
-  margin: 8px 0;
+  font-size: 24px;
+  margin: 12px 0 4px;
 }
 
 .subtitle {
-  font-size: 0.95rem;
-  color: #7a4a3b;
+  margin: 0;
+  font-size: 14px;
+  color: #704437;
 }
 
-/* ========= 卡片 ========= */
-
+/* 卡片外框 */
 .card {
   background: #fff7e6;
   border-radius: 18px;
-  border: 2px solid rgba(240, 190, 120, 0.9);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-  padding: 20px 18px;
+  border: 2px solid #f2d3a2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  padding: 18px 16px 20px;
 }
 
 .card h2 {
-  margin-top: 0;
-  margin-bottom: 8px;
-  font-size: 1.3rem;
+  margin: 0 0 8px;
+  font-size: 20px;
 }
 
 .hint {
-  margin-top: 0;
-  margin-bottom: 16px;
-  font-size: 0.95rem;
-  color: #82544a;
-  line-height: 1.5;
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: #7b5244;
 }
 
 .hint.small {
-  font-size: 0.85rem;
-  color: #a1705c;
+  margin-top: 16px;
+  font-size: 12px;
+  color: #a07462;
 }
 
-/* ========= 畫面切換 ========= */
-
-.screen.hidden {
-  display: none;
-}
-
-/* ========= 勇者列表 ========= */
-
+/* 勇者列表 */
 .hero-list {
   display: flex;
   flex-direction: column;
@@ -84,52 +75,51 @@ body {
   align-items: center;
   width: 100%;
   padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid #f3cf9b;
-  background: #fffaf0;
+  border-radius: 16px;
+  border: 1px solid #f0d0a5;
+  background: #fffaf2;
   cursor: pointer;
   text-align: left;
   outline: none;
-  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
 }
 
 .hero-card:active {
-  transform: translateY(1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12) inset;
-  background: #ffeec9;
+  transform: scale(0.98);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  background: #ffeeda;
 }
 
 .hero-emoji {
-  font-size: 1.7rem;
+  font-size: 26px;
   margin-right: 10px;
 }
 
 .hero-text h3 {
   margin: 0 0 4px;
-  font-size: 1.05rem;
+  font-size: 16px;
+  color: #1f3650;
 }
 
 .hero-text p {
   margin: 0;
-  font-size: 0.9rem;
-  color: #7a4a3b;
+  font-size: 13px;
+  color: #6b4a3b;
 }
 
-/* ========= 九宮格地圖 ========= */
-
+/* 九宮格地圖 */
 .map-grid {
+  margin-top: 10px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  margin-top: 8px;
 }
 
 .map-cell {
-  position: relative;
-  padding: 10px 6px;
   border-radius: 14px;
-  border: 1px solid #f3cf9b;
-  background: #fffaf7;
+  border: 1px solid #f0d0a5;
+  background: #fffdf6;
+  padding: 8px 4px;
   text-align: center;
   cursor: pointer;
   outline: none;
@@ -137,132 +127,113 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 78px;
-  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
 }
 
 .map-cell:active {
-  transform: translateY(1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12) inset;
-  background: #ffe9d0;
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  background: #ffeeda;
+}
+
+.boss-cell {
+  border-color: #f59bb0;
+  background: #fff0f4;
 }
 
 .cell-emoji {
-  font-size: 1.5rem;
-  margin-bottom: 2px;
+  font-size: 22px;
+  margin-bottom: 4px;
 }
 
 .cell-name {
-  font-size: 0.9rem;
+  font-size: 13px;
   font-weight: 600;
   margin-bottom: 2px;
 }
 
 .cell-tag {
-  font-size: 0.75rem;
-  color: #a1705c;
+  font-size: 11px;
+  color: #8b6b5b;
 }
 
-.map-cell.visited {
-  background: #fff1c4;
-  border-color: #f3b953;
-}
-
-.map-cell.visited::after {
-  content: "✓";
-  position: absolute;
-  top: 6px;
-  right: 8px;
-  font-size: 0.8rem;
-  color: #e28b1f;
-}
-
-.boss-cell {
-  border-color: #e78b8b;
-}
-
-/* ========= Modal（占卜 & 遭遇） ========= */
-
-.hidden {
+/* 畫面顯示控制 */
+.screen.hidden {
   display: none;
 }
 
+/* Modal 遮罩 */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.25);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
   z-index: 10;
 }
 
+.modal-backdrop.hidden {
+  display: none;
+}
+
+/* Modal 主體 */
 .modal {
   position: fixed;
   left: 50%;
   top: 50%;
+  width: min(90%, 360px);
   transform: translate(-50%, -50%);
-  max-width: 360px;
-  width: calc(100% - 48px);
   background: #fff7e6;
-  border-radius: 18px;
-  border: 2px solid #f0c27b;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-  padding: 18px 18px 16px;
-  z-index: 11;
+  border-radius: 20px;
+  border: 2px solid #f2d3a2;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+  padding: 18px 16px 16px;
+  z-index: 20;
+}
+
+.modal.hidden {
+  display: none;
 }
 
 .modal-header {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .modal-emoji {
-  font-size: 1.6rem;
-  margin-right: 6px;
+  font-size: 26px;
+  margin-right: 8px;
 }
 
 .modal-header h3 {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 18px;
 }
 
 .modal-text {
   margin: 0 0 16px;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: #7a4a3b;
+  font-size: 14px;
+  color: #6b4a3b;
 }
 
+/* 按鈕 */
 .primary-btn {
+  display: block;
   width: 100%;
-  border: none;
+  padding: 10px 0;
   border-radius: 999px;
-  padding: 10px 12px;
-  font-size: 0.95rem;
-  background: linear-gradient(90deg, #ffaf66, #ff7f80);
+  border: none;
+  background: linear-gradient(90deg, #ffb86c, #ff8ba7);
   color: #fff;
+  font-size: 15px;
   font-weight: 600;
-  box-shadow: 0 4px 10px rgba(255, 133, 102, 0.4);
+  letter-spacing: 1px;
   cursor: pointer;
-  outline: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
 }
 
 .primary-btn:active {
   transform: translateY(1px);
-  box-shadow: 0 2px 6px rgba(255, 133, 102, 0.35);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   filter: brightness(0.95);
-}
-
-/* 手機小螢幕微調 */
-@media (max-width: 360px) {
-  .card {
-    padding: 16px 14px;
-  }
-
-  .modal {
-    width: calc(100% - 32px);
-  }
 }

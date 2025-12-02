@@ -3,20 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>小勇者之旅大冒險 - 勇者猜拳</title>
+  <title>小勇者之旅大冒險 - Little Hero Game</title>
   <style>
-    /* ---- 基本排版 ---- */
-    * { box-sizing: border-box; }
-    body {
+    /* -------- 基礎設定 -------- */
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
       margin: 0;
       padding: 0;
-      font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #ffeec9;
+      height: 100%;
     }
-    .wrap {
+    body {
+      font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(180deg, #ffeec9 0%, #ffe9f2 40%, #e4f2ff 100%);
+      color: #333;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* -------- App 外框 -------- */
+    .app {
       max-width: 480px;
       margin: 0 auto;
-      padding: 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* -------- 上方標題列 -------- */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 248, 224, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(225, 182, 118, 0.5);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .app-header-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff8c7 0, #ffd46a 40%, #ffb347 75%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .app-header-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .app-header-title {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .app-header-sub {
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    /* -------- 內容區 -------- */
+    .app-main {
+      flex: 1;
+      padding: 12px 12px 72px;
+    }
+
+    .section {
+      margin-bottom: 16px;
     }
     .card {
       background: #fff7e6;
@@ -24,46 +84,52 @@
       border: 2px solid #e1b676;
       box-shadow: 0 3px 8px rgba(0,0,0,0.12);
       padding: 16px;
-      margin-bottom: 16px;
+    }
+    .card + .card {
+      margin-top: 12px;
     }
     h1, h2, h3 {
       margin: 0 0 8px;
       text-align: center;
     }
     h1 {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
     }
     h2 {
-      font-size: 1.3rem;
+      font-size: 1.25rem;
     }
     p {
       margin: 4px 0;
-      line-height: 1.5;
+      line-height: 1.6;
     }
+
     .badge {
       display: inline-block;
       padding: 2px 8px;
       border-radius: 999px;
       font-size: 0.75rem;
       background: #ffe08a;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
-    /* ---- 按鈕樣式 ---- */
+    /* -------- 按鈕 -------- */
     .btn-row {
       display: flex;
       gap: 8px;
       margin-top: 8px;
+      flex-wrap: wrap;
     }
     .btn {
       flex: 1;
       padding: 10px 6px;
       border-radius: 999px;
       border: none;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       cursor: pointer;
       background: #ffcc66;
-      transition: transform 0.1s, box-shadow 0.1s;
+      transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+      text-align: center;
+      white-space: nowrap;
     }
     .btn:active {
       transform: translateY(1px);
@@ -73,122 +139,359 @@
       background: #ffd8e2;
       font-size: 0.95rem;
     }
+    .btn-ghost {
+      background: #fff;
+      border: 1px dashed #e1b676;
+      font-size: 0.85rem;
+    }
 
-    /* ---- 狀態區 ---- */
+    /* -------- 首頁列表 -------- */
+    .list {
+      padding-left: 20px;
+      margin: 4px 0;
+      font-size: 0.95rem;
+    }
+
+    /* -------- 勇者卡片 -------- */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .hero-card {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #ffd38a;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s, border-color 0.1s;
+      font-size: 0.9rem;
+    }
+    .hero-card-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .hero-card-line {
+      font-size: 0.8rem;
+      color: #555;
+    }
+    .hero-card-tag {
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #ffe9b5;
+      margin-top: 4px;
+    }
+    .hero-card.selected {
+      border-color: #ff922b;
+      box-shadow: 0 0 0 2px rgba(255, 146, 43, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .hero-summary {
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 12px;
+      background: #fff;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    /* -------- 壞情緒進度條 -------- */
+    .emotion-steps {
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+      margin: 10px 0 4px;
+      font-size: 0.7rem;
+    }
+    .emotion-step {
+      flex: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .emotion-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 2px solid #ffb3c1;
+      background: #fff;
+    }
+    .emotion-step.current .emotion-dot {
+      background: #ffccd5;
+      border-color: #ff6b81;
+    }
+    .emotion-step.done .emotion-dot {
+      background: #69db7c;
+      border-color: #2f9e44;
+    }
+    .emotion-label {
+      white-space: nowrap;
+    }
+
     .status-row {
       display: flex;
       justify-content: space-between;
-      margin-top: 8px;
-      font-size: 0.9rem;
+      margin-top: 4px;
+      font-size: 0.85rem;
     }
     .hp {
       color: #e85959;
-      font-weight: bold;
+      font-weight: 600;
     }
     .mood-good { color: #2f9e44; }
     .mood-bad  { color: #e85959; }
 
+    /* -------- 戰鬥 log -------- */
     .log {
       margin-top: 8px;
       padding: 8px;
       border-radius: 12px;
       background: #fff;
-      max-height: 180px;
+      max-height: 200px;
       overflow-y: auto;
       font-size: 0.9rem;
     }
-    .log p { margin-bottom: 4px; }
+    .log p {
+      margin-bottom: 4px;
+    }
+    .log p.system {
+      color: #555;
+    }
+    .log p.hero {
+      color: #1c7ed6;
+    }
+    .log p.monster {
+      color: #e8590c;
+    }
 
-    /* ---- Hero & Monster tag ---- */
-    .tag-row {
+    .bear-tip {
       display: flex;
       gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 8px 0;
+      align-items: flex-start;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
     }
-    .tag {
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: #e7f5ff;
-      font-size: 0.85rem;
+    .bear-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffe3e3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .bear-bubble {
+      flex: 1;
+      border-radius: 12px;
+      background: #fff;
+      padding: 6px 8px;
+      border: 1px dashed #e1b676;
     }
 
-    /* ---- RWD 小處理 ---- */
+    /* -------- 底部導航列 -------- */
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      max-width: 480px;
+      width: 100%;
+      background: rgba(255, 247, 230, 0.96);
+      border-top: 1px solid rgba(225, 182, 118, 0.6);
+      backdrop-filter: blur(8px);
+      padding: 4px 4px env(safe-area-inset-bottom, 4px);
+      z-index: 30;
+    }
+    .bottom-nav-inner {
+      display: flex;
+      justify-content: space-around;
+      gap: 4px;
+    }
+    .nav-item {
+      flex: 1;
+      text-align: center;
+      padding: 6px 4px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      color: #555;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .nav-item span {
+      font-size: 1.1rem;
+    }
+    .nav-item.active {
+      background: #ffe08a;
+      color: #b35400;
+      font-weight: 600;
+    }
+
     @media (min-width: 540px) {
-      h1 { font-size: 1.8rem; }
+      h1 { font-size: 1.7rem; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <!-- 封面 -->
-    <div class="card">
-      <h1>🌟 小勇者之旅大冒險 🌟</h1>
-      <p style="text-align:center;">副標題：情緒與勇氣的奇幻之旅</p>
-      <p style="text-align:center;font-size:0.9rem;color:#666;">勇者們用 ✊✌️🖐 猜拳，把壞情緒魔物慢慢安撫回好心情。</p>
-    </div>
-
-    <!-- 勇者選擇 -->
-    <div class="card" id="hero-card">
-      <span class="badge">STEP 1</span>
-      <h2>選擇你的勇者</h2>
-      <div class="tag-row">
-        <button class="btn btn-secondary" data-hero="戰士">🛡️ 戰士（✊）</button>
-        <button class="btn btn-secondary" data-hero="法師">🔮 法師（✌️）</button>
-        <button class="btn btn-secondary" data-hero="牧師">💖 牧師（🖐）</button>
-        <button class="btn btn-secondary" data-hero="勇敢的村民">🌾 勇敢的村民（任意）</button>
+  <div class="app">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-header-logo">⭐️</div>
+      <div class="app-header-text">
+        <div class="app-header-title">星星王國｜小勇者之旅</div>
+        <div class="app-header-sub">剪刀石頭布．安撫壞情緒的小遊戲</div>
       </div>
-      <p id="hero-info" style="margin-top:8px;"></p>
-    </div>
+    </header>
 
-    <!-- 猜拳戰鬥區 -->
-    <div class="card" id="battle-card">
-      <span class="badge">STEP 2</span>
-      <h2>勇者猜拳對抗壞情緒魔物</h2>
+    <!-- Main -->
+    <main class="app-main">
+      <!-- 首頁 -->
+      <section class="section" id="home">
+        <div class="card">
+          <span class="badge">遊戲介紹</span>
+          <h1>🌟 小勇者大冒險，出發！</h1>
+          <p style="text-align:center;font-size:0.95rem;color:#555;">
+            在星星王國裡，魔物們被「壞情緒」影響，變得好暴躁。<br>
+            小勇者們要用 <strong>剪刀✌️、石頭✊、布🖐</strong> 與溫暖的語句，慢慢安撫牠們。
+          </p>
+          <ul class="list">
+            <li>選一位喜歡的勇者職業。</li>
+            <li>和魔物玩剪刀石頭布，每贏一次就安撫一種壞情緒。</li>
+            <li>當 6 種壞情緒都被安撫完，魔物會變回開心小夥伴！</li>
+          </ul>
+          <div class="btn-row">
+            <a href="#hero" class="btn">🧒 馬上選擇勇者</a>
+          </div>
+        </div>
+      </section>
 
-      <p id="monster-name" style="text-align:center;margin-bottom:4px;">👾 目前魔物：生氣史萊姆</p>
-      <p style="text-align:center;font-size:0.9rem;color:#666;">
-        小勇者每贏一次，就安撫一種壞情緒。先累積 6 次勝利，就把魔物變回開心小夥伴！
-      </p>
+      <!-- 勇者選擇 -->
+      <section class="section" id="hero">
+        <div class="card" id="hero-card">
+          <span class="badge">STEP 1 勇者登場</span>
+          <h2>選擇你的勇者夥伴</h2>
+          <p style="text-align:center;font-size:0.9rem;color:#666;">
+            不同勇者有不同天賦拳與個性，選一個最像你的角色吧！
+          </p>
+          <div class="hero-grid">
+            <button type="button" class="hero-card" data-hero="戰士">
+              <div class="hero-card-title">🛡️ 戰士（✊）</div>
+              <div class="hero-card-line">勇敢、有責任感</div>
+              <div class="hero-card-line">口頭禪：我一定會守護大家！</div>
+              <div class="hero-card-tag">出 ✊ 並勝利 → 傳達 2 倍好心情</div>
+            </button>
+            <button type="button" class="hero-card" data-hero="法師">
+              <div class="hero-card-title">🔮 法師（✌️）</div>
+              <div class="hero-card-line">聰明、有創意</div>
+              <div class="hero-card-line">口頭禪：嘿嘿～我有新點子！</div>
+              <div class="hero-card-tag">出 ✌️ 並勝利 → 傳達 2 倍好心情</div>
+            </button>
+            <button type="button" class="hero-card" data-hero="牧師">
+              <div class="hero-card-title">💖 牧師（🖐）</div>
+              <div class="hero-card-line">溫柔、善解人意</div>
+              <div class="hero-card-line">口頭禪：別擔心，我來幫你～</div>
+              <div class="hero-card-tag">出 🖐 並勝利 → 傳達 2 倍好心情</div>
+            </button>
+            <button type="button" class="hero-card" data-hero="勇敢的村民">
+              <div class="hero-card-title">🌾 勇敢的村民（任意）</div>
+              <div class="hero-card-line">樸實、堅毅</div>
+              <div class="hero-card-line">口頭禪：我雖然平凡，但不放棄！</div>
+              <div class="hero-card-tag">魔王戰使用任意星星 → 輸了也不受壞情緒影響</div>
+            </button>
+          </div>
+          <div class="hero-summary" id="hero-info">
+            👉 請先點選上面的勇者卡片。
+          </div>
+          <div class="btn-row">
+            <a href="#battle" class="btn btn-secondary">前往 👾 魔物戰鬥區</a>
+          </div>
+        </div>
+      </section>
 
-      <div class="status-row">
-        <span>勇者心情：<span id="hero-mood" class="mood-good">💖 良好</span></span>
-        <span>已安撫：<span id="calm-count">0</span> / 6</span>
+      <!-- 魔物戰鬥 -->
+      <section class="section" id="battle">
+        <div class="card" id="battle-card">
+          <span class="badge">STEP 2 魔物戰鬥</span>
+          <h2>勇者猜拳對抗壞情緒魔物</h2>
+
+          <div class="bear-tip">
+            <div class="bear-avatar">🐻</div>
+            <div class="bear-bubble" id="bear-tip-text">
+              村長熊熊：先選一位勇者，再用剪刀石頭布來跟魔物互動吧！
+            </div>
+          </div>
+
+          <p id="monster-name" style="text-align:center;margin-bottom:4px;">
+            👾 目前魔物：生氣史萊姆
+          </p>
+
+          <!-- 壞情緒進度條 -->
+          <div class="emotion-steps" id="emotion-steps"></div>
+
+          <div class="status-row">
+            <span>勇者心情：<span id="hero-mood" class="mood-good">💖 良好</span></span>
+            <span>已安撫：<span id="calm-count">0</span> / 6</span>
+          </div>
+
+          <div class="btn-row" style="margin-top:10px;">
+            <button class="btn" data-hand="✊">✊ 石頭</button>
+            <button class="btn" data-hand="✌️">✌️ 剪刀</button>
+            <button class="btn" data-hand="🖐">🖐 布</button>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-secondary" id="btn-cheer">💫 使用勇氣星星語句</button>
+            <button class="btn btn-ghost" id="btn-reset">🔁 重新開始</button>
+          </div>
+
+          <div class="log" id="log-box"></div>
+        </div>
+
+        <!-- 家長導讀 -->
+        <div class="card">
+          <span class="badge">家長導讀</span>
+          <h3>這個小遊戲可以練習什麼？</h3>
+          <ul class="list">
+            <li>用「語句」說出感受，而不是只看輸贏。</li>
+            <li>理解壞情緒（生氣、害怕、嫉妒、孤單…）也可以被安撫。</li>
+            <li>透過猜拳練習「輪流」、「等待」與「接受輸贏」。</li>
+          </ul>
+          <p style="font-size:0.85rem;color:#666;">
+            建議家長陪同遊玩，可以請孩子自己想一段「安慰魔物的話」，練習同理與表達。
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- 底部導航 -->
+    <nav class="bottom-nav">
+      <div class="bottom-nav-inner">
+        <a href="#home" class="nav-item active" data-target="home">
+          <span>🏠</span>首頁
+        </a>
+        <a href="#hero" class="nav-item" data-target="hero">
+          <span>🧒</span>勇者
+        </a>
+        <a href="#battle" class="nav-item" data-target="battle">
+          <span>👾</span>魔物戰
+        </a>
       </div>
-
-      <div class="btn-row">
-        <button class="btn" data-hand="✊">✊ 石頭</button>
-        <button class="btn" data-hand="✌️">✌️ 剪刀</button>
-        <button class="btn" data-hand="🖐">🖐 布</button>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn btn-secondary" id="btn-cheer">💫 使用勇氣星星語句</button>
-        <button class="btn btn-secondary" id="btn-reset">🔁 重新開始</button>
-      </div>
-
-      <div class="log" id="log-box"></div>
-    </div>
-
-    <!-- 說明 / 家長導讀 -->
-    <div class="card">
-      <span class="badge">家長導讀</span>
-      <h3>這個小遊戲可以練習什麼？</h3>
-      <ul style="padding-left:20px;margin:4px 0;font-size:0.9rem;">
-        <li>用「語句」表達感受，而不是只靠輸贏。</li>
-        <li>理解壞情緒（生氣、害怕、嫉妒、孤單…）都是可以被安撫的。</li>
-        <li>透過猜拳練習「接受輸贏」、「輪流」與「等待」。</li>
-      </ul>
-      <p style="font-size:0.85rem;color:#666;">
-        建議家長陪同遊玩，可以請孩子自己說出：<br>
-        「如果是你，你會跟這隻魔物說什麼安慰的話？」
-      </p>
-    </div>
+    </nav>
   </div>
 
   <script>
-    // --- 小勇者資料 ---
+    // --- 勇者資料 ---
     const heroes = {
       "戰士": {
         punch: "✊",
@@ -208,9 +511,7 @@
       },
     };
 
-    const badEmotions = [
-      "生氣", "害怕", "嫉妒", "孤單", "沮喪", "疲累"
-    ];
+    const badEmotions = ["生氣", "害怕", "嫉妒", "孤單", "沮喪", "疲累"];
 
     const cheerSentences = [
       "「我在這裡聽你說，不用一個人扛。」",
@@ -230,21 +531,60 @@
     const calmCountEl = document.getElementById("calm-count");
     const monsterNameEl = document.getElementById("monster-name");
     const logBox = document.getElementById("log-box");
+    const bearTipEl = document.getElementById("bear-tip-text");
+    const emotionStepsEl = document.getElementById("emotion-steps");
 
-    function log(text) {
+    // 建立壞情緒小圓點
+    function renderEmotionSteps() {
+      emotionStepsEl.innerHTML = "";
+      badEmotions.forEach((emo, idx) => {
+        const step = document.createElement("div");
+        step.className = "emotion-step";
+        const dot = document.createElement("div");
+        dot.className = "emotion-dot";
+        const label = document.createElement("div");
+        label.className = "emotion-label";
+        label.textContent = emo;
+        step.appendChild(dot);
+        step.appendChild(label);
+        emotionStepsEl.appendChild(step);
+      });
+      updateEmotionSteps();
+    }
+
+    function updateEmotionSteps() {
+      const steps = emotionStepsEl.querySelectorAll(".emotion-step");
+      steps.forEach((step, idx) => {
+        step.classList.remove("current", "done");
+        if (idx < calmCount) {
+          step.classList.add("done");
+        } else if (idx === currentEmotionIndex) {
+          step.classList.add("current");
+        }
+      });
+    }
+
+    function log(text, type = "system") {
       const p = document.createElement("p");
       p.textContent = text;
+      p.classList.add(type);
       logBox.appendChild(p);
       logBox.scrollTop = logBox.scrollHeight;
     }
 
     // 勇者選擇
-    document.querySelectorAll("#hero-card .btn-secondary").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const heroName = btn.dataset.hero;
+    const heroCards = document.querySelectorAll(".hero-card");
+    heroCards.forEach(card => {
+      card.addEventListener("click", () => {
+        const heroName = card.dataset.hero;
         currentHero = heroName;
+        heroCards.forEach(c => c.classList.remove("selected"));
+        card.classList.add("selected");
+
         const info = heroes[heroName];
         heroInfoEl.textContent = `你選擇了【${heroName}】。天賦拳：${info.punch}；個性：${info.text}`;
+        bearTipEl.textContent = `村長熊熊：太好了，小勇者「${heroName}」準備出發！現在可以到下方的魔物戰區，用剪刀石頭布來安撫壞情緒囉～`;
+
         logBox.innerHTML = "";
         heroMoodEl.textContent = "💖 良好";
         heroMoodEl.classList.remove("mood-bad");
@@ -253,11 +593,12 @@
         currentEmotionIndex = 0;
         calmCountEl.textContent = calmCount.toString();
         monsterNameEl.textContent = `👾 目前魔物：${badEmotions[currentEmotionIndex]}史萊姆`;
-        log(`村長熊熊：太好了，小勇者 ${heroName} 準備出發！`);
+        updateEmotionSteps();
+        log(`村長熊熊：小勇者【${heroName}】加入隊伍！`, "system");
       });
     });
 
-    // 猜拳規則：回傳 勇者是 勝/平/負
+    // 猜拳規則
     function judge(player, enemy) {
       if (player === enemy) return "draw";
       if (
@@ -281,7 +622,7 @@
       if (!hand) return;
       btn.addEventListener("click", () => {
         if (!currentHero) {
-          alert("請先選擇一位小勇者！");
+          alert("請先到上方區塊選擇一位小勇者。");
           return;
         }
         const playerHand = hand;
@@ -290,27 +631,32 @@
         const emotion = badEmotions[currentEmotionIndex];
 
         if (result === "win") {
-          log(`你出了 ${playerHand}，魔物出了 ${enemyHand}。你贏了！安撫了「${emotion}」的情緒。`);
+          log(`你出了 ${playerHand}，魔物出了 ${enemyHand}。你贏了！安撫了「${emotion}」的情緒。`, "hero");
           calmCount++;
           calmCountEl.textContent = calmCount.toString();
           heroMoodEl.textContent = "💖 良好";
           heroMoodEl.classList.add("mood-good");
           heroMoodEl.classList.remove("mood-bad");
 
-          if (calmCount >= 6) {
-            log(`✨ ${emotion}史萊姆感受到滿滿的關心，變回了開心小夥伴！恭喜小勇者完成任務！`);
-            monsterNameEl.textContent = "🎉 魔物已全部被安撫，恭喜通關！";
+          if (calmCount >= badEmotions.length) {
+            log(`✨ ${emotion}史萊姆感受到滿滿的關心，所有壞情緒都被好好看見並安撫了！`, "system");
+            monsterNameEl.textContent = "🎉 魔物已全部被安撫，恭喜小勇者通關！";
+            bearTipEl.textContent = "村長熊熊：太棒了！你用耐心和溫柔，成功陪伴魔物走過壞情緒。今天也辛苦你啦～";
+            currentEmotionIndex = badEmotions.length - 1;
           } else {
             currentEmotionIndex = calmCount;
             monsterNameEl.textContent = `👾 下一個壞情緒：${badEmotions[currentEmotionIndex]}史萊姆`;
+            bearTipEl.textContent = `村長熊熊：接下來輪到「${badEmotions[currentEmotionIndex]}」的情緒了，我們慢慢陪它就好～`;
           }
+          updateEmotionSteps();
         } else if (result === "draw") {
-          log(`你出了 ${playerHand}，魔物出了 ${enemyHand}。平手～可以再試一次。`);
+          log(`你出了 ${playerHand}，魔物出了 ${enemyHand}。平手～可以再試一次。`, "system");
         } else {
-          log(`你出了 ${playerHand}，魔物出了 ${enemyHand}。這回合魔物比較激動。`);
+          log(`你出了 ${playerHand}，魔物出了 ${enemyHand}。這回合魔物比較激動。`, "monster");
           heroMoodEl.textContent = "💔 需要調整心情";
           heroMoodEl.classList.remove("mood-good");
           heroMoodEl.classList.add("mood-bad");
+          bearTipEl.textContent = "村長熊熊：輸了也沒關係，先深呼吸一下，再用勇氣星星語句幫助自己和魔物。";
         }
       });
     });
@@ -318,16 +664,18 @@
     // 勇氣星星語句
     document.getElementById("btn-cheer").addEventListener("click", () => {
       const sentence = cheerSentences[Math.floor(Math.random() * cheerSentences.length)];
-      log(`⭐ 小勇者說：${sentence}`);
+      log(`⭐ 小勇者說：${sentence}`, "hero");
       heroMoodEl.textContent = "💖 調整完畢";
       heroMoodEl.classList.add("mood-good");
       heroMoodEl.classList.remove("mood-bad");
+      bearTipEl.textContent = "村長熊熊：好棒的語句！當我們願意說出關心，魔物和自己都會比較輕鬆。";
     });
 
     // 重新開始
     document.getElementById("btn-reset").addEventListener("click", () => {
       currentHero = null;
-      heroInfoEl.textContent = "";
+      heroCards.forEach(c => c.classList.remove("selected"));
+      heroInfoEl.textContent = "👉 請先點選上面的勇者卡片。";
       logBox.innerHTML = "";
       heroMoodEl.textContent = "💖 良好";
       heroMoodEl.classList.add("mood-good");
@@ -336,11 +684,23 @@
       currentEmotionIndex = 0;
       calmCountEl.textContent = calmCount.toString();
       monsterNameEl.textContent = "👾 目前魔物：生氣史萊姆";
-      log("村長熊熊：重新出發吧，小勇者！先選一位夥伴～");
+      bearTipEl.textContent = "村長熊熊：先選一位勇者，再用剪刀石頭布來跟魔物互動吧！";
+      updateEmotionSteps();
+      log("村長熊熊：重新出發！這次會遇到不一樣的心情喔～", "system");
     });
 
-    // 預設提示
-    log("村長熊熊：先在上面選擇你的勇者，再用剪刀石頭布來安撫魔物吧！");
+    // 底部導航 active 狀態
+    const navItems = document.querySelectorAll(".nav-item");
+    navItems.forEach(item => {
+      item.addEventListener("click", () => {
+        navItems.forEach(i => i.classList.remove("active"));
+        item.classList.add("active");
+      });
+    });
+
+    // 初始化
+    renderEmotionSteps();
+    log("村長熊熊：歡迎來到星星王國～點選上方「勇者」先選角色，或者直接滑到魔物戰區開始冒險！", "system");
   </script>
 </body>
 </html>

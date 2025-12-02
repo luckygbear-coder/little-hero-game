@@ -1,258 +1,220 @@
-/* ===========================
-   小勇者之旅大冒險 - 完整版系統
-   魔物 + 魔王 + 占卜 + 語音 + 動畫
-=========================== */
+/* ============================================================
+   小勇者之旅大冒險 · 終極整合版 script.js
+   作者：小庫為吉吉熊量身打造 ❤️
+============================================================ */
 
-/* ----------------------------------
-   魔物資料庫
----------------------------------- */
-const monsters = [
-  {
-    name: "哭哭史萊姆 💧",
-    img: "images/monster_slime_sad.png",
-    happyImg: "images/monster_slime_happy.png",
-    hp: 3,
-    emotions: ["害怕", "孤單", "沮喪"],
-    negativeLines: [
-      "嗚嗚…沒有人理我…",
-      "我好孤單…",
-      "是不是都是我的錯…"
-    ],
-    positiveLines: [
-      "欸？你願意陪我嗎…？",
-      "我覺得好像沒那麼孤單了…",
-      "謝謝你…我心裡暖暖的。"
+/* ===============================
+   1. DOM 元件
+================================ */
+const screenHome = document.getElementById("screen-choose");
+const screenMap = document.getElementById("screen-map");
+const screenMonster = document.getElementById("screen-monster");
+const screenBoss = document.getElementById("screen-boss");
+
+const monsterImg = document.getElementById("monster-img");
+const monsterDialogue = document.getElementById("monsterDialogue");
+const monsterResult = document.getElementById("monsterResult");
+
+const bossImg = document.getElementById("boss-img");
+const bossDialogue = document.getElementById("bossDialogue");
+const bossResult = document.getElementById("bossResult");
+
+/* ===============================
+   2. 魔物資料庫（10 種情緒）
+================================ */
+const monsters = {
+  怒炎小獸: {
+    stages: ["怒炎-1.png", "怒炎-2.png", "怒炎-3.png", "怒炎-4.png"],
+    emotionStory: [
+      "我才沒有生氣！只是…只是心裡熱熱的…！🔥",
+      "你為什麼要對我這麼溫柔啦…我不習慣！",
+      "好啦…我冷靜一些了…謝謝你願意陪我。",
+      "嗯…我現在覺得好舒服…你真的很溫暖。"
     ]
   },
-
-  {
-    name: "抓狂小惡魔 🔥",
-    img: "images/monster_devil_angry.png",
-    happyImg: "images/monster_devil_happy.png",
-    hp: 3,
-    emotions: ["生氣", "嫉妒", "煩躁"],
-    negativeLines: [
-      "走開啦！不要煩我！",
-      "為什麼別人都有？！",
-      "我現在超級煩！！"
-    ],
-    positiveLines: [
-      "欸…你竟然不怕我。",
-      "好啦我冷靜一點…",
-      "謝謝你，我好像不那麼生氣了。"
+  憂鬱影狐: {
+    stages: ["影狐-1.png", "影狐-2.png", "影狐-3.png", "影狐-4.png"],
+    emotionStory: [
+      "…我沒事，只是覺得世界有點灰。",
+      "你願意聽我說嗎…？或許我沒那麼孤單…",
+      "奇怪…為什麼心裡變得亮亮的？",
+      "謝謝你，我覺得自己又能走下去了。"
+    ]
+  },
+  焦慮跳兔: {
+    stages: ["跳兔-1.png", "跳兔-2.png", "跳兔-3.png", "跳兔-4.png"],
+    emotionStory: [
+      "等一下！你要靠近嗎？我還沒準備好！",
+      "你…你真的會保護我嗎？",
+      "呼…好像真的比較放心了…",
+      "謝謝你，我不再害怕了。"
+    ]
+  },
+  嫉妒綠芽靈: {
+    stages: ["芽靈-1.png", "芽靈-2.png", "芽靈-3.png", "芽靈-4.png"],
+    emotionStory: [
+      "為什麼大家都不看我…？",
+      "咦…你願意陪我？",
+      "嘿嘿…我開始覺得自己也很可愛。",
+      "你讓我感受到被喜歡的感覺。"
+    ]
+  },
+  孤單雲茸獸: {
+    stages: ["雲獸-1.png", "雲獸-2.png", "雲獸-3.png", "雲獸-4.png"],
+    emotionStory: [
+      "沒有人會想跟我玩吧？",
+      "你…願意靠近我嗎？",
+      "啊…原來被陪伴是這種感覺…",
+      "你讓我不再孤單了。"
+    ]
+  },
+  挫折泥偶: {
+    stages: ["泥偶-1.png", "泥偶-2.png", "泥偶-3.png", "泥偶-4.png"],
+    emotionStory: [
+      "我什麼都做不好…",
+      "你覺得我真的還能變好嗎？",
+      "喔！我做到了一點點！",
+      "我會繼續努力的，謝謝你相信我。"
+    ]
+  },
+  害羞莓果精: {
+    stages: ["莓精-1.png", "莓精-2.png", "莓精-3.png", "莓精-4.png"],
+    emotionStory: [
+      "嗚…不要一直看我啦…",
+      "咦？你不是想笑我嗎？",
+      "你的鼓勵…好像甜甜的。",
+      "嘿嘿…我現在覺得自己很棒！"
+    ]
+  },
+  厭煩角蜥: {
+    stages: ["角蜥-1.png", "角蜥-2.png", "角蜥-3.png", "角蜥-4.png"],
+    emotionStory: [
+      "唉…好麻煩，不想動。",
+      "你…真的要陪我嗎？好啦。",
+      "好像…沒那麼煩了。",
+      "你讓我覺得輕鬆多了。"
+    ]
+  },
+  胡思亂想狸: {
+    stages: ["狸-1.png", "狸-2.png", "狸-3.png", "狸-4.png"],
+    emotionStory: [
+      "糟了糟了糟了…一定會出事！",
+      "咦？你說我想太多？",
+      "嗯…好像真的沒那麼可怕。",
+      "我覺得世界變得安靜了。"
+    ]
+  },
+  過度開心泡泡獸: {
+    stages: ["泡泡-1.png", "泡泡-2.png", "泡泡-3.png", "泡泡-4.png"],
+    emotionStory: [
+      "好好好好好開心！！停不下來！！",
+      "咦？我是不是太大聲了…？",
+      "嘿嘿…我調整好了～",
+      "現在剛剛好！我喜歡這樣。"
     ]
   }
-];
-
-/* ----------------------------------
-   魔王資料
----------------------------------- */
-const boss = {
-  name: "壞情緒巨獸・暗影烏魯魯",
-  img: "images/boss_dark.png",
-  happyImg: "images/boss_light.png",
-  hp: 6,
-  stageLines: [
-    "你阻止不了我…",
-    "不要靠近…我會傷害你…",
-    "其實我…好累…",
-    "謝謝你……願意走近我。"
-  ]
 };
 
-
-/* ----------------------------------
-   遊戲狀態
----------------------------------- */
-let currentMonsterIndex = 0;
 let currentMonster = null;
-let playerHP = 3;
-let gameStage = "monster"; // monster / boss / end
+let currentStage = 0;
 
+/* ===============================
+   3. 點地圖 → 出現魔物
+================================ */
+function exploreMonster(name) {
+  currentMonster = monsters[name];
+  currentStage = 0;
 
-/* ----------------------------------
-   工具函式
----------------------------------- */
-function rand(list) {
-  return list[Math.floor(Math.random() * list.length)];
+  monsterImg.src = currentMonster.stages[currentStage];
+  monsterDialogue.innerText = currentMonster.emotionStory[currentStage];
+
+  showScreen(screenMonster);
 }
 
-function playHeroVoice() {
-  const voices = [
-    "audio/voice_1.mp3",
-    "audio/voice_2.mp3",
-    "audio/voice_3.mp3"
-  ];
-  const audio = new Audio(rand(voices));
-  audio.play();
-}
+/* ===============================
+   4. 勇者安撫魔物（剪刀石頭布）
+================================ */
+function chooseRPS(choice) {
+  const r = Math.random();
 
-function animateMonster(type) {
-  const m = document.getElementById("monster-img");
-  m.classList.remove("shake", "sad", "happy");
+  if (r < 0.6) {
+    // 勇者成功安撫
+    currentStage++;
 
-  if (type === "hurt") m.classList.add("shake");
-  if (type === "sad") m.classList.add("sad");
-  if (type === "happy") m.classList.add("happy");
-}
+    if (currentStage >= 4) {
+      monsterDialogue.innerText = "✨ 魔物完全恢復好心情！變回可愛的朋友～";
+      monsterImg.src = currentMonster.stages[3];
+      monsterResult.innerText = "太棒了！你獲得一顆勇氣星星 ⭐";
+      return;
+    }
 
-
-/* ----------------------------------
-   初始化魔物
----------------------------------- */
-function loadMonster() {
-  currentMonster = JSON.parse(JSON.stringify(monsters[currentMonsterIndex]));
-
-  document.getElementById("monster-name").innerText = currentMonster.name;
-  document.getElementById("monster-img").src = currentMonster.img;
-  document.getElementById("monster-hp").innerText = `壞情緒值：${currentMonster.hp}`;
-  document.getElementById("log").innerText = "請選擇你的拳～";
-}
-
-
-/* ----------------------------------
-   出拳
----------------------------------- */
-function play(move) {
-  if (gameStage === "end") return;
-  if (gameStage === "boss") {
-    return playBoss(move);
+    monsterImg.src = currentMonster.stages[currentStage];
+    monsterDialogue.innerText = currentMonster.emotionStory[currentStage];
+  } else {
+    monsterResult.innerText = "魔物還沒準備好…再試一次吧！🤝";
   }
-
-  const moves = ["石頭", "剪刀", "布"];
-  const monsterMove = rand(moves);
-
-  let result = "";
-
-  // 平手
-  if (move === monsterMove) {
-    result = `平手！你出 ${move}，魔物也出 ${monsterMove}`;
-    animateMonster("sad");
-  }
-
-  // 勝利
-  else if (
-    (move === "石頭" && monsterMove === "剪刀") ||
-    (move === "剪刀" && monsterMove === "布") ||
-    (move === "布" && monsterMove === "石頭")
-  ) {
-    const emotion = currentMonster.emotions.pop();
-    currentMonster.hp--;
-
-    result = `🎉 你安撫了魔物的「${emotion}」！`;
-
-    playHeroVoice();
-    animateMonster("hurt");
-
-    if (currentMonster.hp <= 0) return finishMonster();
-  }
-
-  // 失敗
-  else {
-    result = `魔物的壞情緒影響你 😣（扣 1 好心情）`;
-    playerHP--;
-
-    animateMonster("sad");
-
-    if (playerHP <= 0) return startBossBattle();
-  }
-
-  document.getElementById("log").innerText = result;
-  document.getElementById("monster-hp").innerText = `壞情緒值：${currentMonster.hp}`;
 }
 
-
-/* ----------------------------------
-   魔物安撫完成
----------------------------------- */
-function finishMonster() {
-  animateMonster("happy");
-  document.getElementById("monster-img").src = currentMonster.happyImg;
-  document.getElementById("monster-hp").innerText = "壞情緒消失了！";
-
-  document.getElementById("log").innerText = `${currentMonster.name} 開心了！`;
-
-  // 開啟占卜
-  setTimeout(() => openFortune(), 900);
-
-  // 換下一隻魔物
-  setTimeout(() => {
-    currentMonsterIndex++;
-    if (currentMonsterIndex >= monsters.length) startBossBattle();
-    else loadMonster();
-  }, 2000);
-}
-
-
-/* ----------------------------------
-   熊熊占卜彈跳視窗
----------------------------------- */
-function openFortune() {
-  const box = document.getElementById("fortune-box");
-  const text = document.getElementById("fortune-text");
-
+/* ===============================
+   5. 占卜（熊熊塔羅卡片）
+================================ */
+function showFortune() {
   const fortunes = [
-    "今天的你充滿治癒力 ✨",
-    "你的善良會讓世界變得更溫柔 💖",
-    "壞情緒只是雲，會散去的 ☁️",
-    "你正在成為更勇敢的自己 🌟"
+    "🌟 今天適合伸出援手，你的溫柔會改變誰的一天。",
+    "🔥 你的勇氣正在累積，準備迎接新的挑戰！",
+    "🌈 放鬆一下吧，你值得擁有美好的休息。",
+    "💖 愛會在你意想不到的地方出現。",
+    "⭐ 你的直覺說得沒錯，相信自己！"
   ];
 
-  text.innerText = rand(fortunes);
-  box.style.display = "flex";
+  const msg = fortunes[Math.floor(Math.random() * fortunes.length)];
+
+  alert("🐻 熊熊占卜：\n\n" + msg);
 }
 
-function closeFortune() {
-  document.getElementById("fortune-box").style.display = "none";
+/* ===============================
+   6. 魔王戰（六段壞情緒）
+================================ */
+let bossStage = 0;
+const bossEmotions = [
+  "我不想聽你說話！走開！🔥",
+  "我不需要任何人…！",
+  "哼…你只是想贏我而已。",
+  "你…你真的關心我嗎？",
+  "為什麼你願意一直陪我…？",
+  "謝謝你，我…好像沒這麼難受了。"
+];
+
+function startBoss() {
+  bossStage = 0;
+  bossImg.src = "boss-1.png";
+  bossDialogue.innerText = bossEmotions[bossStage];
+
+  showScreen(screenBoss);
 }
 
+function chooseRPSBoss() {
+  bossStage++;
 
-/* ----------------------------------
-   魔王戰
----------------------------------- */
-function startBossBattle() {
-  gameStage = "boss";
+  if (bossStage >= 6) {
+    bossDialogue.innerText = "✨ 你成功安撫魔王！星星王國重獲和平！";
+    bossResult.innerText = "恭喜你通過最終挑戰！🎉";
+    bossImg.src = "boss-happy.png";
+    return;
+  }
 
-  document.body.classList.add("boss-mode");
-
-  document.getElementById("monster-name").innerText = boss.name;
-  document.getElementById("monster-img").src = boss.img;
-  document.getElementById("monster-hp").innerText = `魔王情緒值：${boss.hp}`;
-  document.getElementById("log").innerText = "魔王降臨……牠的壞情緒壓得你喘不過氣！";
+  bossImg.src = "boss-" + (bossStage + 1) + ".png";
+  bossDialogue.innerText = bossEmotions[bossStage];
 }
 
-function playBoss(move) {
-  boss.hp--;
-  animateMonster("hurt");
+/* ===============================
+   7. 螢幕切換
+================================ */
+function showScreen(target) {
+  screenHome.classList.add("hidden");
+  screenMap.classList.add("hidden");
+  screenMonster.classList.add("hidden");
+  screenBoss.classList.add("hidden");
 
-  const stageLine = boss.stageLines[Math.floor((6 - boss.hp) / 2)] || "";
-
-  document.getElementById("log").innerText =
-    `你成功安撫魔王的一點情緒！\n${stageLine}`;
-
-  document.getElementById("monster-hp").innerText = `魔王情緒值：${boss.hp}`;
-
-  if (boss.hp <= 0) endBoss();
+  target.classList.remove("hidden");
 }
-
-
-/* ----------------------------------
-   魔王安撫完成（結局）
----------------------------------- */
-function endBoss() {
-  gameStage = "end";
-
-  animateMonster("happy");
-  document.getElementById("monster-img").src = boss.happyImg;
-
-  document.getElementById("log").innerText =
-    "✨ 你成功治癒了魔王！星星王國恢復和平！ ✨";
-
-  document.getElementById("monster-hp").innerText = "情緒完全被淨化";
-}
-
-
-/* ----------------------------------
-   初始化
----------------------------------- */
-loadMonster();

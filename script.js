@@ -1,180 +1,148 @@
-// 全部等畫面載入完成再執行，避免抓不到元素
-window.addEventListener("DOMContentLoaded", () => {
-  // ===== 全域狀態 =====
-  let currentHero = null;
+// ====== 全域狀態 ======
+let currentHero = null;
+let currentLocation = null;
 
-  // ===== 取得畫面元素 =====
-  const screenChoose = document.getElementById("screen-choose");
-  const screenMap = document.getElementById("screen-map");
+// ====== 畫面切換 ======
+const screens = {
+  choose: document.getElementById("screen-choose"),
+  map: document.getElementById("screen-map"),
+};
 
-  const screens = {
-    choose: screenChoose,
-    map: screenMap,
-  };
-
-  function showScreen(name) {
-    Object.values(screens).forEach((el) => {
-      if (!el) return;
-      el.classList.add("hidden");
-    });
-    if (screens[name]) {
-      screens[name].classList.remove("hidden");
-    }
+function showScreen(name) {
+  Object.values(screens).forEach((el) => el.classList.add("hidden"));
+  if (screens[name]) {
+    screens[name].classList.remove("hidden");
   }
+}
 
-  // 如果畫面元素沒找到，直接結束（避免報錯卡死）
-  if (!screenChoose || !screenMap) {
-    console.warn("找不到畫面元素 screen-choose 或 screen-map");
-    return;
-  }
+// 預設顯示選職業畫面
+showScreen("choose");
 
-  // ===== 勇者占卜設定 =====
-  const heroFortunes = {
-    warrior:
-      "今天的你，擁有勇敢與守護力，讓壞情緒知道：你不是一個人面對。",
-    mage: "今天的你，充滿創意靈感，能把擔心和害怕變成新的點子和解方。",
-    priest:
-      "今天的你，有溫柔治癒力，願意聽、願意陪，就能讓很多情緒慢慢放鬆。",
-    villager:
-      "今天的你，看起來平凡，但只要願意邁出一步，就已經是超級勇者了！",
-  };
+// ====== Modal 共用功能 ======
+const modalBackdrop = document.getElementById("modal-backdrop");
+const fortuneModal = document.getElementById("fortuneModal");
+const encounterModal = document.getElementById("encounterModal");
 
-  // ===== 地圖地點設定 =====
-  const locations = {
-    village: {
-      title: "你回到了新手村",
-      text: "這裡是出發點，也是休息的地方。之後可以在這裡補充勇氣與好心情。",
-    },
-    meadow: {
-      title: "草原上的微風",
-      text: "你遇見了有點暴躁的怒炎小獸，它其實只是太想被看見。",
-    },
-    forest: {
-      title: "靜靜的森林",
-      text: "一隻害羞樹精躲在樹後面，好像怕被誤會，心裡有點緊張。",
-    },
-    cave: {
-      title: "黑暗洞窟裡的回聲",
-      text: "怕黑的小魔物縮在角落，它需要有人陪它一起面對黑暗。",
-    },
-    lake: {
-      title: "湖畔的漣漪",
-      text: "哭哭水靈在湖邊掉眼淚，也許只是今天發生了一些太難的事。",
-    },
-    graveyard: {
-      title: "寂寞的墓地",
-      text: "骷髏士兵其實很孤單，只是用酷酷的樣子藏起來。",
-    },
-    witch: {
-      title: "女巫小屋的門縫",
-      text: "女巫正在研究『情緒藥水』，之後也許會給你特別的占卜提示。",
-    },
-    mountain: {
-      title: "風大的山頂",
-      text: "壓力小獸背著很重的包包，它需要有人告訴它：可以慢一點沒關係。",
-    },
-    boss: {
-      title: "魔王城的大門前",
-      text: "這裡住著被好多壞情緒纏住的魔王。等我們先安撫完幾隻魔物，再一起來挑戰最終戰吧！",
-    },
-  };
+function openModal(modalEl) {
+  if (!modalEl) return;
+  modalEl.classList.remove("hidden");
+  modalBackdrop.classList.remove("hidden");
+}
 
-  // ===== 抓取畫面上的 DOM 元素 =====
-  const heroButtons = document.querySelectorAll(".hero-card");
+function closeModal(modalEl) {
+  if (modalEl) modalEl.classList.add("hidden");
 
-  const modalBackdrop = document.getElementById("modal-backdrop");
-
-  // 占卜 modal
-  const fortuneModal = document.getElementById("fortuneModal");
-  const fortuneText = document.getElementById("fortuneText");
-  const fortuneOkBtn = document.getElementById("fortuneOkBtn");
-
-  // 遭遇 modal
-  const encounterModal = document.getElementById("encounterModal");
-  const encounterTitle = document.getElementById("encounterTitle");
-  const encounterText = document.getElementById("encounterText");
-  const encounterOkBtn = document.getElementById("encounterOkBtn");
-
-  const mapCells = document.querySelectorAll(".map-cell");
-
-  // 如果按鈕一個都沒抓到，也先提醒一下（但不報錯）
-  if (heroButtons.length === 0) {
-    console.warn("找不到 .hero-card 按鈕，請確認 index.html 上的 class 名稱。");
-  }
-
-  // ===== 共用 modal 開關 =====
-  function openModal(modalEl) {
-    if (!modalBackdrop || !modalEl) return;
-    modalBackdrop.classList.remove("hidden");
-    modalEl.classList.remove("hidden");
-  }
-
-  function closeModal(modalEl) {
-    if (!modalBackdrop || !modalEl) return;
+  // 如果兩個 modal 都關閉，就一起關掉背景
+  if (
+    fortuneModal.classList.contains("hidden") &&
+    encounterModal.classList.contains("hidden")
+  ) {
     modalBackdrop.classList.add("hidden");
-    modalEl.classList.add("hidden");
   }
+}
 
-  // ===== 點選勇者：設定 hero + 顯示占卜 =====
-  heroButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const heroKey = btn.dataset.hero;
-      currentHero = heroKey;
+// 點背景關閉目前開啟的 modal
+modalBackdrop.addEventListener("click", () => {
+  closeModal(fortuneModal);
+  closeModal(encounterModal);
+});
 
-      const text =
-        heroFortunes[heroKey] ||
-        "今天的你，有著特別的勇氣，可以好好面對自己的感受。";
-      if (fortuneText) fortuneText.textContent = text;
+// ====== 熊熊占卜內容 ======
+const fortuneText = document.getElementById("fortuneText");
+const fortuneOkBtn = document.getElementById("fortuneOkBtn");
 
-      openModal(fortuneModal);
-    });
+const fortuneMessages = [
+  "今天的你，擁有溫柔治癒力，壞情緒看到你都會慢慢軟化～",
+  "今天的你，充滿勇氣加乘值，適合面對讓你有點緊張的事情！",
+  "今天的你，創意滿滿，只要願意開口，大家都會被你逗笑～",
+  "今天的你，很適合好好照顧自己，休息一下也是一種勇敢喔！",
+  "今天的你，是隊友的大太陽，你的笑容會影響整個隊伍的心情！",
+];
+
+function showFortune() {
+  // 隨機抽一句占卜
+  const msg = fortuneMessages[Math.floor(Math.random() * fortuneMessages.length)];
+  fortuneText.textContent = msg;
+  openModal(fortuneModal);
+}
+
+// 點「收到，出發！」 → 關閉占卜 → 進入地圖
+fortuneOkBtn.addEventListener("click", () => {
+  closeModal(fortuneModal);
+  showScreen("map");
+});
+
+// ====== 勇者選擇（對應 index.html 的 .hero-card） ======
+document.querySelectorAll(".hero-card").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    currentHero = btn.dataset.hero; // warrior / mage / priest / villager
+    showFortune();
   });
+});
 
-  // ===== 占卜按鈕：關閉占卜 → 進入地圖畫面 =====
-  if (fortuneOkBtn) {
-    fortuneOkBtn.addEventListener("click", () => {
-      closeModal(fortuneModal);
-      showScreen("map");
-    });
-  }
+// ====== 地圖地點描述，用來顯示遭遇視窗文字 ======
+const encounterTitle = document.getElementById("encounterTitle");
+const encounterText = document.getElementById("encounterText");
+const encounterOkBtn = document.getElementById("encounterOkBtn");
 
-  // ===== 地圖點擊：顯示地點遭遇（先簡單版） =====
-  mapCells.forEach((cell) => {
-    cell.addEventListener("click", () => {
-      const key = cell.dataset.location;
-      const info = locations[key];
-      if (!info) return;
+const locationInfo = {
+  village: {
+    title: "你回到了新手村",
+    text: "村民們向你揮手打招呼，這裡是最安全的地方，可以好好整理心情再出發～",
+  },
+  meadow: {
+    title: "你來到了草原",
+    text: "一隻小小史萊姆被壞情緒纏住，之後可以在這裡進行『安撫猜拳戰』！",
+  },
+  forest: {
+    title: "你走進了森林",
+    text: "害羞樹精躲在樹後面偷看你，似乎很想說話又不敢開口。",
+  },
+  cave: {
+    title: "你來到黑暗洞窟",
+    text: "怕黑小魔物緊緊抱著自己，也許需要有人陪它一起點亮小燈。",
+  },
+  lake: {
+    title: "你來到湖畔",
+    text: "哭哭水靈在湖邊掉眼淚，你的話語，也許可以成為它的安慰。",
+  },
+  graveyard: {
+    title: "你來到寂寞墓地",
+    text: "寂寞骷髏坐在石碑上發呆，似乎很需要一個『願意聽他說話的朋友』。",
+  },
+  witch: {
+    title: "你來到女巫小屋",
+    text: "女巫正在研究情緒魔法，也許可以從她那裡學到新的安撫方法。",
+  },
+  mountain: {
+    title: "你來到高高的山頂",
+    text: "壓力小獸扛著好多重重的石頭，你能不能幫它分擔一點呢？",
+  },
+  boss: {
+    title: "你來到魔王城前",
+    text: "巨大魔王的壞情緒在天空盤旋，之後會在這裡開啟『最終魔王戰』！",
+  },
+};
 
-      cell.classList.add("visited");
+// 點地圖格子 → 顯示遭遇視窗
+document.querySelectorAll(".map-cell").forEach((cell) => {
+  cell.addEventListener("click", () => {
+    const loc = cell.dataset.location;
+    currentLocation = loc;
 
-      if (encounterTitle) encounterTitle.textContent = info.title;
-      if (encounterText) encounterText.textContent = info.text;
+    const info = locationInfo[loc] || {
+      title: "你展開了新的冒險",
+      text: "這裡有一種還沒見過的情緒魔物，之後我們會再補上它的故事！",
+    };
 
-      openModal(encounterModal);
-    });
+    encounterTitle.textContent = info.title;
+    encounterText.textContent = info.text;
+    openModal(encounterModal);
   });
+});
 
-  // 遭遇視窗按鈕：先關閉，之後再接戰鬥
-  if (encounterOkBtn) {
-    encounterOkBtn.addEventListener("click", () => {
-      closeModal(encounterModal);
-    });
-  }
-
-  // 點擊背景關閉目前的 modal
-  if (modalBackdrop) {
-    modalBackdrop.addEventListener("click", () => {
-      if (fortuneModal && !fortuneModal.classList.contains("hidden")) {
-        closeModal(fortuneModal);
-      } else if (
-        encounterModal &&
-        !encounterModal.classList.contains("hidden")
-      ) {
-        closeModal(encounterModal);
-      }
-    });
-  }
-
-  // 起始畫面
-  showScreen("choose");
+// 點「先記下這裡，等等再來安撫～」 → 關閉遭遇視窗
+encounterOkBtn.addEventListener("click", () => {
+  closeModal(encounterModal);
+  // 之後可以在這裡接上：若要直接進入該地點的戰鬥畫面
 });

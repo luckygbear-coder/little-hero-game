@@ -331,4 +331,44 @@ body {
 .ig-link:hover {
   color: #ff9800;
   text-decoration: underline;
+}/* === 熊熊村長 IG 區塊 === */
+
+.ig-banner {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(139, 94, 60, 0.25);
+  text-align: center;
+  font-size: 14px;
+  color: #8b5e3c;
+}
+
+.ig-link {
+  display: inline-block;
+  margin-top: 4px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #d17b00;
+}
+
+.ig-link:hover {
+  color: #ff9800;
+  text-decoration: underline;
+}
+
+/* 占卜 / 遭遇視窗內的小字 IG 說明 */
+.modal-ig {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #a0744d;
+  text-align: center;
+}
+
+/* 頁尾 */
+.footer {
+  text-align: center;
+  padding: 20px 10px 32px;
+  margin-top: 40px;
+  font-size: 13px;
+  color: #8b5e3c;
 }

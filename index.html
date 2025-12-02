@@ -2,117 +2,92 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>小勇者之旅大冒險</title>
 
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+  <div class="container">
 
-<!-- 🔸 頁面標題區 -->
-<header class="top-header">
-  <h1>小勇者之旅大冒險</h1>
-  <p class="subtitle">情緒與勇氣的奇幻之旅 ✨</p>
-</header>
+    <h1 class="title">小勇者之旅大冒險</h1>
+    <p class="subtitle">情緒與勇氣的奇幻之旅 ✨</p>
 
-<!-- 🔸 遊戲模式按鈕 -->
-<div class="mode-switch">
-  <button id="btn-single" class="active">🎮 單人冒險</button>
-  <button id="btn-double">🤝 同機雙人</button>
-</div>
-
-<p class="current-mode">目前模式：單人冒險（1 個人練習與魔物互動）</p>
-
-<!-- 🔸 主導航 -->
-<nav class="tab-menu">
-  <button data-page="page-hero" class="active">選擇小勇者</button>
-  <button data-page="page-map">地圖冒險</button>
-  <button data-page="page-battle">戰鬥</button>
-  <button data-page="page-story">故事背景</button>
-  <button data-page="page-teach">玩法教學</button>
-  <button data-page="page-monsters">魔物圖鑑</button>
-  <button data-page="page-settings">設定 / 說明</button>
-</nav>
-
-<!-- 🔸 內容區：所有頁面 -->
-<main>
-
-  <!-- ⭐ 1. 選擇勇者 -->
-  <section id="page-hero" class="page show">
-
-    <h2>✨ 選擇你的小勇者</h2>
-    <p>在出發冒險之前，先選擇你要扮演的小勇者角色。</p>
-
-    <div class="hero-select-grid">
-
-      <div class="hero-card" data-hero="warrior">
-        <h3>Rock ✊ 戰士</h3>
-        <p>個性：勇敢、有責任感</p>
-        <p>口頭禪：我一定會守護大家！</p>
-      </div>
-
-      <div class="hero-card" data-hero="mage">
-        <h3>Scissors ✌️ 法師</h3>
-        <p>個性：聰明、有創意</p>
-        <p>口頭禪：嘿嘿～我有新點子！</p>
-      </div>
-
-      <div class="hero-card" data-hero="priest">
-        <h3>Paper 🖐 牧師</h3>
-        <p>個性：溫柔、善解人意</p>
-        <p>口頭禪：別擔心，我來幫你～</p>
-      </div>
-
-      <div class="hero-card" data-hero="villager">
-        <h3>自由拳 ✨ 勇敢的村民</h3>
-        <p>個性：樸實、堅毅</p>
-        <p>口頭禪：我雖然平凡，但不放棄！</p>
-      </div>
-
+    <!-- 模式切換 -->
+    <div class="mode-buttons">
+      <button id="mode-single" class="active">🎮 單人冒險</button>
+      <button id="mode-double">🤝 同機雙人</button>
     </div>
 
-    <button id="confirm-hero" class="confirm-btn" disabled>✔️ 確認選擇</button>
-  </section>
+    <p id="modeDisplay">目前模式：單人冒險（1 個人練習與魔物互動）</p>
 
-  <!-- ⭐ 2. 地圖 -->
-  <section id="page-map" class="page">
-    <h2>🗺 冒險地圖（九宮格）</h2>
-    <p>選擇地點開始冒險！</p>
-  </section>
+    <!-- 頁籤 -->
+    <div class="tabs">
+      <button class="tab active" data-page="page-hero">選擇小勇者</button>
+      <button class="tab" data-page="page-map">地圖冒險</button>
+      <button class="tab" data-page="page-battle">戰鬥</button>
+      <button class="tab" data-page="page-story">故事背景</button>
+      <button class="tab" data-page="page-tutorial">玩法教學</button>
+      <button class="tab" data-page="page-best">魔物圖鑑</button>
+      <button class="tab" data-page="page-settings">設定 / 說明</button>
+    </div>
 
-  <!-- ⭐ 3. 戰鬥 -->
-  <section id="page-battle" class="page">
-    <h2>⚔️ 戰鬥畫面</h2>
-    <p>這裡會顯示對戰內容。</p>
-  </section>
+    <!-- 📌 1️⃣ 選擇小勇者 -->
+    <div id="page-hero" class="page active">
+      <h2>🌟 選擇你的小勇者</h2>
+      <p>在出發冒險之前，先選擇你要扮演的小勇者角色！</p>
 
-  <!-- ⭐ 以下為其他頁面 -->
-  <section id="page-story" class="page">
-    <h2>📖 故事背景</h2>
-  </section>
+      <div id="heroList" class="hero-grid">
+        <!-- JS 產生勇者卡 -->
+      </div>
 
-  <section id="page-teach" class="page">
-    <h2>🎓 玩法教學</h2>
-  </section>
+      <button id="confirmHero" class="confirm-btn disabled">
+        ✔️ 確認選擇這位小勇者
+      </button>
+    </div>
 
-  <section id="page-monsters" class="page">
-    <h2>👹 魔物圖鑑</h2>
-  </section>
+    <!-- 📌 2️⃣ 地圖冒險 -->
+    <div id="page-map" class="page">
+      <h2>🗺️ 九宮格地圖</h2>
+      <div id="mapContainer"></div>
+    </div>
 
-  <section id="page-settings" class="page">
-    <h2>⚙️ 設定 / 家長導覽</h2>
-  </section>
+    <!-- 📌 3️⃣ 戰鬥 -->
+    <div id="page-battle" class="page">
+      <h2>⚔️ 戰鬥畫面</h2>
+      <div id="battleArea"></div>
+    </div>
 
-</main>
+    <!-- 📌 4️⃣ 故事背景 -->
+    <div id="page-story" class="page">
+      <h2>📖 故事背景</h2>
+      <p>在遙遠的星星王國，魔物本來都快樂生活……</p>
+    </div>
 
-<!-- 🔸 載入 JS（順序不能錯）-->
-<script src="js/monsters.js"></script>
-<script src="js/boss.js"></script>
-<script src="js/sentences.js"></script>
-<script src="js/game.js"></script>
+    <!-- 📌 5️⃣ 玩法教學 -->
+    <div id="page-tutorial" class="page">
+      <h2>🎮 基本玩法</h2>
+      <p>與魔物使用「剪刀 ✌️ 石頭 ✊ 布 ✋」對決。</p>
+    </div>
 
-<script src="script.js"></script>
+    <!-- 📌 6️⃣ 魔物圖鑑 -->
+    <div id="page-best" class="page">
+      <h2>👹 魔物圖鑑</h2>
+      <div id="monsterList"></div>
+    </div>
 
+    <!-- 📌 7️⃣ 設定 -->
+    <div id="page-settings" class="page">
+      <h2>⚙️ 家長導覽</h2>
+      <p>這是一款情緒教育與猜拳冒險的輕量遊戲……</p>
+    </div>
+
+  </div>
+
+  <script src="js/sentences.js"></script>
+  <script src="js/monsters.js"></script>
+  <script src="js/boss.js"></script>
+  <script src="js/game.js"></script>
 </body>
 </html>

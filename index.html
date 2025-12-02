@@ -202,7 +202,7 @@
       color: #555;
     }
 
-    /* -------- 壞情緒進度條 -------- */
+    /* -------- 壞情緒進度條（小怪 / 魔王共用樣式，各自有容器） -------- */
     .emotion-steps {
       display: flex;
       justify-content: space-between;
@@ -298,6 +298,42 @@
       border: 1px dashed #e1b676;
     }
 
+    .inner-voice {
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid #ffb3c1;
+      font-size: 0.85rem;
+      color: #704040;
+    }
+
+    /* -------- 魔王戰的語句區 -------- */
+    .phrase-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .phrase-btn {
+      flex: 1 1 45%;
+      padding: 6px 8px;
+      border-radius: 12px;
+      border: 1px solid #ffc9de;
+      background: #fff;
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.1s, border-color 0.1s, transform 0.1s;
+    }
+    .phrase-btn:active {
+      transform: translateY(1px);
+    }
+    .phrase-btn.selected {
+      background: #ffe0f0;
+      border-color: #f06595;
+    }
+
     /* -------- 底部導航列 -------- */
     .bottom-nav {
       position: fixed;
@@ -367,8 +403,8 @@
           </p>
           <ul class="list">
             <li>選一位喜歡的勇者職業。</li>
-            <li>和魔物玩剪刀石頭布，每贏一次就安撫一種壞情緒。</li>
-            <li>當 6 種壞情緒都被安撫完，魔物會變回開心小夥伴！</li>
+            <li>先挑戰一般魔物，練習安撫 6 種壞情緒。</li>
+            <li>最後再進入「魔王戰」，聽聽魔王的內心小劇場。</li>
           </ul>
           <div class="btn-row">
             <a href="#hero" class="btn">🧒 馬上選擇勇者</a>
@@ -414,21 +450,22 @@
             👉 請先點選上面的勇者卡片。
           </div>
           <div class="btn-row">
-            <a href="#battle" class="btn btn-secondary">前往 👾 魔物戰鬥區</a>
+            <a href="#battle" class="btn btn-secondary">前往 👾 一般魔物戰鬥</a>
+            <a href="#boss" class="btn btn-ghost">或直接去 👑 魔王戰</a>
           </div>
         </div>
       </section>
 
-      <!-- 魔物戰鬥 -->
+      <!-- 一般魔物戰鬥 -->
       <section class="section" id="battle">
         <div class="card" id="battle-card">
-          <span class="badge">STEP 2 魔物戰鬥</span>
+          <span class="badge">STEP 2 一般魔物</span>
           <h2>勇者猜拳對抗壞情緒魔物</h2>
 
           <div class="bear-tip">
             <div class="bear-avatar">🐻</div>
             <div class="bear-bubble" id="bear-tip-text">
-              村長熊熊：先選一位勇者，再用剪刀石頭布來跟魔物互動吧！
+              村長熊熊：先選一位勇者，再用剪刀石頭布來安撫壞情緒魔物吧！
             </div>
           </div>
 
@@ -436,7 +473,7 @@
             👾 目前魔物：生氣史萊姆
           </p>
 
-          <!-- 壞情緒進度條 -->
+          <!-- 小怪壞情緒進度條 -->
           <div class="emotion-steps" id="emotion-steps"></div>
 
           <div class="status-row">
@@ -461,15 +498,68 @@
         <!-- 家長導讀 -->
         <div class="card">
           <span class="badge">家長導讀</span>
-          <h3>這個小遊戲可以練習什麼？</h3>
+          <h3>一般魔物關卡：可以練習什麼？</h3>
           <ul class="list">
             <li>用「語句」說出感受，而不是只看輸贏。</li>
             <li>理解壞情緒（生氣、害怕、嫉妒、孤單…）也可以被安撫。</li>
             <li>透過猜拳練習「輪流」、「等待」與「接受輸贏」。</li>
           </ul>
-          <p style="font-size:0.85rem;color:#666;">
-            建議家長陪同遊玩，可以請孩子自己想一段「安慰魔物的話」，練習同理與表達。
+        </div>
+      </section>
+
+      <!-- 魔王戰鬥 -->
+      <section class="section" id="boss">
+        <div class="card" id="boss-card">
+          <span class="badge">FINAL 魔王專屬關卡</span>
+          <h2>👑 魔王戰：6 種壞情緒的心聲</h2>
+
+          <div class="bear-tip">
+            <div class="bear-avatar">🐻</div>
+            <div class="bear-bubble" id="bear-boss-tip">
+              村長熊熊：來到魔王城了！先選一段想對魔王說的安撫語句，再決定要出 ✊✌️🖐 跟魔王互動。
+            </div>
+          </div>
+
+          <p id="boss-name" style="text-align:center;margin-bottom:4px;">
+            👑 魔王：暴風之心．奧羅
           </p>
+
+          <!-- 魔王壞情緒進度條 -->
+          <div class="emotion-steps" id="boss-emotion-steps"></div>
+
+          <div class="status-row">
+            <span>勇者心情：<span id="boss-hero-mood" class="mood-good">💖 集中</span></span>
+            <span>已安撫：<span id="boss-calm-count">0</span> / 6</span>
+          </div>
+
+          <h3 style="margin-top:10px;font-size:1rem;">選擇你想對魔王說的話</h3>
+          <div class="phrase-list" id="boss-phrase-list"></div>
+
+          <div class="btn-row" style="margin-top:10px;">
+            <button class="btn" data-hand-boss="✊">✊ 石頭</button>
+            <button class="btn" data-hand-boss="✌️">✌️ 剪刀</button>
+            <button class="btn" data-hand-boss="🖐">🖐 布</button>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-ghost" id="boss-btn-reset">🔁 重來魔王戰</button>
+          </div>
+
+          <div class="inner-voice" id="boss-inner-voice">
+            魔王的心聲會在這裡出現……
+          </div>
+
+          <div class="log" id="boss-log"></div>
+        </div>
+
+        <div class="card">
+          <span class="badge">家長導讀</span>
+          <h3>魔王專屬關卡：更深一層的練習</h3>
+          <ul class="list">
+            <li>讓孩子練習「主動選擇語句」，表達想法與關心。</li>
+            <li>每一段魔王內心小劇場，都可以當作情緒故事一起討論。</li>
+            <li>鼓勵孩子想：如果我是魔王，我會希望別人怎麼對我說話？</li>
+          </ul>
         </div>
       </section>
     </main>
@@ -485,6 +575,9 @@
         </a>
         <a href="#battle" class="nav-item" data-target="battle">
           <span>👾</span>魔物戰
+        </a>
+        <a href="#boss" class="nav-item" data-target="boss">
+          <span>👑</span>魔王戰
         </a>
       </div>
     </nav>
@@ -511,8 +604,21 @@
       },
     };
 
+    // 一般魔物壞情緒
     const badEmotions = ["生氣", "害怕", "嫉妒", "孤單", "沮喪", "疲累"];
 
+    // 魔王專屬 6 種壞情緒 & 內心小劇場
+    const bossEmotions = ["憤怒", "恐懼", "嫉妒", "孤單", "罪惡感", "無力感"];
+    const bossInnerVoices = [
+      "「我不是單純在發脾氣，我只是好怕大家都不聽我說……」",
+      "「其實我很害怕失去，只好裝得很兇，好像這樣就比較不會被拋下。」",
+      "「看到別人開心，我會偷偷難過，覺得自己怎麼都不夠好。」",
+      "「大家都以為我很強，可是有時候我只是好孤單，好想有人陪我。」",
+      "「我一直責怪自己做得不夠好，好像所有錯都是我的。」",
+      "「我累到連生氣的力氣都沒有，只剩下『算了』兩個字。」"
+    ];
+
+    // 一般關卡使用的勇氣星星語句（隨機）
     const cheerSentences = [
       "「我在這裡聽你說，不用一個人扛。」",
       "「生氣沒關係，我們一起找方法。」",
@@ -522,9 +628,23 @@
       "「謝謝你願意把心情說出來。」"
     ];
 
+    // 魔王戰專用語句（讓玩家自己選）
+    const bossPhrases = [
+      "「不管你現在是不是在生氣，我都願意慢慢聽你說。」",
+      "「你看起來很用力撐著，一定也很累了吧？」",
+      "「就算你表現得很可怕，我還是相信你心裡有溫柔的一角。」",
+      "「如果你願意，我可以陪你一起面對害怕的事情。」",
+      "「犯錯並不代表你是壞人，只代表你也是會受傷的普通人。」",
+      "「你不用一直裝得很強，休息一下也沒有關係。」"
+    ];
+
     let currentHero = null;
     let calmCount = 0;
     let currentEmotionIndex = 0;
+
+    let bossCalmCount = 0;
+    let bossCurrentEmotionIndex = 0;
+    let currentBossPhraseIndex = null;
 
     const heroInfoEl = document.getElementById("hero-info");
     const heroMoodEl = document.getElementById("hero-mood");
@@ -534,10 +654,28 @@
     const bearTipEl = document.getElementById("bear-tip-text");
     const emotionStepsEl = document.getElementById("emotion-steps");
 
-    // 建立壞情緒小圓點
+    // 魔王戰元素
+    const bossHeroMoodEl = document.getElementById("boss-hero-mood");
+    const bossCalmCountEl = document.getElementById("boss-calm-count");
+    const bossNameEl = document.getElementById("boss-name");
+    const bossLogBox = document.getElementById("boss-log");
+    const bossEmotionStepsEl = document.getElementById("boss-emotion-steps");
+    const bossInnerVoiceEl = document.getElementById("boss-inner-voice");
+    const bossTipEl = document.getElementById("bear-boss-tip");
+    const bossPhraseListEl = document.getElementById("boss-phrase-list");
+
+    function log(targetEl, text, type = "system") {
+      const p = document.createElement("p");
+      p.textContent = text;
+      p.classList.add(type);
+      targetEl.appendChild(p);
+      targetEl.scrollTop = targetEl.scrollHeight;
+    }
+
+    // --- 一般關卡：壞情緒圓點 ---
     function renderEmotionSteps() {
       emotionStepsEl.innerHTML = "";
-      badEmotions.forEach((emo, idx) => {
+      badEmotions.forEach((emo) => {
         const step = document.createElement("div");
         step.className = "emotion-step";
         const dot = document.createElement("div");
@@ -564,12 +702,34 @@
       });
     }
 
-    function log(text, type = "system") {
-      const p = document.createElement("p");
-      p.textContent = text;
-      p.classList.add(type);
-      logBox.appendChild(p);
-      logBox.scrollTop = logBox.scrollHeight;
+    // --- 魔王戰：壞情緒圓點 ---
+    function renderBossEmotionSteps() {
+      bossEmotionStepsEl.innerHTML = "";
+      bossEmotions.forEach((emo) => {
+        const step = document.createElement("div");
+        step.className = "emotion-step";
+        const dot = document.createElement("div");
+        dot.className = "emotion-dot";
+        const label = document.createElement("div");
+        label.className = "emotion-label";
+        label.textContent = emo;
+        step.appendChild(dot);
+        step.appendChild(label);
+        bossEmotionStepsEl.appendChild(step);
+      });
+      updateBossEmotionSteps();
+    }
+
+    function updateBossEmotionSteps() {
+      const steps = bossEmotionStepsEl.querySelectorAll(".emotion-step");
+      steps.forEach((step, idx) => {
+        step.classList.remove("current", "done");
+        if (idx < bossCalmCount) {
+          step.classList.add("done");
+        } else if (idx === bossCurrentEmotionIndex) {
+          step.classList.add("current");
+        }
+      });
     }
 
     // 勇者選擇
@@ -583,8 +743,10 @@
 
         const info = heroes[heroName];
         heroInfoEl.textContent = `你選擇了【${heroName}】。天賦拳：${info.punch}；個性：${info.text}`;
-        bearTipEl.textContent = `村長熊熊：太好了，小勇者「${heroName}」準備出發！現在可以到下方的魔物戰區，用剪刀石頭布來安撫壞情緒囉～`;
+        bearTipEl.textContent = `村長熊熊：太好了，小勇者「${heroName}」準備出發！可以先到一般魔物區練習，再挑戰魔王戰。`;
+        bossTipEl.textContent = `村長熊熊：魔王也在等你喔，小勇者「${heroName}」。記得先選一段想說的話，再出拳～`;
 
+        // 一般關卡重置
         logBox.innerHTML = "";
         heroMoodEl.textContent = "💖 良好";
         heroMoodEl.classList.remove("mood-bad");
@@ -594,7 +756,12 @@
         calmCountEl.textContent = calmCount.toString();
         monsterNameEl.textContent = `👾 目前魔物：${badEmotions[currentEmotionIndex]}史萊姆`;
         updateEmotionSteps();
-        log(`村長熊熊：小勇者【${heroName}】加入隊伍！`, "system");
+        log(logBox, `村長熊熊：小勇者【${heroName}】加入隊伍！`, "system");
+
+        // 魔王戰也一併稍微初始化（但不清空內心小劇場）
+        bossHeroMoodEl.textContent = "💖 集中";
+        bossHeroMoodEl.classList.add("mood-good");
+        bossHeroMoodEl.classList.remove("mood-bad");
       });
     });
 
@@ -616,13 +783,13 @@
       return hands[Math.floor(Math.random() * hands.length)];
     }
 
-    // 猜拳按鈕
+    // --- 一般魔物戰：猜拳按鈕 ---
     document.querySelectorAll("#battle-card .btn").forEach(btn => {
       const hand = btn.dataset.hand;
       if (!hand) return;
       btn.addEventListener("click", () => {
         if (!currentHero) {
-          alert("請先到上方區塊選擇一位小勇者。");
+          alert("請先到【勇者】分頁選擇一位小勇者。");
           return;
         }
         const playerHand = hand;
@@ -631,7 +798,7 @@
         const emotion = badEmotions[currentEmotionIndex];
 
         if (result === "win") {
-          log(`你出了 ${playerHand}，魔物出了 ${enemyHand}。你贏了！安撫了「${emotion}」的情緒。`, "hero");
+          log(logBox, `你出了 ${playerHand}，魔物出了 ${enemyHand}。你贏了！安撫了「${emotion}」的情緒。`, "hero");
           calmCount++;
           calmCountEl.textContent = calmCount.toString();
           heroMoodEl.textContent = "💖 良好";
@@ -639,9 +806,9 @@
           heroMoodEl.classList.remove("mood-bad");
 
           if (calmCount >= badEmotions.length) {
-            log(`✨ ${emotion}史萊姆感受到滿滿的關心，所有壞情緒都被好好看見並安撫了！`, "system");
+            log(logBox, `✨ ${emotion}史萊姆感受到滿滿的關心，所有壞情緒都被好好看見並安撫了！`, "system");
             monsterNameEl.textContent = "🎉 魔物已全部被安撫，恭喜小勇者通關！";
-            bearTipEl.textContent = "村長熊熊：太棒了！你用耐心和溫柔，成功陪伴魔物走過壞情緒。今天也辛苦你啦～";
+            bearTipEl.textContent = "村長熊熊：太棒了！一般魔物都成功安撫了，可以考慮前往魔王城挑戰最終試煉。";
             currentEmotionIndex = badEmotions.length - 1;
           } else {
             currentEmotionIndex = calmCount;
@@ -650,9 +817,9 @@
           }
           updateEmotionSteps();
         } else if (result === "draw") {
-          log(`你出了 ${playerHand}，魔物出了 ${enemyHand}。平手～可以再試一次。`, "system");
+          log(logBox, `你出了 ${playerHand}，魔物出了 ${enemyHand}。平手～可以再試一次。`, "system");
         } else {
-          log(`你出了 ${playerHand}，魔物出了 ${enemyHand}。這回合魔物比較激動。`, "monster");
+          log(logBox, `你出了 ${playerHand}，魔物出了 ${enemyHand}。這回合魔物比較激動。`, "monster");
           heroMoodEl.textContent = "💔 需要調整心情";
           heroMoodEl.classList.remove("mood-good");
           heroMoodEl.classList.add("mood-bad");
@@ -661,17 +828,17 @@
       });
     });
 
-    // 勇氣星星語句
+    // 一般關卡：勇氣星星語句
     document.getElementById("btn-cheer").addEventListener("click", () => {
       const sentence = cheerSentences[Math.floor(Math.random() * cheerSentences.length)];
-      log(`⭐ 小勇者說：${sentence}`, "hero");
+      log(logBox, `⭐ 小勇者說：${sentence}`, "hero");
       heroMoodEl.textContent = "💖 調整完畢";
       heroMoodEl.classList.add("mood-good");
       heroMoodEl.classList.remove("mood-bad");
       bearTipEl.textContent = "村長熊熊：好棒的語句！當我們願意說出關心，魔物和自己都會比較輕鬆。";
     });
 
-    // 重新開始
+    // 一般關卡：重新開始
     document.getElementById("btn-reset").addEventListener("click", () => {
       currentHero = null;
       heroCards.forEach(c => c.classList.remove("selected"));
@@ -686,7 +853,120 @@
       monsterNameEl.textContent = "👾 目前魔物：生氣史萊姆";
       bearTipEl.textContent = "村長熊熊：先選一位勇者，再用剪刀石頭布來跟魔物互動吧！";
       updateEmotionSteps();
-      log("村長熊熊：重新出發！這次會遇到不一樣的心情喔～", "system");
+      log(logBox, "村長熊熊：重新出發！這次會遇到不一樣的心情喔～", "system");
+
+      // 魔王戰也清空部分狀態
+      bossCalmCount = 0;
+      bossCurrentEmotionIndex = 0;
+      bossCalmCountEl.textContent = "0";
+      bossHeroMoodEl.textContent = "💖 集中";
+      bossHeroMoodEl.classList.add("mood-good");
+      bossHeroMoodEl.classList.remove("mood-bad");
+      bossNameEl.textContent = "👑 魔王：暴風之心．奧羅";
+      bossInnerVoiceEl.textContent = "魔王的心聲會在這裡出現……";
+      bossTipEl.textContent = "村長熊熊：來到魔王城了！先選一段想對魔王說的安撫語句，再決定要出 ✊✌️🖐 跟魔王互動。";
+      currentBossPhraseIndex = null;
+      renderBossEmotionSteps();
+      bossLogBox.innerHTML = "";
+    });
+
+    // --- 魔王戰：語句按鈕 ---
+    function renderBossPhrases() {
+      bossPhraseListEl.innerHTML = "";
+      bossPhrases.forEach((text, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "phrase-btn";
+        btn.textContent = text;
+        btn.addEventListener("click", () => {
+          currentBossPhraseIndex = idx;
+          // 標記選中
+          bossPhraseListEl.querySelectorAll(".phrase-btn").forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+          log(bossLogBox, `你想對魔王說：${text}`, "hero");
+          bossTipEl.textContent = "村長熊熊：好溫暖的一句話～現在可以出一個拳，試著和魔王互動看看。";
+        });
+        bossPhraseListEl.appendChild(btn);
+      });
+    }
+
+    // --- 魔王戰：猜拳按鈕 ---
+    document.querySelectorAll("#boss-card [data-hand-boss]").forEach(btn => {
+      const hand = btn.dataset.handBoss;
+      btn.addEventListener("click", () => {
+        if (!currentHero) {
+          alert("請先到【勇者】分頁選擇一位小勇者。");
+          return;
+        }
+        if (currentBossPhraseIndex === null) {
+          alert("請先選擇一段想對魔王說的安撫語句。");
+          return;
+        }
+        const playerHand = hand;
+        const enemyHand = randomHand(); // 魔王也出拳，但我們說「什麼拳都可能出」
+        const result = judge(playerHand, enemyHand);
+        const emotion = bossEmotions[bossCurrentEmotionIndex];
+        const phrase = bossPhrases[currentBossPhraseIndex];
+
+        log(bossLogBox, `你出了 ${playerHand}，魔王出了 ${enemyHand}。`, "system");
+
+        if (result === "win") {
+          bossCalmCount++;
+          bossCalmCountEl.textContent = bossCalmCount.toString();
+          bossHeroMoodEl.textContent = "💖 穩定";
+          bossHeroMoodEl.classList.add("mood-good");
+          bossHeroMoodEl.classList.remove("mood-bad");
+
+          // 顯示魔王內心小劇場
+          const voice = bossInnerVoices[bossCurrentEmotionIndex];
+          bossInnerVoiceEl.textContent = `魔王的心聲（${emotion}）：${voice}`;
+          log(
+            bossLogBox,
+            `你用「${phrase}」安撫了魔王心中的「${emotion}」情緒。`,
+            "hero"
+          );
+
+          if (bossCalmCount >= bossEmotions.length) {
+            log(
+              bossLogBox,
+              "✨ 魔王所有的壞情緒都被好好看見並安撫了，他慢慢卸下盔甲，露出真正的表情……",
+              "system"
+            );
+            bossNameEl.textContent = "🌈 魔王：恢復本來的樣子．奧羅";
+            bossTipEl.textContent = "村長熊熊：恭喜你，小勇者！你不是把魔王打倒，而是陪他走過了那些難受的心情。這就是最厲害的勇氣。";
+          } else {
+            bossCurrentEmotionIndex = bossCalmCount;
+            bossTipEl.textContent = `村長熊熊：接下來要面對的是魔王心中的「${bossEmotions[bossCurrentEmotionIndex]}」。我們一樣可以慢慢陪他。`;
+          }
+          updateBossEmotionSteps();
+        } else if (result === "draw") {
+          log(bossLogBox, "這回合勢均力敵，誰也說服不了誰。可以再試一次。", "system");
+        } else {
+          log(bossLogBox, "魔王的情緒一時又強烈了起來……也許他還沒準備好聽進去。", "monster");
+          bossHeroMoodEl.textContent = "💔 有點疲憊";
+          bossHeroMoodEl.classList.remove("mood-good");
+          bossHeroMoodEl.classList.add("mood-bad");
+          bossTipEl.textContent = "村長熊熊：當對方還沒準備好，我們也可以先照顧自己的心情，再慢慢來。";
+        }
+      });
+    });
+
+    // 魔王戰：重置
+    document.getElementById("boss-btn-reset").addEventListener("click", () => {
+      bossCalmCount = 0;
+      bossCurrentEmotionIndex = 0;
+      bossCalmCountEl.textContent = "0";
+      bossHeroMoodEl.textContent = "💖 集中";
+      bossHeroMoodEl.classList.add("mood-good");
+      bossHeroMoodEl.classList.remove("mood-bad");
+      bossNameEl.textContent = "👑 魔王：暴風之心．奧羅";
+      bossInnerVoiceEl.textContent = "魔王的心聲會在這裡出現……";
+      bossTipEl.textContent = "村長熊熊：這次我們重新來過，記得先選一段想對魔王說的話，再出拳。";
+      currentBossPhraseIndex = null;
+      bossPhraseListEl.querySelectorAll(".phrase-btn").forEach(b => b.classList.remove("selected"));
+      bossLogBox.innerHTML = "";
+      renderBossEmotionSteps();
+      log(bossLogBox, "村長熊熊：新的魔王戰開始了，我們一樣是來「理解」他，不是來把他打倒。", "system");
     });
 
     // 底部導航 active 狀態
@@ -700,7 +980,10 @@
 
     // 初始化
     renderEmotionSteps();
-    log("村長熊熊：歡迎來到星星王國～點選上方「勇者」先選角色，或者直接滑到魔物戰區開始冒險！", "system");
+    renderBossEmotionSteps();
+    renderBossPhrases();
+    log(logBox, "村長熊熊：歡迎來到星星王國～點選上方「勇者」先選角色，或直接滑到魔物戰區開始練習！", "system");
+    log(bossLogBox, "村長熊熊：魔王戰比較不容易，但我們的目標不是打敗他，而是理解他心裡的那些複雜感受。", "system");
   </script>
 </body>
 </html>

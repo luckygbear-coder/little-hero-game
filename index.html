@@ -2,12 +2,12 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>小勇者之旅大冒險 ✨</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>小勇者之旅大冒險 ✨</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="game-wrap">
+  <div class="game-wrap">
     <header class="game-header">
       <h1>小勇者之旅大冒險 ✨</h1>
       <p class="subtitle">
@@ -15,167 +15,149 @@
       </p>
     </header>
 
-    <!-- ====== 畫面 1：選擇勇者職業 ====== -->
+    <!-- ===== 畫面 1：選擇職業 ===== -->
     <section id="screen-choose" class="screen">
       <div class="card">
-        <h2 class="card-title">選擇你的勇者職業</h2>
-        <p class="card-text">先選一位想出發的小勇者，熊熊會幫你抽今日占卜喔～</p>
+        <h2>選擇你的勇者職業</h2>
+        <p class="hint">
+          先選一位想出發的小勇者，熊熊會幫你抽今日占卜喔～
+        </p>
 
-        <div class="hero-grid">
-          <button class="hero-btn" data-hero="warrior">
-            <span class="hero-emoji">🛡</span>
-            <span class="hero-name">勇敢的戰士</span>
-            <span class="hero-desc">擅長正面迎戰，給予堅定的力量！</span>
+        <div class="hero-list">
+          <button class="hero-card" data-hero="warrior">
+            <div class="hero-emoji">🛡️</div>
+            <div class="hero-text">
+              <h3>勇敢的戰士</h3>
+              <p>擅長正面迎戰，給予堅定的力量！</p>
+            </div>
           </button>
 
-          <button class="hero-btn" data-hero="mage">
-            <span class="hero-emoji">🔮</span>
-            <span class="hero-name">創意法師</span>
-            <span class="hero-desc">用點子和想像力，把壞心情變成點亮星星的魔法。</span>
+          <button class="hero-card" data-hero="mage">
+            <div class="hero-emoji">🔮</div>
+            <div class="hero-text">
+              <h3>創意法師</h3>
+              <p>用點子和想像力，把壞心情變成亮亮星星的魔法。</p>
+            </div>
           </button>
 
-          <button class="hero-btn" data-hero="priest">
-            <span class="hero-emoji">💖</span>
-            <span class="hero-name">溫柔牧師</span>
-            <span class="hero-desc">用傾聽與擁抱，安撫受傷的小魔物。</span>
+          <button class="hero-card" data-hero="priest">
+            <div class="hero-emoji">💖</div>
+            <div class="hero-text">
+              <h3>溫柔牧師</h3>
+              <p>用傾聽與擁抱，安撫受傷的小魔物。</p>
+            </div>
           </button>
 
-          <button class="hero-btn" data-hero="villager">
-            <span class="hero-emoji">🌾</span>
-            <span class="hero-name">勇敢的村民</span>
-            <span class="hero-desc">雖然平凡，卻有不放棄的心，任何拳都能學！</span>
+          <button class="hero-card" data-hero="villager">
+            <div class="hero-emoji">🌾</div>
+            <div class="hero-text">
+              <h3>勇敢的村民</h3>
+              <p>雖然平凡，卻有不放棄的心，任何拳都能學！</p>
+            </div>
           </button>
         </div>
       </div>
     </section>
 
-    <!-- ====== 畫面 2：九宮格地圖 ====== -->
+    <!-- ===== 畫面 2：九宮格地圖 ===== -->
     <section id="screen-map" class="screen hidden">
       <div class="card">
-        <h2 class="card-title">
-          冒險地圖
-          <span id="current-hero-label" class="pill"></span>
-        </h2>
-        <p class="card-text">
-          點選一個地點展開冒險吧！安撫完所有魔物，就能前往魔王城。
+        <h2>選擇探索地點</h2>
+        <p class="hint">
+          點一格地圖前進冒險～每個地點都住著不同情緒的魔物。
         </p>
 
         <div class="map-grid">
-          <button class="map-tile" data-monster="anger">
-            草原<br />🔥 怒炎小獸
-          </button>
-          <button class="map-tile" data-monster="sadness">
-            湖畔<br />💧 淚滴史萊姆
-          </button>
-          <button class="map-tile" data-monster="fear">
-            森林<br />🦇 驚驚蝙蝠
+          <button class="map-cell" data-location="village">
+            <span class="cell-emoji">🏡</span>
+            <span class="cell-name">新手村</span>
+            <span class="cell-tag">出發點</span>
           </button>
 
-          <button class="map-tile map-tile--disabled">
-            村莊廣場<br />休息一下
-          </button>
-          <button class="map-tile map-tile--disabled">
-            女巫小屋<br />施工中
-          </button>
-          <button class="map-tile map-tile--disabled">
-            祕密花園<br />敬請期待
+          <button class="map-cell" data-location="meadow">
+            <span class="cell-emoji">🌿</span>
+            <span class="cell-name">草原</span>
+            <span class="cell-tag">小小史萊姆</span>
           </button>
 
-          <button class="map-tile map-tile--disabled">
-            洞窟深處<br />施工中
+          <button class="map-cell" data-location="forest">
+            <span class="cell-emoji">🌳</span>
+            <span class="cell-name">森林</span>
+            <span class="cell-tag">害羞樹精</span>
           </button>
-          <button class="map-tile map-tile--disabled">
-            墓地<br />施工中
+
+          <button class="map-cell" data-location="cave">
+            <span class="cell-emoji">🕳️</span>
+            <span class="cell-name">洞窟</span>
+            <span class="cell-tag">怕黑小魔物</span>
           </button>
-          <button class="map-tile map-tile--boss" id="tile-boss">
-            魔王城<br />🐉 壞情緒魔王
+
+          <button class="map-cell" data-location="lake">
+            <span class="cell-emoji">🌊</span>
+            <span class="cell-name">湖畔</span>
+            <span class="cell-tag">哭哭水靈</span>
+          </button>
+
+          <button class="map-cell" data-location="graveyard">
+            <span class="cell-emoji">⚰️</span>
+            <span class="cell-name">墓地</span>
+            <span class="cell-tag">寂寞骷髏</span>
+          </button>
+
+          <button class="map-cell" data-location="witch">
+            <span class="cell-emoji">🧙‍♀️</span>
+            <span class="cell-name">女巫小屋</span>
+            <span class="cell-tag">神祕情緒</span>
+          </button>
+
+          <button class="map-cell" data-location="mountain">
+            <span class="cell-emoji">⛰️</span>
+            <span class="cell-name">山頂</span>
+            <span class="cell-tag">壓力小獸</span>
+          </button>
+
+          <button class="map-cell boss-cell" data-location="boss">
+            <span class="cell-emoji">🐉</span>
+            <span class="cell-name">魔王城</span>
+            <span class="cell-tag">最終決戰</span>
           </button>
         </div>
 
-        <div class="map-actions">
-          <button id="btn-rechoose-hero" class="secondary-btn">
-            重新選勇者
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====== 畫面 3：魔物戰 ====== -->
-    <section id="screen-monster" class="screen hidden">
-      <div class="card">
-        <h2 class="card-title">
-          <span id="monster-area"></span> 的
-          <span id="monster-name"></span>
-        </h2>
-        <p id="monster-desc" class="card-text"></p>
-        <p id="monster-hp-text" class="hp-text"></p>
-
-        <div class="rps-area">
-          <p class="card-text">選一個拳，對魔物傳達好心情：</p>
-          <div class="rps-buttons">
-            <button class="rps-btn" data-hand="rock">✊ 石頭</button>
-            <button class="rps-btn" data-hand="scissors">✌️ 剪刀</button>
-            <button class="rps-btn" data-hand="paper">🖐 布</button>
-          </div>
-          <p id="monster-round-result" class="round-text"></p>
-          <div id="monster-log" class="log-box"></div>
-        </div>
-
-        <div class="map-actions">
-          <button id="btn-monster-back" class="secondary-btn">
-            回到地圖
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====== 畫面 4：魔王戰 ====== -->
-    <section id="screen-boss" class="screen hidden">
-      <div class="card card-boss">
-        <h2 class="card-title">最終決戰：壞情緒魔王 🐉</h2>
-        <p class="card-text">
-          魔王身上集結了很多壞情緒，需要你用
-          <strong>6 次好心情</strong> 才能完全安撫。
+        <p class="hint small">
+          之後我們會在這裡加入：<br />
+          「點地點 → 遇到魔物 → 進入猜拳安撫戰」的完整流程。
         </p>
-        <p id="boss-hp-text" class="hp-text"></p>
-
-        <div class="rps-area">
-          <p class="card-text">選擇拳＋說出一句鼓勵或關心的話吧：</p>
-          <div class="rps-buttons">
-            <button class="boss-rps-btn" data-hand="rock">✊ 石頭</button>
-            <button class="boss-rps-btn" data-hand="scissors">✌️ 剪刀</button>
-            <button class="boss-rps-btn" data-hand="paper">🖐 布</button>
-          </div>
-          <p id="boss-round-result" class="round-text"></p>
-          <div id="boss-log" class="log-box"></div>
-        </div>
-
-        <div class="map-actions">
-          <button id="btn-boss-back" class="secondary-btn">
-            先回地圖準備一下
-          </button>
-        </div>
       </div>
     </section>
-  </main>
-
-  <!-- ====== 熊熊占卜視窗 ====== -->
-  <div id="fortune-modal" class="modal-backdrop">
-    <div class="modal-card">
-      <h2 class="modal-title">🐻 熊熊占卜</h2>
-      <p id="fortune-text" class="modal-text">
-        今天的你，擁有溫柔治癒力，壞情緒看到你都會慢慢軟化～
-      </p>
-      <button
-        id="fortune-ok-btn"
-        class="modal-button"
-        onclick="closeFortuneModal()"
-      >
-        收到，出發！
-      </button>
-    </div>
   </div>
 
-  <script src="script.js" defer></script>
+  <!-- ===== 通用遮罩 ===== -->
+  <div id="modal-backdrop" class="modal-backdrop hidden"></div>
+
+  <!-- 熊熊占卜視窗 -->
+  <div id="fortuneModal" class="modal hidden">
+    <div class="modal-header">
+      <span class="modal-emoji">🐻</span>
+      <h3>熊熊占卜</h3>
+    </div>
+    <p id="fortuneText" class="modal-text">
+      今天的你，擁有溫柔治癒力，壞情緒看到你都會慢慢軟化～
+    </p>
+    <button id="fortuneOkBtn" class="primary-btn">收到，出發！</button>
+  </div>
+
+  <!-- 地圖遭遇視窗（先做簡單版，之後接上戰鬥） -->
+  <div id="encounterModal" class="modal hidden">
+    <div class="modal-header">
+      <span class="modal-emoji">✨</span>
+      <h3 id="encounterTitle">你來到了草原</h3>
+    </div>
+    <p id="encounterText" class="modal-text">
+      遠方出現了一隻情緒魔物……之後會在這裡加入猜拳安撫戰！
+    </p>
+    <button id="encounterOkBtn" class="primary-btn">先記下這裡，等等再來安撫～</button>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

@@ -305,3 +305,20 @@ function playBoss(playerHand) {
 showScreen("choose");
 // 若你希望一開場就來一張占卜卡，這行打開即可：
 // showFortune();
+// ====== 熊熊占卜：保險機制，確保按鈕可以關閉視窗 ======
+(function setupFortuneModalFix() {
+  const modal = document.getElementById("fortune-modal");
+  const okBtn = document.getElementById("fortune-ok-btn");
+
+  // 如果找不到元素就直接離開（避免報錯）
+  if (!modal || !okBtn) return;
+
+  function closeFortune() {
+    // 用和畫面切換一樣的方式隱藏
+    modal.classList.add("hidden");
+    modal.setAttribute("aria-hidden", "true");
+  }
+
+  // 再次保險地綁定一次點擊事件
+  okBtn.addEventListener("click", closeFortune);
+})();

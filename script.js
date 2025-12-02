@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var heroCards = document.querySelectorAll(".hero-card");
   for (var i = 0; i < heroCards.length; i++) {
     heroCards[i].addEventListener("click", function () {
-      // 這裡可以之後記錄 currentHero，目前先直接占卜
+      // 之後可以記錄 currentHero，目前先直接占卜
       showFortune();
     });
   }
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     meadow: {
       title: "你來到了草原",
-      text: "一隻小小史萊姆被壞情緒纏住，之後可以在這裡進行『安撫猜拳戰』！"
+      text: "一隻小小史萊姆被壞情緒纏住，之後可以在這裡進行「安撫猜拳戰」！"
     },
     forest: {
       title: "你走進了森林",
@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     graveyard: {
       title: "你來到寂寞墓地",
-      text: "寂寞骷髏坐在石碑上發呆，似乎很需要一個『願意聽他說話的朋友』。"
+      text: "寂寞骷髏坐在石碑上發呆，似乎很需要一個「願意聽他說話的朋友」。"
     },
     witch: {
       title: "你來到女巫小屋",
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     boss: {
       title: "你來到魔王城前",
-      text: "巨大魔王的壞情緒在天空盤旋，之後會在這裡開啟『最終魔王戰』！"
+      text: "巨大魔王的壞情緒在天空盤旋，之後會在這裡開啟「最終魔王戰」！"
     }
   };
 

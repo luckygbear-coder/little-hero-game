@@ -433,21 +433,37 @@ document.addEventListener("DOMContentLoaded", () => {
     // 不做事
   });
 
-  // ===== 事件：點地圖格子 =====
-  const mapCells = document.querySelectorAll(".map-cell");
-  mapCells.forEach((cell) => {
-    cell.addEventListener("click", () => {
-      const loc = cell.dataset.location;
-      if (loc === "village") {
-        resultText.textContent =
-          "你在新手村整理裝備、做做伸展、跟熊熊打招呼，等等再出發去安撫魔物～";
-        resultOkBtn.textContent = "準備好了！";
-        openModal(resultModal);
-        return;
-      }
+// ===== 事件：點地圖格子 =====
+const mapCells = document.querySelectorAll(".map-cell");
+mapCells.forEach((cell) => {
+  cell.addEventListener("click", () => {
+    const loc = cell.dataset.location;
+
+    // === 新手村：休息 ===
+    if (loc === "village") {
+      resultText.textContent =
+        "你在新手村做伸展、補充水分、跟熊熊打招呼，休息一下再出發～";
+      resultOkBtn.textContent = "出發！";
+      openModal(resultModal);
+      return;
+    }
+
+    // === 女巫小屋：必定抽塔羅，無戰鬥 ===
+    if (loc === "witch") {
+      drawTarot(); // 直接抽塔羅
+      return;
+    }
+
+    // === 魔王城：打魔王 ===
+    if (loc === "boss") {
       startBattle(loc);
-    });
+      return;
+    }
+
+    // === 一般地點：遇魔物→猜拳戰鬥 ===
+    startBattle(loc);
   });
+});
 
   resultOkBtn.addEventListener("click", () => {
     closeModal(resultModal);

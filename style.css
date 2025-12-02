@@ -1,4 +1,4 @@
-/* 全域設定 */
+/* ===== 全域設定 ===== */
 *,
 *::before,
 *::after {
@@ -8,62 +8,72 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif;
-  background: linear-gradient(#ffe0c9, #ffd6e9);
-  color: #4a2a23;
+  font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, system-ui,
+    sans-serif;
+  background: linear-gradient(#ffe0c9, #ffdbe8);
+  color: #4a2b22;
 }
 
-/* 版面 */
+/* ===== 版面 ===== */
 .game-wrap {
-  max-width: 520px;
+  max-width: 480px;
   margin: 0 auto;
-  padding: 16px 16px 32px;
+  padding: 16px;
+  min-height: 100vh;
 }
 
-/* 標題區 */
 .game-header {
   text-align: center;
   margin-bottom: 16px;
 }
 
 .game-header h1 {
-  font-size: 24px;
-  margin: 12px 0 4px;
+  font-size: 1.6rem;
+  margin: 8px 0;
 }
 
 .subtitle {
   margin: 0;
-  font-size: 14px;
-  color: #704437;
+  font-size: 0.9rem;
+  color: #7b4a40;
 }
 
-/* 卡片外框 */
+/* ===== 卡片 ===== */
 .card {
   background: #fff7e6;
   border-radius: 18px;
-  border: 2px solid #f2d3a2;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  padding: 18px 16px 20px;
+  border: 2px solid #f0c78d;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+  padding: 20px 18px;
 }
 
 .card h2 {
-  margin: 0 0 8px;
-  font-size: 20px;
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 1.3rem;
 }
 
 .hint {
-  margin: 0 0 16px;
-  font-size: 14px;
-  color: #7b5244;
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  color: #84574c;
 }
 
 .hint.small {
-  margin-top: 16px;
-  font-size: 12px;
-  color: #a07462;
+  font-size: 0.8rem;
 }
 
-/* 勇者列表 */
+/* ===== 畫面切換 ===== */
+.screen {
+  margin-bottom: 24px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ===== 勇者列表 ===== */
 .hero-list {
   display: flex;
   flex-direction: column;
@@ -75,237 +85,232 @@ body {
   align-items: center;
   width: 100%;
   padding: 10px 12px;
-  border-radius: 16px;
-  border: 1px solid #f0d0a5;
-  background: #fffaf2;
+  border-radius: 14px;
+  border: 1px solid #f0c78d;
+  background: #fffaf0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
   cursor: pointer;
   text-align: left;
-  outline: none;
-  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
 }
 
 .hero-card:active {
   transform: scale(0.98);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  background: #ffeeda;
 }
 
 .hero-emoji {
-  font-size: 26px;
+  font-size: 1.8rem;
   margin-right: 10px;
 }
 
 .hero-text h3 {
   margin: 0 0 4px;
-  font-size: 16px;
-  color: #1f3650;
+  font-size: 1rem;
+  color: #2d1a16;
 }
 
 .hero-text p {
   margin: 0;
-  font-size: 13px;
-  color: #6b4a3b;
+  font-size: 0.85rem;
+  color: #80534a;
 }
 
-/* 九宮格地圖 */
+/* ===== 地圖九宮格 ===== */
 .map-grid {
-  margin-top: 10px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
 
 .map-cell {
+  background: #fffaf2;
   border-radius: 14px;
-  border: 1px solid #f0d0a5;
-  background: #fffdf6;
-  padding: 8px 4px;
-  text-align: center;
-  cursor: pointer;
-  outline: none;
+  border: 1px solid #f0c78d;
+  padding: 8px 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+  min-height: 76px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 .map-cell:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  background: #ffeeda;
-}
-
-.boss-cell {
-  border-color: #f59bb0;
-  background: #fff0f4;
+  transform: scale(0.96);
 }
 
 .cell-emoji {
-  font-size: 22px;
+  font-size: 1.4rem;
   margin-bottom: 4px;
 }
 
 .cell-name {
-  font-size: 13px;
+  font-size: 0.9rem;
   font-weight: 600;
-  margin-bottom: 2px;
 }
 
 .cell-tag {
-  font-size: 11px;
-  color: #8b6b5b;
+  font-size: 0.7rem;
+  color: #986054;
 }
 
-/* 畫面顯示控制 */
-.screen.hidden {
-  display: none;
+.boss-cell {
+  border-color: #f38b8b;
+  background: #fff1f1;
 }
 
-/* Modal 遮罩 */
+/* ===== 戰鬥畫面 ===== */
+.back-btn {
+  border: none;
+  background: transparent;
+  color: #7f5b4c;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.battle-layout {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 12px 0 14px;
+}
+
+.battle-side {
+  flex: 1;
+  background: #fffaf3;
+  border-radius: 12px;
+  border: 1px solid #f0c78d;
+  padding: 8px 10px;
+}
+
+.section-title {
+  margin: 0 0 4px;
+  font-size: 0.95rem;
+}
+
+.stat-line {
+  margin: 2px 0;
+  font-size: 0.8rem;
+}
+
+#hero-hp,
+#monster-hp {
+  font-size: 1.1rem;
+}
+
+.rps-area {
+  margin-top: 10px;
+}
+
+.rps-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.rps-btn {
+  flex: 1;
+  border-radius: 999px;
+  border: none;
+  background: #ffe0b5;
+  padding: 8px 0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.rps-btn:active {
+  transform: scale(0.96);
+}
+
+.battle-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.primary-btn,
+.secondary-btn {
+  border-radius: 999px;
+  border: none;
+  padding: 9px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.primary-btn {
+  background: #ffa94d;
+  color: #3b1c13;
+}
+
+.secondary-btn {
+  background: #ffe6f2;
+  color: #7a4260;
+  flex: 1;
+}
+
+.primary-btn:active,
+.secondary-btn:active {
+  transform: scale(0.97);
+}
+
+.log-area {
+  margin-top: 12px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fffaf3;
+  border: 1px dashed #f0c78d;
+  font-size: 0.85rem;
+}
+
+/* ===== Modal & 遮罩 ===== */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.3);
   z-index: 10;
 }
 
-.modal-backdrop.hidden {
-  display: none;
-}
-
-/* Modal 主體 */
 .modal {
   position: fixed;
   left: 50%;
   top: 50%;
-  width: min(90%, 360px);
+  width: min(90vw, 360px);
   transform: translate(-50%, -50%);
   background: #fff7e6;
-  border-radius: 20px;
-  border: 2px solid #f2d3a2;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+  border-radius: 18px;
+  border: 2px solid #f0c78d;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
   padding: 18px 16px 16px;
-  z-index: 20;
-}
-
-.modal.hidden {
-  display: none;
+  z-index: 11;
 }
 
 .modal-header {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 6px;
 }
 
 .modal-emoji {
-  font-size: 26px;
-  margin-right: 8px;
+  font-size: 1.6rem;
 }
 
 .modal-header h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 1.1rem;
 }
 
 .modal-text {
-  margin: 0 0 16px;
-  font-size: 14px;
-  color: #6b4a3b;
+  margin: 6px 0 14px;
+  font-size: 0.9rem;
+  color: #73443a;
 }
 
-/* 按鈕 */
-.primary-btn {
-  display: block;
+.modal .primary-btn {
   width: 100%;
-  padding: 10px 0;
-  border-radius: 999px;
-  border: none;
-  background: linear-gradient(90deg, #ffb86c, #ff8ba7);
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
-}
-
-.primary-btn:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-  filter: brightness(0.95);
-}
-
-.secondary-btn {
-  display: block;
-  width: 100%;
-  padding: 9px 0;
-  border-radius: 999px;
-  border: 1px solid #f2d3a2;
-  background: #fffaf2;
-  color: #6b4a3b;
-  font-size: 14px;
-  cursor: pointer;
-  margin-top: 6px;
-}
-
-.secondary-btn.hidden {
-  display: none;
-}
-
-/* 戰鬥區塊 */
-.battle-status {
-  margin-bottom: 12px;
-  border-radius: 12px;
-  background: #fff0da;
-  padding: 10px 10px 8px;
-}
-
-.hp-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-}
-
-.hp-label {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.hp-hearts {
-  font-size: 18px;
-}
-
-.battle-buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-
-.rps-btn {
-  flex: 1;
-  padding: 8px 4px;
-  border-radius: 12px;
-  border: 1px solid #f0d0a5;
-  background: #fffaf2;
-  font-size: 14px;
-  cursor: pointer;
-  outline: none;
-  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
-}
-
-.rps-btn:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  background: #ffeeda;
-}
-
-.battle-log {
-  margin: 4px 0 6px;
-  font-size: 13px;
-  color: #6b4a3b;
 }

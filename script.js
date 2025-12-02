@@ -1,9 +1,10 @@
-// ======= 全域狀態 =======
-let currentHero = null;
-let currentMonster = null;
-let bossCalmCount = 0; // 魔王已被安撫的情緒數（0~6）
+// ====== 全域狀態 ======
+let currentHeroKey = null;
+let currentMonsterKey = null;
+let currentMonsterHp = 0;
+let bossHp = 6;
 
-// 方便切換畫面
+// ====== 畫面切換 ======
 const screens = {
   choose: document.getElementById("screen-choose"),
   map: document.getElementById("screen-map"),
@@ -16,135 +17,110 @@ function showScreen(name) {
   screens[name].classList.remove("hidden");
 }
 
-// ======= 勇者資料 =======
+// ====== 資料設定 ======
 const heroNames = {
-  warrior: "🛡️ 戰士",
-  mage: "🔮 法師",
-  priest: "💖 牧師",
+  warrior: "🛡 勇敢的戰士",
+  mage: "🔮 創意法師",
+  priest: "💖 溫柔牧師",
   villager: "🌾 勇敢的村民",
 };
 
-// ======= 魔物設定（10 種情緒可以慢慢補，先放幾個示範） =======
 const monsters = {
   anger: {
     id: "anger",
-    name: "🔥 怒炎小獸",
+    name: "怒炎小獸",
     emoji: "🔥",
-    intro: "牠全身都是小火花，最近一直因為小事大爆炸。",
-    winLines: [
-      "「好啦…其實我只是希望有人理解我在意的事情。」",
-      "「被你這樣聽我說，我的火好像沒那麼燒了。」",
-    ],
-    loseLines: [
-      "「哼！你根本不懂我！」",
-      "「走開啦，我現在什麼都不想聽！」",
+    area: "草原",
+    maxHp: 3,
+    description: "牠一緊張就會大吼大叫，其實只是害怕被忽略。",
+    calmLines: [
+      "我看到你很生氣，但你其實很在意大家吧？",
+      "謝謝你把真實的感受說出來，我有聽見。",
+      "你可以慢慢來，不用一次就完全冷靜下來。",
     ],
   },
-  sad: {
-    id: "sad",
-    name: "💧 泣波水靈",
+  sadness: {
+    id: "sadness",
+    name: "淚滴史萊姆",
     emoji: "💧",
-    intro: "眼淚像小水球一樣浮在身邊，走到哪裡都滴滴答答。",
-    winLines: [
-      "「聽你這麼說…我好像沒那麼難過了。」",
-      "「原來難過也可以慢慢變成力量，謝謝你。」",
-    ],
-    loseLines: [
-      "「不要理我，我只想一個人哭…」",
+    area: "湖畔",
+    maxHp: 3,
+    description: "總是覺得自己做不好，眼淚一顆一顆掉進湖裡。",
+    calmLines: [
+      "難過的時候，能哭出來也是一種很大的勇氣。",
+      "就算你現在很沮喪，我還是很喜歡你在這裡。",
+      "你不需要一直很乖，放鬆一下也沒關係。",
     ],
   },
   fear: {
     id: "fear",
-    name: "😱 驚羽小鳥",
-    emoji: "😱",
-    intro: "任何聲音都會嚇到牠，翅膀一直抖個不停。",
-    winLines: [
-      "「原來可以一點一點練習勇敢…我想試試看。」",
-    ],
-    loseLines: [
-      "「不要靠近我！好可怕！」",
-    ],
-  },
-  jealous: {
-    id: "jealous",
-    name: "💚 忌影貓妖",
-    emoji: "🐱",
-    intro: "總覺得別人都比自己好，尾巴一直不爽地甩來甩去。",
-    winLines: [
-      "「也許我也有自己的閃亮點…謝謝你提醒我。」",
-    ],
-    loseLines: [
-      "「哼，你一定也在笑我吧！」",
+    name: "驚驚蝙蝠",
+    emoji: "🦇",
+    area: "森林",
+    maxHp: 3,
+    description: "對未知的事情超害怕，總覺得會發生不好的事。",
+    calmLines: [
+      "害怕的時候，我們可以一起慢慢來。",
+      "你不用一個人面對，我在你旁邊陪你。",
+      "一步一步就好，不用一下子就完成全部。",
     ],
   },
-  lonely: {
-    id: "lonely",
-    name: "🌙 孤單雲茸獸",
-    emoji: "☁️",
-    intro: "飄在半空中，很想靠近大家又有點害羞。",
-    winLines: [
-      "「原來我可以主動說：我們一起玩好嗎？」",
-    ],
-    loseLines: [
-      "「算了…沒人需要我。」",
-    ],
-  },
-  tired: {
-    id: "tired",
-    name: "😴 累累木靈",
-    emoji: "🌳",
-    intro: "長著樹葉枕頭，一直想睡覺，什麼都好懶。",
-    winLines: [
-      "「原來休息一下再出發，也是很棒的選擇。」",
-    ],
-    loseLines: [
-      "「不要吵我…我什麼都不想動。」",
-    ],
-  },
-  anxious: {
-    id: "anxious",
-    name: "🔥 焦躁火鼠",
-    emoji: "🐭",
-    intro: "總覺得時間不夠用，尾巴火花啪啪作響。",
-    winLines: [
-      "「慢慢來、先做一件事情就好…好像也可以耶！」",
-    ],
-    loseLines: [
-      "「快點快點！我好緊張啊！」",
-    ],
-  },
-  inferior: {
-    id: "inferior",
-    name: "🫥 虛心史萊姆",
-    emoji: "🫧",
-    intro: "覺得自己軟趴趴、什麼都不行，一直往地板黏。",
-    winLines: [
-      "「原來我也有值得被喜歡的地方。」",
-    ],
-    loseLines: [
-      "「我就爛…一定又會弄錯。」",
-    ],
-  },
-  // 之後還可以再加兩隻：愧疚 shame、厭煩 bored…等
 };
 
-// ======= 占卜卡片 =======
-const fortuneMessages = [
-  "今天的你，具有超強『傾聽魔法』。先聽聽魔物在乎的是什麼，再出拳吧！",
-  "當你願意說出自己的感受時，魔物也會比較敢說真心話。",
-  "輸了沒關係，每一次出拳，都是在練習勇敢面對情緒。",
-  "記得深呼吸三次，再按下出拳的按鈕，心就會比較穩定喔。",
-  "你不是一個人，星星王國裡有很多夥伴跟你一起面對壞情緒。",
+const bossData = {
+  name: "壞情緒魔王",
+  emoji: "🐉",
+  maxHp: 6,
+  calmLines: [
+    "就算你生氣、害怕或難過，也不代表你是壞的。",
+    "謝謝你願意讓我看到你真正的模樣。",
+    "我願意聽你說，不會笑你或責怪你。",
+    "你的感受很重要，我都有認真放在心上。",
+    "不管發生什麼事，你都值得被溫柔對待。",
+    "如果很累，也可以先休息，之後再一起努力。",
+  ],
+};
+
+const fortunes = [
+  "今天的你，擁有溫柔治癒力，壞情緒看到你都會慢慢軟化～",
+  "今天的你，充滿創意魔法，任何困難都能變成有趣的挑戰！",
+  "今天的你，超級可靠穩重，是大家心中的小隊長！",
+  "今天的你，散發溫暖笑容，只要出現，氣氛就會變得亮亮的。",
+  "今天的你，很適合安靜地陪伴別人，一起呼吸、一起放鬆。",
 ];
 
-// ======= 工具：隨機出拳、勝負判定 =======
-const rps = ["rock", "scissors", "paper"];
+// ====== DOM 元素 ======
+const currentHeroLabel = document.getElementById("current-hero-label");
 
-function randomRPS() {
-  return rps[Math.floor(Math.random() * rps.length)];
+// 魔物畫面
+const monsterAreaEl = document.getElementById("monster-area");
+const monsterNameEl = document.getElementById("monster-name");
+const monsterDescEl = document.getElementById("monster-desc");
+const monsterHpTextEl = document.getElementById("monster-hp-text");
+const monsterRoundResultEl = document.getElementById("monster-round-result");
+const monsterLogEl = document.getElementById("monster-log");
+
+// 魔王畫面
+const bossHpTextEl = document.getElementById("boss-hp-text");
+const bossRoundResultEl = document.getElementById("boss-round-result");
+const bossLogEl = document.getElementById("boss-log");
+
+// 占卜
+const fortuneModal = document.getElementById("fortune-modal");
+const fortuneTextEl = document.getElementById("fortune-text");
+
+// ====== 工具函式 ======
+function getRandomItem(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function judgeRPS(player, enemy) {
+function getRandomHand() {
+  const hands = ["rock", "scissors", "paper"];
+  return getRandomItem(hands);
+}
+
+// rock > scissors, scissors > paper, paper > rock
+function judgeRound(player, enemy) {
   if (player === enemy) return "draw";
   if (
     (player === "rock" && enemy === "scissors") ||
@@ -156,169 +132,232 @@ function judgeRPS(player, enemy) {
   return "lose";
 }
 
-function rpsToEmoji(hand) {
+function handToIcon(hand) {
   if (hand === "rock") return "✊";
   if (hand === "scissors") return "✌️";
-  return "✋";
+  return "🖐";
 }
 
-// ======= 熊熊占卜 =======
-const fortunePopup = document.getElementById("fortunePopup");
-const fortuneText = document.getElementById("fortuneText");
-
-function showFortune() {
-  const msg =
-    fortuneMessages[Math.floor(Math.random() * fortuneMessages.length)];
-  if (fortuneText) fortuneText.textContent = msg;
-  if (fortunePopup) fortunePopup.classList.remove("hidden");
+// ====== 熊熊占卜 ======
+function openFortuneModal() {
+  const text = getRandomItem(fortunes);
+  fortuneTextEl.textContent = text;
+  fortuneModal.style.display = "flex";
 }
 
-function closeFortune() {
-  if (fortunePopup) fortunePopup.classList.add("hidden");
-}
-
-// ======= 勇者選擇 =======
-function selectHero(heroKey) {
-  currentHero = heroKey;
-  // 選好勇者後，先給一張占卜卡，再進入地圖
-  showFortune();
-  // 關掉占卜後再手動按回地圖，比較有儀式感；
-  // 如果你想自動進地圖，也可以在 closeFortune 裡面加 showScreen("map")。
+// 給 HTML onclick 用（一定會存在）
+function closeFortuneModal() {
+  fortuneModal.style.display = "none";
   showScreen("map");
 }
 
-// ======= 進入魔物戰 =======
-const monsterTitle = document.getElementById("monsterTitle");
-const monsterImg = document.getElementById("monsterImg");
-const monsterDialogue = document.getElementById("monsterDialogue");
-const monsterResult = document.getElementById("monsterResult");
+// 再保險一次，也加上 JS 綁定（就算哪天忘記 onclick 也能動）
+document.getElementById("fortune-ok-btn").addEventListener("click", () => {
+  closeFortuneModal();
+});
 
-function enterMonster(monsterId) {
-  const m = monsters[monsterId];
-  if (!m) return;
+// ====== 勇者選擇邏輯 ======
+function setupHeroButtons() {
+  const heroButtons = document.querySelectorAll(".hero-btn");
+  heroButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const heroKey = btn.dataset.hero;
+      currentHeroKey = heroKey;
+      currentHeroLabel.textContent = heroNames[heroKey] || "小勇者";
+      // 選完勇者 → 顯示占卜視窗
+      openFortuneModal();
+    });
+  });
+}
 
-  currentMonster = m;
-  monsterTitle.textContent = `${m.name}`;
-  monsterImg.textContent = m.emoji;
-  monsterDialogue.textContent = m.intro;
-  monsterResult.textContent = "選一個拳，試著用好心情與牠互動吧～";
+// ====== 地圖按鈕 ======
+function setupMapTiles() {
+  const tiles = document.querySelectorAll(".map-tile");
+  tiles.forEach((tile) => {
+    const monsterKey = tile.dataset.monster;
+    if (!monsterKey) return;
+    tile.addEventListener("click", () => {
+      startMonsterBattle(monsterKey);
+    });
+  });
+
+  const bossTile = document.getElementById("tile-boss");
+  bossTile.addEventListener("click", () => {
+    startBossBattle();
+  });
+
+  document
+    .getElementById("btn-rechoose-hero")
+    .addEventListener("click", () => {
+      currentHeroKey = null;
+      currentHeroLabel.textContent = "";
+      showScreen("choose");
+    });
+}
+
+// ====== 魔物戰 ======
+function startMonsterBattle(monsterKey) {
+  const monster = monsters[monsterKey];
+  if (!monster) return;
+
+  currentMonsterKey = monsterKey;
+  currentMonsterHp = monster.maxHp;
+
+  monsterAreaEl.textContent = monster.area;
+  monsterNameEl.textContent = `${monster.emoji} ${monster.name}`;
+  monsterDescEl.textContent = monster.description;
+  monsterHpTextEl.textContent = `壞情緒強度：${currentMonsterHp} / ${monster.maxHp}`;
+  monsterRoundResultEl.textContent = "";
+  monsterLogEl.innerHTML = "";
+
+  addLog(
+    monsterLogEl,
+    `你遇見了 ${monster.emoji} ${monster.name}，牠看起來有點不安……`
+  );
 
   showScreen("monster");
 }
 
-// 玩家在魔物戰出拳
-function playMonster(playerHand) {
-  if (!currentMonster) return;
+function addLog(container, text) {
+  const line = document.createElement("div");
+  line.className = "log-line";
+  line.textContent = text;
+  container.appendChild(line);
+  container.scrollTop = container.scrollHeight;
+}
 
-  const enemyHand = randomRPS();
-  const outcome = judgeRPS(playerHand, enemyHand);
+function playMonsterRound(playerHand) {
+  if (!currentMonsterKey) return;
 
-  let text = `你出的是 ${rpsToEmoji(playerHand)}，魔物出的是 ${rpsToEmoji(
-    enemyHand
-  )}。\n`;
+  const monster = monsters[currentMonsterKey];
+  const enemyHand = getRandomHand();
+  const result = judgeRound(playerHand, enemyHand);
 
-  if (outcome === "draw") {
-    text += "平手！也許可以再試一次，用不同的語氣說說看？";
-  } else if (outcome === "win") {
-    const line =
-      currentMonster.winLines[
-        Math.floor(Math.random() * currentMonster.winLines.length)
-      ];
-    text += `你用溫柔的語氣說話，魔物的表情慢慢軟化。\n${line}`;
+  const playerIcon = handToIcon(playerHand);
+  const enemyIcon = handToIcon(enemyHand);
+
+  if (result === "win") {
+    currentMonsterHp = Math.max(0, currentMonsterHp - 1);
+    const calmLine = getRandomItem(monster.calmLines);
+    monsterRoundResultEl.textContent = `你贏了！${playerIcon} 戰勝 ${enemyIcon}`;
+    addLog(monsterLogEl, `你對魔物說：「${calmLine}」`);
+    if (currentMonsterHp === 0) {
+      addLog(
+        monsterLogEl,
+        `${monster.emoji} ${monster.name} 眼神變得柔和，慢慢露出笑容：「謝謝你願意理解我！」`
+      );
+      monsterHpTextEl.textContent = `壞情緒強度：0 / ${monster.maxHp}（已被安撫）`;
+    } else {
+      monsterHpTextEl.textContent = `壞情緒強度：${currentMonsterHp} / ${monster.maxHp}`;
+    }
+  } else if (result === "lose") {
+    monsterRoundResultEl.textContent = `這回合魔物佔上風…… ${playerIcon} 輸給 ${enemyIcon}`;
+    addLog(
+      monsterLogEl,
+      `${monster.emoji} 情緒有點激動，你深呼吸一下，提醒自己也要照顧好心情。`
+    );
   } else {
-    const line =
-      currentMonster.loseLines[
-        Math.floor(Math.random() * currentMonster.loseLines.length)
-      ];
-    text += `這次的語氣好像有點太衝了…魔物有點受傷。\n${line}`;
+    monsterRoundResultEl.textContent = `平手！${playerIcon} 對 ${enemyIcon}`;
+    addLog(monsterLogEl, "你們同時出了一樣的拳，再試一次吧～");
   }
-
-  monsterResult.textContent = text;
 }
 
-// 回到地圖
-function backToMap() {
-  showScreen("map");
+// 猜拳按鈕綁定（魔物）
+function setupMonsterRpsButtons() {
+  const buttons = document.querySelectorAll("#screen-monster .rps-btn");
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const hand = btn.dataset.hand;
+      playMonsterRound(hand);
+    });
+  });
+
+  document
+    .getElementById("btn-monster-back")
+    .addEventListener("click", () => {
+      showScreen("map");
+    });
 }
 
-// ======= 魔王戰 =======
-const bossImg = document.getElementById("bossImg");
-const bossDialogue = document.getElementById("bossDialogue");
-const bossResult = document.getElementById("bossResult");
-
-// 六種壞情緒，安撫六次就成功
-const bossEmotions = [
-  "憤怒",
-  "悲傷",
-  "害怕",
-  "嫉妒",
-  "孤單",
-  "自卑",
-];
-
+// ====== 魔王戰 ======
 function startBossBattle() {
-  bossCalmCount = 0;
-  bossImg.textContent = "🐲";
-  bossDialogue.textContent =
-    "「我是被六種壞情緒纏住的魔王…你有辦法讓我的心慢慢放鬆嗎？」";
-  bossResult.textContent = "連續安撫 6 種情緒，就能讓魔王變回溫柔的守護者！";
+  bossHp = bossData.maxHp;
+  bossHpTextEl.textContent = `壞情緒強度：${bossHp} / ${bossData.maxHp}`;
+  bossRoundResultEl.textContent = "";
+  bossLogEl.innerHTML = "";
+
+  addLog(
+    bossLogEl,
+    `${bossData.emoji} ${bossData.name} 緩緩出現，牠的身上聚集了許多壞情緒……`
+  );
+  addLog(
+    bossLogEl,
+    "別擔心，只要一步一步用好心情回應，就能讓牠慢慢放鬆下來。"
+  );
 
   showScreen("boss");
 }
 
-function playBoss(playerHand) {
-  const enemyHand = randomRPS();
-  const outcome = judgeRPS(playerHand, enemyHand);
+function playBossRound(playerHand) {
+  const enemyHand = getRandomHand();
+  const result = judgeRound(playerHand, enemyHand);
 
-  let text = `你出的是 ${rpsToEmoji(playerHand)}，魔王出的是 ${rpsToEmoji(
-    enemyHand
-  )}。\n`;
+  const playerIcon = handToIcon(playerHand);
+  const enemyIcon = handToIcon(enemyHand);
 
-  if (outcome === "draw") {
-    text += "這一拳互相試探，誰也沒真正受傷，再試一次吧。";
-  } else if (outcome === "win") {
-    const emotion = bossEmotions[bossCalmCount] || "壞情緒";
-    bossCalmCount += 1;
+  if (result === "win") {
+    bossHp = Math.max(0, bossHp - 1);
+    const calmLine = getRandomItem(bossData.calmLines);
+    bossRoundResultEl.textContent = `你成功傳遞好心情！${playerIcon} 戰勝 ${enemyIcon}`;
+    addLog(bossLogEl, `你對魔王說：「${calmLine}」`);
 
-    text += `你用星星語句安撫了魔王心中的「${emotion}」。\n`;
-
-    if (bossCalmCount >= 6) {
-      text +=
-        "六種壞情緒都被好好安頓好了！魔王的眼神變得溫柔，原來牠也只是太需要被理解。恭喜你完成小勇者之旅大冒險！";
-      bossImg.textContent = "🌟";
-      bossDialogue.textContent =
-        "「謝謝你願意看見我的心，而不是只看見我的壞脾氣。」";
+    if (bossHp === 0) {
+      bossHpTextEl.textContent = `壞情緒強度：0 / ${bossData.maxHp}（已被安撫）`;
+      addLog(
+        bossLogEl,
+        `${bossData.emoji} ${bossData.name} 緩緩放下武裝：「原來，我也可以被理解……謝謝你，小勇者。」`
+      );
+      addLog(
+        bossLogEl,
+        "恭喜你！你讓壞情緒魔王重新找回好心情，星星王國的天空亮了起來！"
+      );
     } else {
-      bossDialogue.textContent = `「咦…我的心好像輕了一點點，還剩下 ${
-        6 - bossCalmCount
-      } 種情緒…你願意繼續陪我嗎？」`;
+      bossHpTextEl.textContent = `壞情緒強度：${bossHp} / ${bossData.maxHp}`;
     }
+  } else if (result === "lose") {
+    bossRoundResultEl.textContent = `這回合魔王比較激動…… ${playerIcon} 輸給 ${enemyIcon}`;
+    addLog(
+      bossLogEl,
+      "魔王情緒突然飆高，你先退一步深呼吸三次，提醒自己也值得被照顧。"
+    );
   } else {
-    text +=
-      "魔王被壞情緒再次影響，大吼了一聲。不過你深呼吸了一下，決定再試一次。";
+    bossRoundResultEl.textContent = `平手！${playerIcon} 對 ${enemyIcon}`;
+    addLog(bossLogEl, "你們同時出了一樣的拳，先笑一笑，再來一回合！");
   }
-
-  bossResult.textContent = text;
 }
 
-// ======= 一開始預設畫面 =======
-showScreen("choose");
-// 若你希望一開場就來一張占卜卡，這行打開即可：
-// showFortune();
-// ====== 熊熊占卜：保險機制，確保按鈕可以關閉視窗 ======
-(function setupFortuneModalFix() {
-  const modal = document.getElementById("fortune-modal");
-  const okBtn = document.getElementById("fortune-ok-btn");
+// 猜拳按鈕綁定（魔王）
+function setupBossRpsButtons() {
+  const buttons = document.querySelectorAll("#screen-boss .boss-rps-btn");
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const hand = btn.dataset.hand;
+      playBossRound(hand);
+    });
+  });
 
-  // 如果找不到元素就直接離開（避免報錯）
-  if (!modal || !okBtn) return;
+  document.getElementById("btn-boss-back").addEventListener("click", () => {
+    showScreen("map");
+  });
+}
 
-  function closeFortune() {
-    // 用和畫面切換一樣的方式隱藏
-    modal.classList.add("hidden");
-    modal.setAttribute("aria-hidden", "true");
-  }
+// ====== 初始化 ======
+function init() {
+  showScreen("choose");
+  setupHeroButtons();
+  setupMapTiles();
+  setupMonsterRpsButtons();
+  setupBossRpsButtons();
+}
 
-  // 再次保險地綁定一次點擊事件
-  okBtn.addEventListener("click", closeFortune);
-})();
+init();

@@ -1,7 +1,9 @@
-/* =========================
+/* ================================
    全域設定
-========================= */
-* {
+================================ */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -9,191 +11,161 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Noto Sans TC", sans-serif;
-  background: linear-gradient(#ffe9c9, #ffd9f1);
-  color: #4a2e2a;
-  text-align: center;
+  background: linear-gradient(#ffe9c9, #ffdcdc, #ffe9c9);
+  color: #4a2c2a;
 }
 
+/* 包裝器 */
 .game-wrap {
-  max-width: 500px;
-  margin: auto;
+  max-width: 480px;
+  margin: 0 auto;
   padding: 20px;
 }
 
-/* =========================
-   標題
-========================= */
-.title {
-  font-size: 30px;
-  font-weight: 800;
-  margin-bottom: 4px;
+/* 卡片 */
+.card {
+  background: #fff7e6;
+  border-radius: 16px;
+  border: 2px solid #e1b676;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.hidden {
+  display: none;
+}
+
+h1.title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 5px;
 }
 
 .subtitle {
+  text-align: center;
   font-size: 16px;
   margin-bottom: 20px;
-  color: #7a5a50;
+  opacity: 0.8;
 }
 
-/* =========================
-   魔物區
-========================= */
-.monster-box {
-  background: #fff5dd;
-  border: 3px solid #f3c27a;
-  padding: 16px;
+/* ================================
+   按鈕
+================================ */
+button {
+  padding: 10px 16px;
   border-radius: 12px;
-  margin-bottom: 20px;
+  border: none;
+  cursor: pointer;
+  margin: 4px;
+  font-size: 16px;
+  transition: 0.2s;
 }
+
+button:hover {
+  transform: scale(1.05);
+}
+
+.hero-buttons button {
+  background: #ffe1a8;
+  border: 2px solid #d39a44;
+}
+
+/* 返回按鈕 */
+.back-btn {
+  background: #ffb3b3;
+  border: 2px solid #d66;
+  margin-top: 10px;
+}
+
+/* ================================
+   地圖九宮格
+================================ */
+
+.map-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.map-grid div {
+  background: #fff;
+  border: 2px solid #c6a974;
+  border-radius: 10px;
+  padding: 18px;
+  text-align: center;
+  min-height: 65px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.map-grid div:hover {
+  transform: scale(1.05);
+  background: #fff3d6;
+}
+
+/* ================================
+   魔物區
+================================ */
 
 .monster-img {
-  width: 180px;
-  height: 180px;
-  object-fit: contain;
-  margin: 12px auto;
-  transition: 0.25s;
+  width: 70%;
+  display: block;
+  margin: 0 auto 10px auto;
 }
 
-/* =========================
-   魔物動畫效果
-========================= */
-
-/* 受傷（抖動） */
-.shake {
-  animation: shakeAnim 0.4s;
-}
-@keyframes shakeAnim {
-  0% { transform: translate(0px, 0px); }
-  25% { transform: translate(4px, -4px); }
-  50% { transform: translate(-4px, 4px); }
-  75% { transform: translate(4px, 4px); }
-  100% { transform: translate(0px, 0px); }
-}
-
-/* 難過（下墜） */
-.sad {
-  animation: sadAnim 0.6s;
-}
-@keyframes sadAnim {
-  0% { transform: translateY(0px); opacity: 1; }
-  100% { transform: translateY(14px); opacity: 0.7; }
-}
-
-/* 開心（跳動） */
-.happy {
-  animation: happyAnim 0.8s ease-in-out;
-}
-@keyframes happyAnim {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.15); }
-  60% { transform: scale(0.9); }
-  100% { transform: scale(1); }
-}
-
-/* =========================
-   出拳按鈕
-========================= */
-.controls {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 18px;
-}
-
-.controls button {
-  padding: 12px 18px;
-  font-size: 18px;
-  border: none;
-  background: #ffe7b8;
-  border-radius: 12px;
-  border: 2px solid #d7a76a;
-  cursor: pointer;
-  transition: 0.15s;
-}
-
-.controls button:hover {
-  background: #fff4d6;
-}
-
-.controls button:active {
-  transform: scale(0.95);
-}
-
-/* =========================
-   Log 區
-========================= */
-.log-box {
-  background: #ffffff;
-  border: 2px dashed #d6a771;
-  padding: 12px;
+.dialogue {
+  font-size: 17px;
+  margin: 10px 0;
+  padding: 10px;
+  background: #fff3d4;
   border-radius: 10px;
-  min-height: 60px;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #634131;
+  border: 1px solid #e2c085;
 }
 
-/* =========================
-   熊熊占卜彈跳視窗
-========================= */
-.fortune-box {
-  display: none;
+.rps-buttons button {
+  background: #ffd18b;
+  border: 2px solid #c48732;
+}
+
+/* ================================
+   占卜彈窗
+================================ */
+.popup {
   position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
   align-items: center;
-  animation: fadeIn 0.4s forwards;
+  justify-content: center;
+  z-index: 1000;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.fortune-card {
-  background: #fff8e8;
-  width: 80%;
-  max-width: 320px;
-  padding: 16px;
+.popup-card {
+  background: #fff7e6;
   border-radius: 16px;
-  border: 3px solid #f3c27a;
-  animation: popup 0.3s ease-out;
+  border: 2px solid #e1b676;
+  padding: 20px;
+  width: 80%;
+  text-align: center;
 }
 
-@keyframes popup {
-  0% { transform: scale(0.6); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+/* ================================
+   魔王戰
+================================ */
+.boss-img {
+  width: 80%;
+  display: block;
+  margin: 0 auto 10px auto;
 }
 
-.fortune-card h3 {
-  margin-top: 0;
-  color: #c4741c;
-  font-size: 24px;
-}
-
-.close-btn {
-  background: #ffd28d;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 10px;
-  margin-top: 12px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.close-btn:hover {
-  background: #ffe3b8;
-}
-
-/* =========================
-   魔王暗黑特效
-========================= */
-.boss-mode {
-  animation: bossDark 1.2s infinite alternate;
-}
-
-@keyframes bossDark {
-  0% { filter: brightness(1); }
-  100% { filter: brightness(0.75); }
+#bossResult {
+  font-size: 18px;
+  text-align: center;
+  margin-top: 10px;
 }

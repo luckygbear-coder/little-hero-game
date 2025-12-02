@@ -1,95 +1,152 @@
-// ================== 全域狀態 ==================
+// ===== 全域狀態 =====
 let currentHero = null;
 
-// ================== 畫面元素 ==================
+// ===== 方塊：畫面切換 =====
 const screens = {
   choose: document.getElementById("screen-choose"),
-  map: document.getElementById("screen-map") || null,
-  monster: document.getElementById("screen-monster") || null,
-  boss: document.getElementById("screen-boss") || null,
+  map: document.getElementById("screen-map"),
 };
 
 function showScreen(name) {
-  // 安全檢查：有拿到元素才操作，避免 null 報錯
   Object.values(screens).forEach((el) => {
-    if (!el) return;
     el.classList.add("hidden");
   });
-  const target = screens[name];
-  if (target) target.classList.remove("hidden");
+  screens[name].classList.remove("hidden");
 }
 
-// ================== 勇者 & 占卜設定 ==================
-const heroNames = {
-  warrior: "🛡️ 勇敢的戰士",
-  mage: "🔮 創意法師",
-  priest: "💖 溫柔牧師",
-  villager: "🌾 勇敢的村民",
-};
-
-// 每個職業各自的熊熊占卜內容（之後你想再多加都可以）
+// ===== 勇者占卜設定 =====
 const heroFortunes = {
-  warrior: [
-    "今天的你，擁有正面迎戰的勇氣，壞情緒會被你一個個打敗！",
-    "你的肩膀很穩，夥伴們靠在你身邊會覺得很安心～",
-    "遇到困難時，記得先深呼吸，再一步一步往前走。",
-  ],
-  mage: [
-    "今天你的點子特別多，試著用創意把壞情緒變成好玩的故事吧！",
-    "你的想像力是超能力，畫出來、寫出來，心裡會變輕鬆。",
-    "別害怕做夢，你的靈感正在幫你找到新的路。",
-  ],
-  priest: [
-    "你的溫柔是很大的力量，連壞情緒被你擁抱後都會慢慢軟化。",
-    "今天適合好好照顧自己，喝一杯喜歡的飲料，對自己說聲辛苦了。",
-    "你的傾聽很重要，也別忘了聽聽自己心裡的聲音。",
-  ],
-  villager: [
-    "雖然覺得自己很普通，但你的堅持讓你一點都不平凡。",
-    "一步一步慢慢走也沒關係，你一直都有在前進。",
-    "今天的你，很適合做一件小小的好事，讓世界亮一點點。",
-  ],
+  warrior: "今天的你，擁有勇敢與守護力，讓壞情緒知道：你不是一個人面對。",
+  mage: "今天的你，充滿創意靈感，能把擔心和害怕變成新的點子和解方。",
+  priest:
+    "今天的你，有溫柔治癒力，願意聽、願意陪，就能讓很多情緒慢慢放鬆。",
+  villager:
+    "今天的你，看起來平凡，但只要願意邁出一步，就已經是超級勇者了！",
 };
 
-// ================== 占卜視窗元素 ==================
-const fortuneModal = document.getElementById("fortune-modal");
-const fortuneText = document.getElementById("fortune-text");
-const fortuneOkBtn = document.getElementById("fortune-ok-btn");
+// ===== 地圖地點設定（之後這裡會接「遇到的魔物」與戰鬥） =====
+const locations = {
+  village: {
+    title: "你回到了新手村",
+    text: "這裡是出發點，也是休息的地方。之後可以在這裡補充勇氣與好心情。",
+  },
+  meadow: {
+    title: "草原上的微風",
+    text: "你遇見了有點暴躁的怒炎小獸，它其實只是太想被看見。",
+  },
+  forest: {
+    title: "靜靜的森林",
+    text: "一隻害羞樹精躲在樹後面，好像怕被誤會，心裡有點緊張。",
+  },
+  cave: {
+    title: "黑暗洞窟裡的回聲",
+    text: "怕黑的小魔物縮在角落，它需要有人陪它一起面對黑暗。",
+  },
+  lake: {
+    title: "湖畔的漣漪",
+    text: "哭哭水靈在湖邊掉眼淚，也許只是今天發生了一些太難的事。",
+  },
+  graveyard: {
+    title: "寂寞的墓地",
+    text: "骷髏士兵其實很孤單，只是用酷酷的樣子藏起來。",
+  },
+  witch: {
+    title: "女巫小屋的門縫",
+    text: "女巫正在研究『情緒藥水』，之後也許會給你特別的占卜提示。",
+  },
+  mountain: {
+    title: "風大的山頂",
+    text: "壓力小獸背著很重的包包，它需要有人告訴它：可以慢一點沒關係。",
+  },
+  boss: {
+    title: "魔王城的大門前",
+    text: "這裡住著被好多壞情緒纏住的魔王。等我們先安撫完幾隻魔物，再一起來挑戰最終戰吧！",
+  },
+};
 
-// 顯示熊熊占卜
-function openFortune(heroKey) {
-  const list = heroFortunes[heroKey] || [
-    "今天的你，充滿勇氣與溫柔，壞情緒看到你都會慢慢軟化～",
-  ];
-  const msg = list[Math.floor(Math.random() * list.length)];
-  fortuneText.textContent = msg;
-  fortuneModal.classList.remove("hidden");
+// ===== DOM 抓取 =====
+const heroButtons = document.querySelectorAll(".hero-card");
+
+const modalBackdrop = document.getElementById("modal-backdrop");
+
+// 占卜 modal
+const fortuneModal = document.getElementById("fortuneModal");
+const fortuneText = document.getElementById("fortuneText");
+const fortuneOkBtn = document.getElementById("fortuneOkBtn");
+
+// 遭遇 modal
+const encounterModal = document.getElementById("encounterModal");
+const encounterTitle = document.getElementById("encounterTitle");
+const encounterText = document.getElementById("encounterText");
+const encounterOkBtn = document.getElementById("encounterOkBtn");
+
+// 地圖格子
+const mapCells = document.querySelectorAll(".map-cell");
+
+// ===== 共用 modal 開關 =====
+function openModal(modalEl) {
+  modalBackdrop.classList.remove("hidden");
+  modalEl.classList.remove("hidden");
 }
 
-// 關閉熊熊占卜
-function closeFortune() {
-  fortuneModal.classList.add("hidden");
-  // 之後要前往地圖畫面，可以在這裡改：showScreen("map");
+function closeModal(modalEl) {
+  modalBackdrop.classList.add("hidden");
+  modalEl.classList.add("hidden");
 }
 
-// ================== 初始化綁定事件 ==================
-document.addEventListener("DOMContentLoaded", () => {
-  // 先顯示職業選擇畫面
-  showScreen("choose");
+// 點選勇者：設定 hero + 顯示占卜
+heroButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const heroKey = btn.dataset.hero;
+    currentHero = heroKey;
 
-  // 綁定四個職業按鈕
-  const heroButtons = document.querySelectorAll(".hero-card, .hero-btn");
-  heroButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const heroKey = btn.dataset.hero;
-      if (!heroKey) return;
-      currentHero = heroKey;
-      openFortune(heroKey);
-    });
+    const text =
+      heroFortunes[heroKey] ||
+      "今天的你，有著特別的勇氣，可以好好面對自己的感受。";
+    fortuneText.textContent = text;
+
+    openModal(fortuneModal);
   });
+});
 
-  // 占卜視窗按鈕
-  if (fortuneOkBtn) {
-    fortuneOkBtn.addEventListener("click", closeFortune);
+// 占卜按鈕：關閉占卜 → 進入地圖畫面
+fortuneOkBtn.addEventListener("click", () => {
+  closeModal(fortuneModal);
+  showScreen("map");
+});
+
+// 地圖點擊：顯示遇到的地點／情緒魔物（先簡單文字版）
+mapCells.forEach((cell) => {
+  cell.addEventListener("click", () => {
+    const key = cell.dataset.location;
+    const info = locations[key];
+
+    if (!info) return;
+
+    // 標記已造訪
+    cell.classList.add("visited");
+
+    encounterTitle.textContent = info.title;
+    encounterText.textContent = info.text;
+
+    openModal(encounterModal);
+  });
+});
+
+// 遭遇視窗按鈕：先關閉，之後這裡會接「進入戰鬥畫面」
+encounterOkBtn.addEventListener("click", () => {
+  closeModal(encounterModal);
+  // 目前什麼都不做，停留在地圖畫面。
+});
+
+// 點擊背景關閉目前的 modal（選擇性，可保留）
+modalBackdrop.addEventListener("click", () => {
+  if (!fortuneModal.classList.contains("hidden")) {
+    closeModal(fortuneModal);
+  } else if (!encounterModal.classList.contains("hidden")) {
+    closeModal(encounterModal);
   }
 });
+
+// 起始畫面
+showScreen("choose");

@@ -1,120 +1,206 @@
-/* ===== 全域設定 ===== */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+/* =========================================
+   小勇者之旅大冒險 - 風格化外觀樣式
+   色調：溫暖童話風、圓角、柔和陰影
+========================================= */
 
 body {
   margin: 0;
   padding: 0;
-  font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, system-ui,
-    sans-serif;
-  background: linear-gradient(#ffe0c9, #ffdbe8);
-  color: #4a2b22;
+  font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(#cff4ff, #b9ffd3);
+  color: #5a3b23;
 }
 
-/* ===== 版面 ===== */
 .game-wrap {
   max-width: 480px;
   margin: 0 auto;
   padding: 16px;
-  min-height: 100vh;
 }
 
-.game-header {
-  text-align: center;
-  margin-bottom: 16px;
-}
-
-.game-header h1 {
-  font-size: 1.6rem;
-  margin: 8px 0;
-}
-
-.subtitle {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #7b4a40;
-}
-
-/* ===== 卡片 ===== */
+/* 卡片框架 */
 .card {
   background: #fff7e6;
   border-radius: 18px;
-  border: 2px solid #f0c78d;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
-  padding: 20px 18px;
+  border: 2px solid #e1b676;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
 }
 
-.card h2 {
-  margin-top: 0;
-  margin-bottom: 8px;
-  font-size: 1.3rem;
+/* 標題 */
+h1 {
+  font-size: 26px;
+  color: #b6661a;
+  margin: 0;
+  text-align: center;
 }
 
-.hint {
-  margin-top: 0;
-  margin-bottom: 16px;
-  font-size: 0.9rem;
-  color: #84574c;
+.subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: #c4874d;
+  margin-bottom: 18px;
 }
 
-.hint.small {
-  font-size: 0.8rem;
-}
-
-/* ===== 畫面切換 ===== */
-.screen {
-  margin-bottom: 24px;
-}
-
-.hidden {
-  display: none !important;
-}
-
-/* ===== 勇者列表 ===== */
-.hero-list {
+/* =========================================
+   主選單 Tabs
+========================================= */
+.nav-tabs {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.nav-btn {
+  flex: 1;
+  padding: 8px;
+  font-size: 13px;
+  border-radius: 10px;
+  border: 1px solid #d9b47a;
+  background: #fff3d8;
+  color: #7a5635;
+}
+
+.nav-btn.active {
+  background: #f7c57b;
+  color: #5a3b23;
+  font-weight: bold;
+}
+
+/* =========================================
+   模式選擇（單人 / 雙人）
+========================================= */
+
+.mode-select-wrap {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 14px;
+  font-size: 15px;
+  border: 2px solid #e1b676;
+  background: #fff3dd;
+  color: #7a4f25;
+}
+
+.mode-btn.active {
+  background: #ffb870;
+  color: #fff;
+  font-weight: bold;
+}
+
+.mode-banner {
+  text-align: center;
+  background: #ffe8c2;
+  padding: 6px 0;
+  border-radius: 10px;
+  border: 1px solid #e1b676;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+/* =========================================
+   頁面顯示 / 隱藏
+========================================= */
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+/* =========================================
+   小勇者選擇卡
+========================================= */
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
 .hero-card {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid #f0c78d;
-  background: #fffaf0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  background: #fff;
+  border-radius: 16px;
+  border: 2px solid #e1b676;
+  padding: 12px;
+  text-align: center;
+  font-size: 13px;
   cursor: pointer;
-  text-align: left;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
 }
 
-.hero-card:active {
-  transform: scale(0.98);
+.hero-card:hover {
+  background: #fff5e3;
 }
 
-.hero-emoji {
-  font-size: 1.8rem;
-  margin-right: 10px;
+.hero-badge {
+  background: #ffe2b2;
+  padding: 3px 8px;
+  border-radius: 50px;
+  font-size: 12px;
+  display: inline-block;
+  margin-bottom: 5px;
+  color: #8a551d;
 }
 
-.hero-text h3 {
-  margin: 0 0 4px;
-  font-size: 1rem;
-  color: #2d1a16;
+.hero-tag {
+  font-size: 12px;
+  color: #9b7040;
+  margin-bottom: 6px;
 }
 
-.hero-text p {
-  margin: 0;
-  font-size: 0.85rem;
-  color: #80534a;
+.current-hero {
+  margin-top: 16px;
+  background: #fff3d5;
+  border-radius: 12px;
+  padding: 10px;
+  border: 1px solid #e1b676;
+  font-size: 14px;
+  text-align: center;
 }
 
-/* ===== 地圖九宮格 ===== */
+/* =========================================
+   主選單頁
+========================================= */
+
+.center {
+  text-align: center;
+}
+
+.primary-btn {
+  background: linear-gradient(90deg, #ffb870, #ff9f52);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 16px;
+  border: none;
+  font-size: 16px;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  opacity: 0.85;
+}
+
+.tip-box {
+  background: #fff0d0;
+  border-left: 4px solid #f2a24a;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+/* =========================================
+   地圖九宮格
+========================================= */
+
 .map-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -122,253 +208,120 @@ body {
 }
 
 .map-cell {
-  background: #fffaf2;
-  border-radius: 14px;
-  border: 1px solid #f0c78d;
-  padding: 8px 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 76px;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  background: #fff;
+  border: 2px solid #e1b676;
+  border-radius: 16px;
+  padding: 10px;
+  font-size: 12px;
+  position: relative;
 }
 
-.map-cell:active {
-  transform: scale(0.96);
-}
-
-.cell-emoji {
-  font-size: 1.4rem;
-  margin-bottom: 4px;
-}
-
-.cell-name {
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.cell-tag {
-  font-size: 0.7rem;
-  color: #986054;
-}
-
-.boss-cell {
-  border-color: #f38b8b;
-  background: #fff1f1;
-}
-
-/* ===== 戰鬥畫面 ===== */
-.back-btn {
-  border: none;
-  background: transparent;
-  color: #7f5b4c;
-  font-size: 0.85rem;
-  margin-bottom: 4px;
-  padding: 0;
-  cursor: pointer;
-}
-
-.battle-layout {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin: 12px 0 14px;
-}
-
-.battle-side {
-  flex: 1;
-  background: #fffaf3;
-  border-radius: 12px;
-  border: 1px solid #f0c78d;
-  padding: 8px 10px;
-}
-
-.section-title {
-  margin: 0 0 4px;
-  font-size: 0.95rem;
-}
-
-.stat-line {
-  margin: 2px 0;
-  font-size: 0.8rem;
-}
-
-#hero-hp,
-#monster-hp {
-  font-size: 1.1rem;
-}
-
-.rps-area {
-  margin-top: 10px;
-}
-
-.rps-buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 6px;
-  margin-top: 6px;
-}
-
-.rps-btn {
-  flex: 1;
-  border-radius: 999px;
-  border: none;
-  background: #ffe0b5;
-  padding: 8px 0;
-  font-size: 0.9rem;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-}
-
-.rps-btn:active {
-  transform: scale(0.96);
-}
-
-.battle-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.primary-btn,
-.secondary-btn {
-  border-radius: 999px;
-  border: none;
-  padding: 9px 12px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-.primary-btn {
-  background: #ffa94d;
-  color: #3b1c13;
-}
-
-.secondary-btn {
-  background: #ffe6f2;
-  color: #7a4260;
-  flex: 1;
-}
-
-.primary-btn:active,
-.secondary-btn:active {
-  transform: scale(0.97);
-}
-
-.log-area {
-  margin-top: 12px;
-  padding: 8px 10px;
-  border-radius: 10px;
-  background: #fffaf3;
-  border: 1px dashed #f0c78d;
-  font-size: 0.85rem;
-}
-
-/* ===== Modal & 遮罩 ===== */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 10;
-}
-
-.modal {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  width: min(90vw, 360px);
-  transform: translate(-50%, -50%);
-  background: #fff7e6;
-  border-radius: 18px;
-  border: 2px solid #f0c78d;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-  padding: 18px 16px 16px;
-  z-index: 11;
-}
-
-.modal-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-}
-
-.modal-emoji {
-  font-size: 1.6rem;
-}
-
-.modal-header h3 {
+.map-cell h4 {
   margin: 0;
-  font-size: 1.1rem;
-}
-
-.modal-text {
-  margin: 6px 0 14px;
-  font-size: 0.9rem;
-  color: #73443a;
-}
-
-.modal .primary-btn {
-  width: 100%;
-}
-.footer {
-  text-align: center;
-  padding: 20px 10px;
-  margin-top: 40px;
   font-size: 14px;
-  color: #8b5e3c;
+  color: #b6661a;
 }
 
-.ig-link {
-  color: #d17b00;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.ig-link:hover {
-  color: #ff9800;
-  text-decoration: underline;
-}/* === 熊熊村長 IG 區塊 === */
-
-.ig-banner {
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px dashed rgba(139, 94, 60, 0.25);
-  text-align: center;
-  font-size: 14px;
-  color: #8b5e3c;
-}
-
-.ig-link {
+.map-cell .tag {
   display: inline-block;
-  margin-top: 4px;
-  font-weight: 700;
-  text-decoration: none;
-  color: #d17b00;
+  background: #ffe9c7;
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-top: 6px;
+  color: #7a5635;
+  font-size: 11px;
 }
 
-.ig-link:hover {
-  color: #ff9800;
-  text-decoration: underline;
+.pos-label {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background: #ffd28c;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 11px;
 }
 
-/* 占卜 / 遭遇視窗內的小字 IG 說明 */
-.modal-ig {
-  margin-top: 10px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: #a0744d;
+/* =========================================
+   戰鬥畫面
+========================================= */
+
+.battle-box {
+  background: #fff8e7;
+  border-radius: 18px;
+  padding: 15px;
+  border: 2px solid #e1b676;
+}
+
+.battle-mode-label {
   text-align: center;
+  background: #ffe2b9;
+  padding: 4px 0;
+  font-size: 13px;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
-/* 頁尾 */
-.footer {
-  text-align: center;
-  padding: 20px 10px 32px;
-  margin-top: 40px;
+.battle-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
   font-size: 13px;
-  color: #8b5e3c;
+}
+
+#bossEmotionBar {
+  background: #ffe8cc;
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid #e1b676;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.bear-tip {
+  background: #fff0d7;
+  border-left: 4px solid #e39d41;
+  padding: 8px;
+  font-size: 13px;
+  border-radius: 8px;
+}
+
+.battle-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 16px 0;
+}
+
+.battle-btn {
+  flex: 1;
+  margin: 0 4px;
+  padding: 10px 0;
+  font-size: 15px;
+  border-radius: 14px;
+  border: 2px solid #e1b676;
+  background: #fff3dd;
+  color: #7a4f25;
+}
+
+.battle-btn:hover {
+  background: #ffe4c0;
+}
+
+#battleResult {
+  background: #fff0d0;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e1b676;
+  min-height: 40px;
+  font-size: 14px;
+}
+
+/* =========================================
+   表單 / 說明頁
+========================================= */
+
+.mono {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #7a5635;
 }

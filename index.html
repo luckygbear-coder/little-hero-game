@@ -3,220 +3,344 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>小勇者之旅大冒險 ✨</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>小勇者之旅大冒險 - 勇者猜拳</title>
+  <style>
+    /* ---- 基本排版 ---- */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffeec9;
+    }
+    .wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .card {
+      background: #fff7e6;
+      border-radius: 16px;
+      border: 2px solid #e1b676;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    h1, h2, h3 {
+      margin: 0 0 8px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 1.6rem;
+    }
+    h2 {
+      font-size: 1.3rem;
+    }
+    p {
+      margin: 4px 0;
+      line-height: 1.5;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: #ffe08a;
+      margin-bottom: 4px;
+    }
+
+    /* ---- 按鈕樣式 ---- */
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .btn {
+      flex: 1;
+      padding: 10px 6px;
+      border-radius: 999px;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      background: #ffcc66;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15) inset;
+    }
+    .btn-secondary {
+      background: #ffd8e2;
+      font-size: 0.95rem;
+    }
+
+    /* ---- 狀態區 ---- */
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 0.9rem;
+    }
+    .hp {
+      color: #e85959;
+      font-weight: bold;
+    }
+    .mood-good { color: #2f9e44; }
+    .mood-bad  { color: #e85959; }
+
+    .log {
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 12px;
+      background: #fff;
+      max-height: 180px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+    }
+    .log p { margin-bottom: 4px; }
+
+    /* ---- Hero & Monster tag ---- */
+    .tag-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 8px 0;
+    }
+    .tag {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #e7f5ff;
+      font-size: 0.85rem;
+    }
+
+    /* ---- RWD 小處理 ---- */
+    @media (min-width: 540px) {
+      h1 { font-size: 1.8rem; }
+    }
+  </style>
 </head>
 <body>
-  <div class="game-wrap">
-    <header class="game-header">
-      <h1>小勇者之旅大冒險 ✨</h1>
-      <p class="subtitle">
-        用勇氣與好心情，一起安撫被壞情緒綁住的魔物吧！
+  <div class="wrap">
+    <!-- 封面 -->
+    <div class="card">
+      <h1>🌟 小勇者之旅大冒險 🌟</h1>
+      <p style="text-align:center;">副標題：情緒與勇氣的奇幻之旅</p>
+      <p style="text-align:center;font-size:0.9rem;color:#666;">勇者們用 ✊✌️🖐 猜拳，把壞情緒魔物慢慢安撫回好心情。</p>
+    </div>
+
+    <!-- 勇者選擇 -->
+    <div class="card" id="hero-card">
+      <span class="badge">STEP 1</span>
+      <h2>選擇你的勇者</h2>
+      <div class="tag-row">
+        <button class="btn btn-secondary" data-hero="戰士">🛡️ 戰士（✊）</button>
+        <button class="btn btn-secondary" data-hero="法師">🔮 法師（✌️）</button>
+        <button class="btn btn-secondary" data-hero="牧師">💖 牧師（🖐）</button>
+        <button class="btn btn-secondary" data-hero="勇敢的村民">🌾 勇敢的村民（任意）</button>
+      </div>
+      <p id="hero-info" style="margin-top:8px;"></p>
+    </div>
+
+    <!-- 猜拳戰鬥區 -->
+    <div class="card" id="battle-card">
+      <span class="badge">STEP 2</span>
+      <h2>勇者猜拳對抗壞情緒魔物</h2>
+
+      <p id="monster-name" style="text-align:center;margin-bottom:4px;">👾 目前魔物：生氣史萊姆</p>
+      <p style="text-align:center;font-size:0.9rem;color:#666;">
+        小勇者每贏一次，就安撫一種壞情緒。先累積 6 次勝利，就把魔物變回開心小夥伴！
       </p>
-    </header>
 
-    <!-- ===== 畫面 1：選擇職業 ===== -->
-    <section id="screen-choose" class="screen">
-      <div class="card">
-        <h2>選擇你的勇者職業</h2>
-        <p class="hint">
-          先選一位想出發的小勇者，熊熊會幫你抽今日占卜喔～
-        </p>
-
-        <div class="hero-list">
-          <button class="hero-card" data-hero="warrior">
-            <div class="hero-emoji">🛡️</div>
-            <div class="hero-text">
-              <h3>勇敢的戰士</h3>
-              <p>擅長正面迎戰，給予堅定的力量！</p>
-            </div>
-          </button>
-
-          <button class="hero-card" data-hero="mage">
-            <div class="hero-emoji">🔮</div>
-            <div class="hero-text">
-              <h3>創意法師</h3>
-              <p>用點子和想像力，把壞心情變成亮亮星星的魔法。</p>
-            </div>
-          </button>
-
-          <button class="hero-card" data-hero="priest">
-            <div class="hero-emoji">💖</div>
-            <div class="hero-text">
-              <h3>溫柔牧師</h3>
-              <p>用傾聽與擁抱，安撫受傷的小魔物。</p>
-            </div>
-          </button>
-
-          <button class="hero-card" data-hero="villager">
-            <div class="hero-emoji">🌾</div>
-            <div class="hero-text">
-              <h3>勇敢的村民</h3>
-              <p>雖然平凡，卻有不放棄的心，任何拳都能學！</p>
-            </div>
-          </button>
-        </div>
-
-        <!-- 熊熊村長 IG 推薦區 -->
-        <div class="ig-banner">
-          <p>🐻 想在現實世界也遇見熊熊村長嗎？</p>
-          <a
-            class="ig-link"
-            href="https://www.instagram.com/luckygbear"
-            target="_blank"
-          >
-            👉 追蹤熊熊村長 IG：@luckygbear
-          </a>
-        </div>
+      <div class="status-row">
+        <span>勇者心情：<span id="hero-mood" class="mood-good">💖 良好</span></span>
+        <span>已安撫：<span id="calm-count">0</span> / 6</span>
       </div>
-    </section>
 
-    <!-- ===== 畫面 2：九宮格地圖 ===== -->
-    <section id="screen-map" class="screen hidden">
-      <div class="card">
-        <h2>選擇探索地點</h2>
-        <p class="hint">
-          點一格地圖前進冒險～每個地點都住著不同情緒的魔物。
-        </p>
-
-        <div class="map-grid">
-          <!-- 新手村：可以回到選擇職業 -->
-          <button class="map-cell" data-location="village">
-            <span class="cell-emoji">🏡</span>
-            <span class="cell-name">新手村</span>
-            <span class="cell-tag">回到起點</span>
-          </button>
-
-          <button class="map-cell" data-location="meadow">
-            <span class="cell-emoji">🌿</span>
-            <span class="cell-name">草原</span>
-            <span class="cell-tag">小小史萊姆</span>
-          </button>
-
-          <button class="map-cell" data-location="forest">
-            <span class="cell-emoji">🌳</span>
-            <span class="cell-name">森林</span>
-            <span class="cell-tag">害羞樹精</span>
-          </button>
-
-          <button class="map-cell" data-location="cave">
-            <span class="cell-emoji">🕳️</span>
-            <span class="cell-name">洞窟</span>
-            <span class="cell-tag">怕黑小魔物</span>
-          </button>
-
-          <button class="map-cell" data-location="lake">
-            <span class="cell-emoji">🌊</span>
-            <span class="cell-name">湖畔</span>
-            <span class="cell-tag">哭哭水靈</span>
-          </button>
-
-          <button class="map-cell" data-location="graveyard">
-            <span class="cell-emoji">⚰️</span>
-            <span class="cell-name">墓地</span>
-            <span class="cell-tag">寂寞骷髏</span>
-          </button>
-
-          <!-- 女巫小屋：塔羅占卜入口（之後會加塔羅系統） -->
-          <button class="map-cell" data-location="witch">
-            <span class="cell-emoji">🧙‍♀️</span>
-            <span class="cell-name">女巫小屋</span>
-            <span class="cell-tag">塔羅占卜</span>
-          </button>
-
-          <button class="map-cell" data-location="mountain">
-            <span class="cell-emoji">⛰️</span>
-            <span class="cell-name">山頂</span>
-            <span class="cell-tag">壓力小獸</span>
-          </button>
-
-          <button class="map-cell boss-cell" data-location="boss">
-            <span class="cell-emoji">🐉</span>
-            <span class="cell-name">魔王城</span>
-            <span class="cell-tag">最終決戰</span>
-          </button>
-        </div>
-
-        <p class="hint small">
-          之後我們會在這裡加入：<br />
-          「點地點 → 遇到魔物（含弱點拳 / 禁出拳 / 熊熊提醒）
-          → 進入猜拳安撫戰」的完整流程。
-        </p>
+      <div class="btn-row">
+        <button class="btn" data-hand="✊">✊ 石頭</button>
+        <button class="btn" data-hand="✌️">✌️ 剪刀</button>
+        <button class="btn" data-hand="🖐">🖐 布</button>
       </div>
-    </section>
-  </div>
 
-  <!-- ===== 通用遮罩 ===== -->
-  <div id="modal-backdrop" class="modal-backdrop hidden"></div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btn-cheer">💫 使用勇氣星星語句</button>
+        <button class="btn btn-secondary" id="btn-reset">🔁 重新開始</button>
+      </div>
 
-  <!-- 熊熊占卜視窗 -->
-  <div id="fortuneModal" class="modal hidden">
-    <div class="modal-header">
-      <span class="modal-emoji">🐻</span>
-      <h3>熊熊占卜</h3>
+      <div class="log" id="log-box"></div>
     </div>
-    <p id="fortuneText" class="modal-text">
-      今天的你，擁有溫柔治癒力，壞情緒看到你都會慢慢軟化～
-    </p>
 
-    <!-- 占卜後的 IG 引導 -->
-    <p class="modal-text modal-ig">
-      想聽熊熊更多溫暖小語？<br />
-      <a
-        class="ig-link"
-        href="https://www.instagram.com/luckygbear"
-        target="_blank"
-      >
-        來 IG 找熊熊：@luckygbear
-      </a>
-    </p>
-
-    <button id="fortuneOkBtn" class="primary-btn">收到，出發！</button>
-  </div>
-
-  <!-- 地圖遭遇視窗（之後會接上魔物 / 魔王戰） -->
-  <div id="encounterModal" class="modal hidden">
-    <div class="modal-header">
-      <span class="modal-emoji">✨</span>
-      <h3 id="encounterTitle">你來到了草原</h3>
+    <!-- 說明 / 家長導讀 -->
+    <div class="card">
+      <span class="badge">家長導讀</span>
+      <h3>這個小遊戲可以練習什麼？</h3>
+      <ul style="padding-left:20px;margin:4px 0;font-size:0.9rem;">
+        <li>用「語句」表達感受，而不是只靠輸贏。</li>
+        <li>理解壞情緒（生氣、害怕、嫉妒、孤單…）都是可以被安撫的。</li>
+        <li>透過猜拳練習「接受輸贏」、「輪流」與「等待」。</li>
+      </ul>
+      <p style="font-size:0.85rem;color:#666;">
+        建議家長陪同遊玩，可以請孩子自己說出：<br>
+        「如果是你，你會跟這隻魔物說什麼安慰的話？」
+      </p>
     </div>
-    <p id="encounterText" class="modal-text">
-      遠方出現了一隻情緒魔物……之後會在這裡加入猜拳安撫戰！
-    </p>
-
-    <!-- 熊熊村長小提醒 + IG -->
-    <p class="modal-text modal-ig">
-      熊熊村長提醒：每一個魔物，都只是暫時被壞情緒纏住的小夥伴。<br />
-      先照顧好自己的心情，再慢慢靠近就好。<br />
-      想看熊熊更多冒險日記？<br />
-      <a
-        class="ig-link"
-        href="https://www.instagram.com/luckygbear"
-        target="_blank"
-      >
-        IG：@luckygbear
-      </a>
-    </p>
-
-    <button id="encounterOkBtn" class="primary-btn">
-      了解了，先記下這裡～
-    </button>
   </div>
 
-  <!-- ===== 頁尾：熊熊村長 IG 固定入口 ===== -->
-  <footer class="footer">
-    <p>🐻 想看更多熊熊村長的故事與小勇者日常嗎？</p>
-    <p>
-      <a
-        class="ig-link"
-        href="https://www.instagram.com/luckygbear"
-        target="_blank"
-      >
-        👉 追蹤熊熊村長 IG：@luckygbear
-      </a>
-    </p>
-  </footer>
+  <script>
+    // --- 小勇者資料 ---
+    const heroes = {
+      "戰士": {
+        punch: "✊",
+        text: "勇敢、有責任感：「我一定會守護大家！」",
+      },
+      "法師": {
+        punch: "✌️",
+        text: "聰明、有創意：「嘿嘿～我有新點子！」",
+      },
+      "牧師": {
+        punch: "🖐",
+        text: "溫柔、善解人意：「別擔心，我來幫你～」",
+      },
+      "勇敢的村民": {
+        punch: "任意",
+        text: "樸實、堅毅：「我雖然平凡，但不放棄！」",
+      },
+    };
 
-  <script src="script.js"></script>
+    const badEmotions = [
+      "生氣", "害怕", "嫉妒", "孤單", "沮喪", "疲累"
+    ];
+
+    const cheerSentences = [
+      "「我在這裡聽你說，不用一個人扛。」",
+      "「生氣沒關係，我們一起找方法。」",
+      "「你很重要，也值得被好好對待。」",
+      "「害怕的時候，可以先深呼吸三次。」",
+      "「失敗只是暫停，不是結束。」",
+      "「謝謝你願意把心情說出來。」"
+    ];
+
+    let currentHero = null;
+    let calmCount = 0;
+    let currentEmotionIndex = 0;
+
+    const heroInfoEl = document.getElementById("hero-info");
+    const heroMoodEl = document.getElementById("hero-mood");
+    const calmCountEl = document.getElementById("calm-count");
+    const monsterNameEl = document.getElementById("monster-name");
+    const logBox = document.getElementById("log-box");
+
+    function log(text) {
+      const p = document.createElement("p");
+      p.textContent = text;
+      logBox.appendChild(p);
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    // 勇者選擇
+    document.querySelectorAll("#hero-card .btn-secondary").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const heroName = btn.dataset.hero;
+        currentHero = heroName;
+        const info = heroes[heroName];
+        heroInfoEl.textContent = `你選擇了【${heroName}】。天賦拳：${info.punch}；個性：${info.text}`;
+        logBox.innerHTML = "";
+        heroMoodEl.textContent = "💖 良好";
+        heroMoodEl.classList.remove("mood-bad");
+        heroMoodEl.classList.add("mood-good");
+        calmCount = 0;
+        currentEmotionIndex = 0;
+        calmCountEl.textContent = calmCount.toString();
+        monsterNameEl.textContent = `👾 目前魔物：${badEmotions[currentEmotionIndex]}史萊姆`;
+        log(`村長熊熊：太好了，小勇者 ${heroName} 準備出發！`);
+      });
+    });
+
+    // 猜拳規則：回傳 勇者是 勝/平/負
+    function judge(player, enemy) {
+      if (player === enemy) return "draw";
+      if (
+        (player === "✊" && enemy === "✌️") ||
+        (player === "✌️" && enemy === "🖐") ||
+        (player === "🖐" && enemy === "✊")
+      ) {
+        return "win";
+      }
+      return "lose";
+    }
+
+    function randomHand() {
+      const hands = ["✊", "✌️", "🖐"];
+      return hands[Math.floor(Math.random() * hands.length)];
+    }
+
+    // 猜拳按鈕
+    document.querySelectorAll("#battle-card .btn").forEach(btn => {
+      const hand = btn.dataset.hand;
+      if (!hand) return;
+      btn.addEventListener("click", () => {
+        if (!currentHero) {
+          alert("請先選擇一位小勇者！");
+          return;
+        }
+        const playerHand = hand;
+        const enemyHand = randomHand();
+        const result = judge(playerHand, enemyHand);
+        const emotion = badEmotions[currentEmotionIndex];
+
+        if (result === "win") {
+          log(`你出了 ${playerHand}，魔物出了 ${enemyHand}。你贏了！安撫了「${emotion}」的情緒。`);
+          calmCount++;
+          calmCountEl.textContent = calmCount.toString();
+          heroMoodEl.textContent = "💖 良好";
+          heroMoodEl.classList.add("mood-good");
+          heroMoodEl.classList.remove("mood-bad");
+
+          if (calmCount >= 6) {
+            log(`✨ ${emotion}史萊姆感受到滿滿的關心，變回了開心小夥伴！恭喜小勇者完成任務！`);
+            monsterNameEl.textContent = "🎉 魔物已全部被安撫，恭喜通關！";
+          } else {
+            currentEmotionIndex = calmCount;
+            monsterNameEl.textContent = `👾 下一個壞情緒：${badEmotions[currentEmotionIndex]}史萊姆`;
+          }
+        } else if (result === "draw") {
+          log(`你出了 ${playerHand}，魔物出了 ${enemyHand}。平手～可以再試一次。`);
+        } else {
+          log(`你出了 ${playerHand}，魔物出了 ${enemyHand}。這回合魔物比較激動。`);
+          heroMoodEl.textContent = "💔 需要調整心情";
+          heroMoodEl.classList.remove("mood-good");
+          heroMoodEl.classList.add("mood-bad");
+        }
+      });
+    });
+
+    // 勇氣星星語句
+    document.getElementById("btn-cheer").addEventListener("click", () => {
+      const sentence = cheerSentences[Math.floor(Math.random() * cheerSentences.length)];
+      log(`⭐ 小勇者說：${sentence}`);
+      heroMoodEl.textContent = "💖 調整完畢";
+      heroMoodEl.classList.add("mood-good");
+      heroMoodEl.classList.remove("mood-bad");
+    });
+
+    // 重新開始
+    document.getElementById("btn-reset").addEventListener("click", () => {
+      currentHero = null;
+      heroInfoEl.textContent = "";
+      logBox.innerHTML = "";
+      heroMoodEl.textContent = "💖 良好";
+      heroMoodEl.classList.add("mood-good");
+      heroMoodEl.classList.remove("mood-bad");
+      calmCount = 0;
+      currentEmotionIndex = 0;
+      calmCountEl.textContent = calmCount.toString();
+      monsterNameEl.textContent = "👾 目前魔物：生氣史萊姆";
+      log("村長熊熊：重新出發吧，小勇者！先選一位夥伴～");
+    });
+
+    // 預設提示
+    log("村長熊熊：先在上面選擇你的勇者，再用剪刀石頭布來安撫魔物吧！");
+  </script>
 </body>
 </html>
